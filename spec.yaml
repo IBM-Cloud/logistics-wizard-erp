@@ -1,0 +1,51 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Logistics Wizard ERP
+  description: Defines the minimum set of data models and operations required by the Logistics Wizard application
+  license:
+    name: Apache 2.0
+host: localhost
+basePath: /api
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /products:
+    get:
+      summary: Returns all products
+      parameters: []
+      responses:
+        '200':
+          description: A list of products
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Product'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+definitions:
+  Product:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+  errorModel:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
