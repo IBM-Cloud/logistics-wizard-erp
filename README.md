@@ -50,10 +50,11 @@ With the Logistics Wizard app, we focus on the planning and delivery of products
     DistributionCenter from;
     RetailLocation to;
     ShipmentStatus status;
-    Address currentLocation;
     Date createdAt;
     Date updatedAt;
-    Date eta;
+    Date deliveredAt;
+    Address currentLocation;
+    Date estimatedTimeOfArrival;
   }
   /**
    */
@@ -98,19 +99,29 @@ With the Logistics Wizard app, we focus on the planning and delivery of products
 The API and data models are defined in [this Swagger 2.0 file](spec.yaml). You can view this file in the [Swagger Editor](http://editor.swagger.io/#/?import=https://raw.githubusercontent.com/IBM-Bluemix/logistics-wizard-erp/master/spec.yaml
 ).
 
+The API allows to:
+* get the list of Products, Distribution Centers, Retailers, 
+* create, retrieve, update, delete Shipments.
+
+The API defines the following roles:
+* supply chain manager - can manage Shipments
+* auditor - can only view data
+
 ## Logistics Wizard ERP Simulator
 
 This module includes a simulator application implementing the API and data models defined above.
 
-### Deploying the simulator
+### Deploying the simulator automatically
 
-Use the *Deploy to Bluemix* button to get your own copy of the ERP simulator deployed in your Bluemix account.
+TODO
 
-[![Deploy to Bluemix](http://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM-Bluemix/logistics-wizard-erp.git)
+### Deploying the simulator manually
 
-## Contribute
+TODO
 
-Please create a pull request with your desired changes.
+### Running the simulator locally
+
+TODO
 
 ## License
 
