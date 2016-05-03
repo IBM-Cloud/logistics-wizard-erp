@@ -18,8 +18,8 @@ It is recommended that you create a dedicated space in Bluemix to the Logistics 
     {rank=source; others, discovery }
     /* styling */
     simulator [shape=rect label="ERP service"]
-    discovery [shape=circle style=filled color="%234E96DB" fontcolor=white label="Service Discovery"]
-    database [shape=circle style=filled color="%234E96DB" fontcolor=white label="Database"]
+    discovery [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Service\\nDiscovery"]
+    database [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Database"]
     others [shape=rect style=filled color="%2324B643" fontcolor=white label="Other Services"]
   }
 )
