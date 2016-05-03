@@ -161,15 +161,17 @@ This configuration illustrates:
   * lost of connectivity between the ERP service and its database
   * lost of connectivity between the other services and the ERP service
 
-[Follow these instructions to work with this configuration.](README-BASIC.md)
+[**>>> Follow these instructions to deploy and work with this configuration.**](README-BASIC.md)
 
-### Hybrid configuration to access a on-prem service in a hybrid cloud scenario
+### Hybrid configuration to access a on-prem ERP service
 
 In this configuration, the Secure Gateway sits between the ERP service and the other services. All calls to the ERP service go through the Secure Gateway. We don't require a real on-prem ERP system, the ERP simulator is used.
 
 This configuration illustrates:
 * how to expose an on-prem service outside of the enterprise
 * how to configure the security settings of the Secure Gateway
+
+[**>>> Follow these instructions to deploy and work with the hybrid configuration.**](README-HYBRID.md)
 
 ## License
 

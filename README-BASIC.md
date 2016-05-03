@@ -1,8 +1,6 @@
 # Basic configuration with the Logistics Wizard ERP simulator
 
-The simulator runs as a Cloud Foundry app in Bluemix.
-
-It is recommended that you create a dedicated space in Bluemix to the Logistics Wizard app. This way you have a simple way to view all the runtimes and services involved in the app.
+In the basic configuration, the simulator runs as a Cloud Foundry app in Bluemix.
 
 ![Architecture](http://g.gravizo.com/g?
   digraph G {
@@ -26,6 +24,8 @@ It is recommended that you create a dedicated space in Bluemix to the Logistics 
 
 ## Deploying the simulator
 
+Before deploying any of the pieces of the application, it is recommended that you create a dedicated space in Bluemix for the Logistics Wizard app. This gives a simple way to view all the resources involved in the app.
+
 ### Deploying the simulator automatically
 
 1. Use the Deploy to Bluemix button to create an instance of the ERP simulator.
@@ -37,7 +37,7 @@ It is recommended that you create a dedicated space in Bluemix to the Logistics 
   * a database **logistics-wizard-erp-database**
   * the ERP simulator app **logistics-wizard-erp**
   
-  Note: if a service with the name already exists in the space, it will be reused.
+  Note: if a service with the same name already exists in the space, it will be reused.
 
 ## Working with the sample data set
 
@@ -69,16 +69,17 @@ The ERP simulator uses [Loopback](https://strongloop.com/) for its implementatio
   * Easily create client apps using Android, iOS, and JavaScript SDKs.
   * Run your application on-premises or in the cloud.
 
-1. Connect to http://<your-erp-service-url>/explorer/ to look at the ERP service API.
+For the simulator, the API is generated using the [Swagger generator](https://docs.strongloop.com/display/public/LB/Swagger+generator) included in Loopback.
 
-This API has been generated using the [Swagger generator](https://docs.strongloop.com/display/public/LB/Swagger+generator) included in Loopback.
+1. Connect to http://[your-erp-service-url]/explorer/ to look at the ERP service API.
 
-### Registering with a Service Discovery
-* how to integrate with a Service Discovery service in a microservice architecture
+## Using a Service Discovery
+* (todo) how to integrate with the Service Discovery service in a microservice architecture
+* (todo) point to the code where the registration is done and the hearbeat is sent
 
-### Configuring auto-scaling
-* how to configure auto-scaling to cope with additional load
+## Configuring auto-scaling
+* (todo) how to configure auto-scaling to cope with additional load + script to generate load to actually show the auto-scaling in effect
 
-### Managing ERP service failures and loss of connectivity
-* lost of connectivity between the ERP service and its database
-* lost of connectivity between the other services and the ERP service
+## Managing ERP service failures and loss of connectivity
+* (todo) lost of connectivity between the ERP service and its database
+* (todo) lost of connectivity between the other services and the ERP service
