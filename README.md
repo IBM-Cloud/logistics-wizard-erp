@@ -2,11 +2,13 @@
 
 **WORK IN PROGRESS**
 
-This module is part of the larger [Logistics Wizard](https://github.com/IBM-Bluemix/logistics-wizard) project.
+This service is part of the larger [Logistics Wizard](https://github.com/IBM-Bluemix/logistics-wizard) project.
 
 ## Overview
 
-With the Logistics Wizard app, we focus on the planning and delivery of products from distribution centers to retail locations. The Logistics Wizard ERP module defines a subset of a full ERP system data model and the API to access this system.
+With the Logistics Wizard app, we focus on the planning and delivery of products from distribution centers to retail locations. The Logistics Wizard ERP service defines a subset of a full ERP system data model and the API to access this system.
+
+### Shipment Model
 
 ![Architecture](http://g.gravizo.com/g?
   /**
@@ -74,18 +76,18 @@ With the Logistics Wizard app, we focus on the planning and delivery of products
    */
   class DistributionCenter {
     Address location;
-    User manager;
+    Contact manager;
   }
   /**
    */
-  class User {
+  class Contact {
     String name;
   }
   /**
    */
   class Retailer {
     Address location;
-    User manager;
+    Contact manager;
   }
   /**
    */
@@ -96,32 +98,78 @@ With the Logistics Wizard app, we focus on the planning and delivery of products
   }
 )
 
+### User Model
+
+![Architecture](http://g.gravizo.com/g?
+  /**
+   *@opt inferrel
+   *@opt collpackages java.util.*
+   *@opt inferdep
+   *@opt inferdepinpackage
+   *@opt hide java.*
+   *@opt all
+   *@opt !constructors
+   *@opt !operations
+   *@hidden
+   */
+  class UMLOptions {
+  }
+  /**
+   *@hidden
+   */
+  class UMLNoteOptions{}
+  /**
+   */
+  class User {
+    String username;
+    String password;
+    String email;
+  }
+)
+### API Definition
+
 The API and data models are defined in [this Swagger 2.0 file](spec.yaml). You can view this file in the [Swagger Editor](http://editor.swagger.io/#/?import=https://raw.githubusercontent.com/IBM-Bluemix/logistics-wizard-erp/master/spec.yaml
 ).
 
 The API allows to:
-* get the list of Products, Distribution Centers, Retailers, 
+* log in and get access tokens;
+* get the list of Products, Distribution Centers, Retailers;
 * create, retrieve, update, delete Shipments.
 
 The API defines the following roles:
 * supply chain manager - can manage Shipments
 * auditor - can only view data
 
-## Logistics Wizard ERP Simulator
+### Logistics Wizard ERP Simulator
 
-This module includes a simulator application implementing the API and data models defined above.
+This project includes an ERP simulator implementing the API and data models defined above. With the simulator we remove the dependency on a real ERP giving us more flexibility to demonstrate edge cases like connectivity failures.
 
-### Deploying the simulator automatically
+## Supported use cases
 
-TODO
+The ERP service can be used to demonstrate different capabilities and configuration of IBM Bluemix.
 
-### Deploying the simulator manually
+### Basic configuration to support for the use cases of the other services
 
-TODO
+In this configuration, the ERP service is only providing access to the data. We deploy the ERP simulator as a regular Clound Foundry app in Bluemix and connect it to the rest of the system.
 
-### Running the simulator locally
+This configuration illustrates:
+* how to integrate with a Service Discovery service in a microservice architecture
+* how to document an API with Swagger.io
+* how to quickly implement an API with Loopback.io
+* how to configure auto-scaling to cope with additional load
+* how to manage failures of a backend service and how to recover when it becomes available again
+  * lost of connectivity between the ERP service and its database
+  * lost of connectivity between the other services and the ERP service
 
-TODO
+[Follow these instructions to work with this configuration.](README-BASIC.md)
+
+### Hybrid configuration to access a on-prem service in a hybrid cloud scenario
+
+In this configuration, the Secure Gateway sits between the ERP service and the other services. All calls to the ERP service go through the Secure Gateway. We don't require a real on-prem ERP system, the ERP simulator is used.
+
+This configuration illustrates:
+* how to expose an on-prem service outside of the enterprise
+* how to configure the security settings of the Secure Gateway
 
 ## License
 
