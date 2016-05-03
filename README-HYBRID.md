@@ -27,7 +27,7 @@ The hybrid configuration introduces the Secure Gateway service to cross the on-p
 )
 
 * The **ERP Service Broker** exposes the ERP Service API. It handles the connection with the Secure Gateway to reach the on-prem ERP service. To the outside world, the ERP Service Broker is just another ERP service.
-* In diagram the **ERP** is sitting on-prem behind the Secure Gateway. It can be a real ERP system or the ERP simulator.
+* The **ERP** is sitting on-prem behind the Secure Gateway. It can be a real ERP system or the ERP simulator.
 
 ## Deploying the ERP Service Broker with the ERP Simulator
 
