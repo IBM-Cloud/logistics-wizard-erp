@@ -1,5 +1,7 @@
 # Logistics Wizard ERP
 
+[![Build Status](https://travis-ci.org/IBM-Bluemix/logistics-wizard-erp.svg?branch=master)](https://travis-ci.org/IBM-Bluemix/logistics-wizard-erp)
+
 **WORK IN PROGRESS**
 
 This service is part of the larger [Logistics Wizard](https://github.com/IBM-Bluemix/logistics-wizard) project.
