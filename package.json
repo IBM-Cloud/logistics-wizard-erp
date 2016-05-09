@@ -5,8 +5,7 @@
   "scripts": {
     "postinstall": "bower install --allow-root",
     "start": "node .",
-    "pretest": "jshint .",
-    "posttest": "nsp check"
+    "test": "mocha test/*.js"
   },
   "dependencies": {
     "async": "^2.0.0-rc.4",
@@ -24,12 +23,15 @@
   },
   "devDependencies": {
     "jshint": "^2.5.6",
-    "nsp": "^2.1.0"
+    "nsp": "^2.1.0",
+    "mocha": "*",
+    "chai": "*",
+    "supertest": "*"
   },
   "repository": {
     "type": "",
     "url": ""
   },
   "license": "Apache-2.0",
-  "description": "logistics-wizard-erp"
+  "description": "Logistics Wizard ERP"
 }
