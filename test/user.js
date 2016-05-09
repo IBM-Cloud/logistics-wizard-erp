@@ -1,10 +1,18 @@
 var supertest = require('supertest');
-var loopback = require('loopback');
-var app = require('..');
-app.use(loopback.rest());
-var api = supertest(app);
 
 describe('Users', function () {
+
+  var loopback;
+  var app;
+  var api;
+
+  before(function () {
+    loopback = require('loopback');
+    app = require('..');
+    app.use(loopback.rest());
+    api = supertest(app);
+  });
+
   it('errors if login does not exist', function (done) {
     api.post("/Users/login")
       .set('Content-Type', 'application/json')
