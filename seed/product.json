@@ -1,0 +1,52 @@
+[
+  {
+    "id": "I1",
+    "name": "Jacket",
+    "supplierId": "North Face"
+  },
+  {
+    "id": "I2",
+    "name": "Gloves",
+    "supplierId": "North Face"
+  },
+  {
+    "id": "I3",
+    "name": "Scarf",
+    "supplierId": "J Crew"
+  },
+  {
+    "id": "I4",
+    "name": "Beans",
+    "supplierId": "Goya"
+  },
+  {
+    "id": "I5",
+    "name": "Soup",
+    "supplierId": "Campbell"
+  },
+  {
+    "id": "I6",
+    "name": "Bread",
+    "supplierId": "The Bread Co."
+  },
+  {
+    "id": "I7",
+    "name": "Rain Jacket",
+    "supplierId": "Barbour"
+  },
+  {
+    "id": "I8",
+    "name": "Umbrella",
+    "supplierId": "LifeTek"
+  },
+  {
+    "id": "I9",
+    "name": "Milk",
+    "supplierId": "Abbott"
+  },
+  {
+    "id": "I10",
+    "name": "Pasta",
+    "supplierId": "Barilla"
+  }
+]

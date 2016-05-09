@@ -1,0 +1,41 @@
+[
+  {
+    "id": "D1",
+    "address": {
+      "city": "Salt Lake City",
+      "state": "Utah",
+      "country": "US",
+      "latitude": 40.71,
+      "longitude": -111.90
+    },
+    "contact": {
+      "name": "Joseph Smith"
+    }
+  },
+  {
+    "id": "D2",
+    "address": {
+      "city": "Cincinnati",
+      "state": "Ohio",
+      "country": "US",
+      "latitude": 39.10,
+      "longitude": -84.49
+    },
+    "contact": {
+      "name": "John Doe"
+    }
+  },
+  {
+    "id": "D3",
+    "address": {
+      "city": "Albany",
+      "state": "New York",
+      "country": "US",
+      "latitude": 42.65,
+      "longitude": -73.75
+    },
+    "contact": {
+      "name": "Mary Joe"
+    }
+  }
+]

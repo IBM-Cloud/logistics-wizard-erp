@@ -1,0 +1,62 @@
+[
+  {
+    "shipmentId": "S1",
+    "productId": "I4",
+    "quantity": 100
+  },
+  {
+    "shipmentId": "S1",
+    "productId": "I5",
+    "quantity": 50
+  },
+  {
+    "shipmentId": "S2",
+    "productId": "I9",
+    "quantity": 85
+  },
+  {
+    "shipmentId": "S3",
+    "productId": "I6",
+    "quantity": 200
+  },
+  {
+    "shipmentId": "S3",
+    "productId": "I10",
+    "quantity": 40
+  },
+  {
+    "shipmentId": "S4",
+    "productId": "I9",
+    "quantity": 85
+  },
+  {
+    "shipmentId": "S5",
+    "productId": "I7",
+    "quantity": 85
+  },
+  {
+    "shipmentId": "S5",
+    "productId": "I8",
+    "quantity": 85
+  },
+  {
+    "shipmentId": "S6",
+    "productId": "I1",
+    "quantity": 85
+  },
+  {
+    "shipmentId": "S6",
+    "productId": "I2",
+    "quantity": 100
+  },
+  {
+    "shipmentId": "S6",
+    "productId": "I3",
+    "quantity": 40
+  },
+  {
+    "shipmentId": "S7",
+    "productId": "I6",
+    "quantity": 125
+  }
+]

@@ -1,0 +1,107 @@
+[
+  {
+    "id": "S1",
+    "status": "SHIPPED",
+    "fromId": "D2",
+    "toId": "R1",
+    "currentLocation": {
+      "city": "Blacksburg",
+      "state": "West Virginia",
+      "country": "US",
+      "latitude": 37.23,
+      "longitude": -80.41
+    },
+    "estimatedTimeOfArrival": "Thu, 17 Oct 2015",
+    "lastUpdate": "Thu, 15 Oct 2015 16:15:37 GMT"
+  },
+  {
+    "id": "S2",
+    "status": "ACCEPTED",
+    "fromId": "D2",
+    "toId": "R2",
+    "currentLocation": {
+      "city": "Memphis",
+      "state": "Tennessee",
+      "country": "US",
+      "latitude": 35.19,
+      "longitude": -90.02
+    },
+    "estimatedTimeOfArrival": "Thu, 16 Oct 2015",
+    "lastUpdate": "Thu, 13 Oct 2015 12:15:37 GMT"
+  },
+  {
+    "id": "S3",
+    "status": "SHIPPED",
+    "fromId": "D1",
+    "toId": "R3",
+    "currentLocation": {
+      "city": "Reno",
+      "state": "Nevada",
+      "country": "US",
+      "latitude": 39.44,
+      "longitude": -119.79
+    },
+    "estimatedTimeOfArrival": "Thu, 20 Oct 2015",
+    "updatedAt": "Thu, 19 Oct 2015 12:15:37 GMT"
+  },
+  {
+    "id": "S4",
+    "status": "SHIPPED",
+    "fromId": "D1",
+    "toId": "R3",
+    "currentLocation": {
+      "city": "Spring Creek",
+      "state": "Nevada",
+      "country": "US",
+      "latitude": 40.80,
+      "longitude": -115.76
+    },
+    "estimatedTimeOfArrival": "Thu, 22 Oct 2015",
+    "updatedAt": "Thu, 20 Oct 2015 12:15:37 GMT"
+  },
+  {
+    "id": "S5",
+    "status": "SHIPPED",
+    "fromId": "D2",
+    "toId": "R2",
+    "currentLocation": {
+      "city": "Dallas",
+      "state": "Texas",
+      "country": "US",
+      "latitude": 32.74,
+      "longitude": -96.80
+    },
+    "estimatedTimeOfArrival": "Thu, 22 Oct 2015",
+    "updatedAt": "Thu, 20 Oct 2015 12:15:37 GMT"
+  },
+  {
+    "id": "S6",
+    "status": "SHIPPED",
+    "fromId": "D3",
+    "toId": "R4",
+    "currentLocation": {
+      "city": "Poughkeepsie",
+      "state": "New York",
+      "country": "US",
+      "latitude": 41.70,
+      "longitude": -73.91
+    },
+    "estimatedTimeOfArrival": "Thu, 24 Oct 2015",
+    "updatedAt": "Thu, 24 Oct 2015 12:15:37 GMT"
+  },
+  {
+    "id": "S7",
+    "status": "IN_TRANSIT",
+    "fromId": "D3",
+    "toId": "R4",
+    "currentLocation": {
+      "city": "Albany",
+      "state": "New York",
+      "country": "US",
+      "latitude": 42.65,
+      "longitude": -73.75
+    },
+    "estimatedTimeOfArrival": "Thu, 28 Oct 2015",
+    "updatedAt": "Thu, 27 Oct 2015 12:15:37 GMT"
+  }
+]

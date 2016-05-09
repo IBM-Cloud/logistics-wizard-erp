@@ -1,7 +1,8 @@
 {
   "db": {
     "name": "db",
-    "connector": "memory"
+    "connector": "memory-idstr",
+    "file": "in-memory-database.json"
   },
   "transient": {
     "name": "transient",

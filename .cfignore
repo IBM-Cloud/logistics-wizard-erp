@@ -1,1 +1,4 @@
 node_modules
+client/vendor
+in-memory-database.json
+*.md

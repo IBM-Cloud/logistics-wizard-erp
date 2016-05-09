@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Logistics Wizard ERP - Demo Setup</title>
+
+  <!-- Bootstrap -->
+  <link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1>Logistics Wizard ERP</h1>
+      <p>Uses this page to initialize, reset the database.</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Inject sample data</h3>
+          </div>
+          <div class="panel-body">
+            <p>
+              Sample Distribution Centers, Retailers, Products, Shipments. All you need to start experimenting with <a href="/explorer">the API</a>.
+            </p>
+
+            <form action="/api/v1/demo/initialize" method="post">
+              <div>
+                <button type="submit" class="btn btn-default">Inject Data</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Clean up</h3>
+          </div>
+          <div class="panel-body">
+            <p>
+              Remove all documents from the database. There is no way back. You've been warned!
+            </p>
+            <form action="/api/v1/demo/reset" method="post">
+              <div>
+                <button type="submit" class="btn btn-default">Remove All</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../vendor/jquery/dist/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>
