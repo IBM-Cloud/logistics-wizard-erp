@@ -1,0 +1,67 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "db"
+  },
+  "AccessToken": {
+    "dataSource": "db",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Supplier": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Product": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Contact": {
+    "dataSource": "transient",
+    "public": false
+  },
+  "Address": {
+    "dataSource": "transient",
+    "public": false
+  },
+  "DistributionCenter": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Shipment": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Retailer": {
+    "dataSource": "db",
+    "public": true
+  },
+  "LineItem": {
+    "dataSource": "db",
+    "public": false
+  }
+}

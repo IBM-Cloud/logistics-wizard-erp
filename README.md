@@ -50,7 +50,7 @@ With the Logistics Wizard app, we focus on the planning and delivery of products
   class Shipment {
     LineItem[] items;
     DistributionCenter from;
-    RetailLocation to;
+    Retailer to;
     ShipmentStatus status;
     Date createdAt;
     Date updatedAt;

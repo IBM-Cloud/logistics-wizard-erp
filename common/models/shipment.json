@@ -1,0 +1,57 @@
+{
+  "name": "Shipment",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "status": {
+      "type": "string",
+      "required": true,
+      "default": "NEW"
+    },
+    "createdAt": {
+      "type": "date",
+      "required": true,
+      "default": "$now"
+    },
+    "updatedAt": {
+      "type": "date"
+    },
+    "deliveredAt": {
+      "type": "date"
+    },
+    "estimatedTimeOfArrival": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "address": {
+      "type": "embedsOne",
+      "model": "Address",
+      "property": "currentLocation",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
+    },
+    "distributionCenter": {
+      "type": "belongsTo",
+      "model": "DistributionCenter",
+      "foreignKey": "fromId"
+    },
+    "retailer": {
+      "type": "belongsTo",
+      "model": "Retailer",
+      "foreignKey": "toId"
+    },
+    "items": {
+      "type": "hasMany",
+      "model": "LineItem"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
