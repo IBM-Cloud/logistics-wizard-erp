@@ -708,6 +708,32 @@ paths:
             items:
               $ref: '#/definitions/Supplier'
       deprecated: false
+  '/Products/{id}/distributionCenters':
+    get:
+      tags:
+        - Product
+      summary: Queries distributionCenters of Product.
+      operationId: Product.prototype.__get__distributionCenters
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: PersistedModel id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DistributionCenter'
+      deprecated: false
   '/Products/{id}':
     get:
       tags:
@@ -744,6 +770,32 @@ paths:
           in: query
           description: 'Filter defining fields, where, include, order, offset, and limit'
           required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Product'
+      deprecated: false
+  '/DistributionCenters/{id}/products':
+    get:
+      tags:
+        - DistributionCenter
+      summary: Queries products of DistributionCenter.
+      operationId: DistributionCenter.prototype.__get__products
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: PersistedModel id
+          required: true
           type: string
           format: JSON
       responses:
@@ -1170,6 +1222,160 @@ paths:
             items:
               $ref: '#/definitions/Retailer'
       deprecated: false
+  '/Inventories/{id}/product':
+    get:
+      tags:
+        - Inventory
+      summary: Fetches belongsTo relation product.
+      operationId: Inventory.prototype.__get__product
+      parameters:
+        - name: refresh
+          in: query
+          required: false
+          type: boolean
+        - name: id
+          in: path
+          description: PersistedModel id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Product'
+      deprecated: false
+  '/Inventories/{id}/distributionCenter':
+    get:
+      tags:
+        - Inventory
+      summary: Fetches belongsTo relation distributionCenter.
+      operationId: Inventory.prototype.__get__distributionCenter
+      parameters:
+        - name: refresh
+          in: query
+          required: false
+          type: boolean
+        - name: id
+          in: path
+          description: PersistedModel id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/DistributionCenter'
+      deprecated: false
+  /Inventories:
+    post:
+      tags:
+        - Inventory
+      summary: Create a new instance of the model and persist it into the data source.
+      operationId: Inventory.create
+      parameters:
+        - name: data
+          in: body
+          description: Model instance data
+          required: false
+          schema:
+            $ref: '#/definitions/Inventory'
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Inventory'
+      deprecated: false
+    get:
+      tags:
+        - Inventory
+      summary: Find all instances of the model matched by filter from the data source.
+      operationId: Inventory.find
+      parameters:
+        - name: filter
+          in: query
+          description: 'Filter defining fields, where, include, order, offset, and limit'
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Inventory'
+      deprecated: false
+  '/Inventories/{id}':
+    get:
+      tags:
+        - Inventory
+      summary: Find a model instance by id from the data source.
+      operationId: Inventory.findById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+        - name: filter
+          in: query
+          description: Filter defining fields and include
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Inventory'
+      deprecated: false
+    delete:
+      tags:
+        - Inventory
+      summary: Delete a model instance by id from the data source.
+      operationId: Inventory.deleteById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+      deprecated: false
+    put:
+      tags:
+        - Inventory
+      summary: >-
+        Update attributes for a model instance and persist it into the data
+        source.
+      operationId: Inventory.prototype.updateAttributes
+      parameters:
+        - name: data
+          in: body
+          description: An object of model property name/value pairs
+          required: false
+          schema:
+            $ref: '#/definitions/Inventory'
+        - name: id
+          in: path
+          description: PersistedModel id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Inventory'
+      deprecated: false
 definitions:
   x-any:
     properties: {}
@@ -1186,8 +1392,7 @@ definitions:
         type: string
         format: date
       userId:
-        type: number
-        format: double
+        type: string
     required:
       - id
     additionalProperties: false
@@ -1214,8 +1419,7 @@ definitions:
         type: string
         format: date
       id:
-        type: number
-        format: double
+        type: string
     required:
       - email
     additionalProperties: false
@@ -1224,11 +1428,9 @@ definitions:
       name:
         type: string
       id:
-        type: number
-        format: double
+        type: string
       supplierId:
-        type: number
-        format: double
+        type: string
     required:
       - name
     additionalProperties: false
@@ -1237,16 +1439,14 @@ definitions:
       name:
         type: string
       id:
-        type: number
-        format: double
+        type: string
     required:
       - name
     additionalProperties: false
   DistributionCenter:
     properties:
       id:
-        type: number
-        format: double
+        type: string
       address:
         $ref: '#/definitions/Address'
       contact:
@@ -1255,8 +1455,7 @@ definitions:
   Retailer:
     properties:
       id:
-        type: number
-        format: double
+        type: string
       address:
         $ref: '#/definitions/Address'
       contact:
@@ -1269,11 +1468,9 @@ definitions:
         type: number
         format: double
       id:
-        type: number
-        format: double
+        type: string
       shipmentId:
-        type: number
-        format: double
+        type: string
     required:
       - quantity
     additionalProperties: false
@@ -1296,19 +1493,29 @@ definitions:
         type: string
         format: date
       id:
-        type: number
-        format: double
+        type: string
       currentLocation:
         $ref: '#/definitions/Address'
       fromId:
-        type: number
-        format: double
+        type: string
       toId:
-        type: number
-        format: double
+        type: string
     required:
       - status
       - createdAt
+    additionalProperties: false
+  Inventory:
+    properties:
+      quantity:
+        default: '0'
+        type: number
+        format: double
+      id:
+        type: string
+      productId:
+        type: string
+      dcId:
+        type: string
     additionalProperties: false
   Address:
     properties:
@@ -1343,3 +1550,4 @@ tags:
   - name: DistributionCenter
   - name: Shipment
   - name: Retailer
+  - name: Inventory
