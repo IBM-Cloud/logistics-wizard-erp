@@ -36,6 +36,7 @@ module.exports = function (server) {
           server.models.Supplier,
           server.models.Product,
           server.models.DistributionCenter,
+          server.models.Inventory,
           server.models.Retailer,
           server.models.Shipment,
           server.models.LineItem,
@@ -58,9 +59,10 @@ module.exports = function (server) {
     function (req, res) {
       async.waterfall(
         [
-          server.models.Product,
           server.models.Supplier,
+          server.models.Product,
           server.models.DistributionCenter,
+          server.models.Inventory,
           server.models.Retailer,
           server.models.Shipment,
           server.models.LineItem,

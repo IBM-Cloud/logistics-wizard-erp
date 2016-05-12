@@ -25,6 +25,12 @@
         "validate": true,
         "forceId": false
       }
+    },
+    "products": {
+      "type": "hasMany",
+      "model": "Product",
+      "foreignKey": "dcId",
+      "through": "Inventory"
     }
   },
   "acls": [],

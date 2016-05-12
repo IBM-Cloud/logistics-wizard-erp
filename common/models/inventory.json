@@ -1,0 +1,29 @@
+{
+  "name": "Inventory",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "quantity": {
+      "type": "number",
+      "default": "0"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "product": {
+      "type": "belongsTo",
+      "model": "Product",
+      "foreignKey": "productId"
+    },
+    "distributionCenter": {
+      "type": "belongsTo",
+      "model": "DistributionCenter",
+      "foreignKey": "dcId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

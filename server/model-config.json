@@ -63,5 +63,9 @@
   "LineItem": {
     "dataSource": "db",
     "public": false
+  },
+  "Inventory": {
+    "dataSource": "db",
+    "public": true
   }
 }

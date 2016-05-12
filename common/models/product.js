@@ -3,6 +3,7 @@ var helper = require("./helper.js");
 
 module.exports = function(Product) {
   helper.readOnly(Product);
+  helper.readOnlyRelation(Product, "distributionCenters");
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");

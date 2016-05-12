@@ -12,7 +12,14 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "distributionCenters": {
+      "type": "hasMany",
+      "model": "DistributionCenter",
+      "foreignKey": "productId",
+      "through": "Inventory"
+    }
+  },
   "acls": [],
   "methods": {}
 }
