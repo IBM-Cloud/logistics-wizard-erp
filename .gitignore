@@ -19,3 +19,5 @@ node_modules
 npm-debug.log
 client/vendor
 in-memory-database.json
+coverage
+.coveralls.yml

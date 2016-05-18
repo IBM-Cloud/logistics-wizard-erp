@@ -14,7 +14,8 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "db",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "db",
@@ -65,6 +66,10 @@
     "public": false
   },
   "Inventory": {
+    "dataSource": "db",
+    "public": true
+  },
+  "ERPUser": {
     "dataSource": "db",
     "public": true
   }

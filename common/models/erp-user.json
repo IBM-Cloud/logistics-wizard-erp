@@ -1,0 +1,14 @@
+{
+  "name": "ERPUser",
+  "base": "User",
+  "plural": "Users",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

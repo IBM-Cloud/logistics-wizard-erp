@@ -11,535 +11,6 @@ consumes:
 produces:
   - application/json
 paths:
-  '/Users/{id}/accessTokens/{fk}':
-    get:
-      tags:
-        - User
-      summary: Find a related item by id for accessTokens.
-      operationId: User.prototype.__findById__accessTokens
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for accessTokens
-          required: true
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: User id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/AccessToken'
-      deprecated: false
-    delete:
-      tags:
-        - User
-      summary: Delete a related item by id for accessTokens.
-      operationId: User.prototype.__destroyById__accessTokens
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for accessTokens
-          required: true
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: User id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
-    put:
-      tags:
-        - User
-      summary: Update a related item by id for accessTokens.
-      operationId: User.prototype.__updateById__accessTokens
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for accessTokens
-          required: true
-          type: string
-          format: JSON
-        - name: data
-          in: body
-          required: false
-          schema:
-            $ref: '#/definitions/AccessToken'
-        - name: id
-          in: path
-          description: User id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/AccessToken'
-      deprecated: false
-  '/Users/{id}/accessTokens':
-    get:
-      tags:
-        - User
-      summary: Queries accessTokens of User.
-      operationId: User.prototype.__get__accessTokens
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: User id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/AccessToken'
-      deprecated: false
-    post:
-      tags:
-        - User
-      summary: Creates a new instance in accessTokens of this model.
-      operationId: User.prototype.__create__accessTokens
-      parameters:
-        - name: data
-          in: body
-          required: false
-          schema:
-            $ref: '#/definitions/AccessToken'
-        - name: id
-          in: path
-          description: User id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/AccessToken'
-      deprecated: false
-    delete:
-      tags:
-        - User
-      summary: Deletes all accessTokens of this model.
-      operationId: User.prototype.__delete__accessTokens
-      parameters:
-        - name: id
-          in: path
-          description: User id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
-  '/Users/{id}/accessTokens/count':
-    get:
-      tags:
-        - User
-      summary: Counts accessTokens of User.
-      operationId: User.prototype.__count__accessTokens
-      parameters:
-        - name: where
-          in: query
-          description: Criteria to match model instances
-          required: false
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: User id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: object
-            properties:
-              count:
-                type: number
-                format: double
-      deprecated: false
-  /Users:
-    post:
-      tags:
-        - User
-      summary: Create a new instance of the model and persist it into the data source.
-      operationId: User.create
-      parameters:
-        - name: data
-          in: body
-          description: Model instance data
-          required: false
-          schema:
-            $ref: '#/definitions/User'
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/User'
-      deprecated: false
-    put:
-      tags:
-        - User
-      summary: >-
-        Update an existing model instance or insert a new one into the data
-        source.
-      operationId: User.upsert
-      parameters:
-        - name: data
-          in: body
-          description: Model instance data
-          required: false
-          schema:
-            $ref: '#/definitions/User'
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/User'
-      deprecated: false
-    get:
-      tags:
-        - User
-      summary: Find all instances of the model matched by filter from the data source.
-      operationId: User.find
-      parameters:
-        - name: filter
-          in: query
-          description: 'Filter defining fields, where, include, order, offset, and limit'
-          required: false
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/User'
-      deprecated: false
-  '/Users/{id}/exists':
-    get:
-      tags:
-        - User
-      summary: Check whether a model instance exists in the data source.
-      operationId: 'User.exists__get_Users_{id}_exists'
-      parameters:
-        - name: id
-          in: path
-          description: Model id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: object
-            properties:
-              exists:
-                type: boolean
-      deprecated: false
-  '/Users/{id}':
-    head:
-      tags:
-        - User
-      summary: Check whether a model instance exists in the data source.
-      operationId: 'User.exists__head_Users_{id}'
-      parameters:
-        - name: id
-          in: path
-          description: Model id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: object
-            properties:
-              exists:
-                type: boolean
-      deprecated: false
-    get:
-      tags:
-        - User
-      summary: Find a model instance by id from the data source.
-      operationId: User.findById
-      parameters:
-        - name: id
-          in: path
-          description: Model id
-          required: true
-          type: string
-          format: JSON
-        - name: filter
-          in: query
-          description: Filter defining fields and include
-          required: false
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/User'
-      deprecated: false
-    delete:
-      tags:
-        - User
-      summary: Delete a model instance by id from the data source.
-      operationId: User.deleteById
-      parameters:
-        - name: id
-          in: path
-          description: Model id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: object
-      deprecated: false
-    put:
-      tags:
-        - User
-      summary: >-
-        Update attributes for a model instance and persist it into the data
-        source.
-      operationId: User.prototype.updateAttributes
-      parameters:
-        - name: data
-          in: body
-          description: An object of model property name/value pairs
-          required: false
-          schema:
-            $ref: '#/definitions/User'
-        - name: id
-          in: path
-          description: User id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/User'
-      deprecated: false
-  /Users/findOne:
-    get:
-      tags:
-        - User
-      summary: Find first instance of the model matched by filter from the data source.
-      operationId: User.findOne
-      parameters:
-        - name: filter
-          in: query
-          description: 'Filter defining fields, where, include, order, offset, and limit'
-          required: false
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/User'
-      deprecated: false
-  /Users/update:
-    post:
-      tags:
-        - User
-      summary: Update instances of the model matched by where from the data source.
-      operationId: User.updateAll
-      parameters:
-        - name: where
-          in: query
-          description: Criteria to match model instances
-          required: false
-          type: string
-          format: JSON
-        - name: data
-          in: body
-          description: An object of model property name/value pairs
-          required: false
-          schema:
-            $ref: '#/definitions/User'
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            description: The number of instances updated
-            type: object
-      deprecated: false
-  /Users/count:
-    get:
-      tags:
-        - User
-      summary: Count instances of the model matched by where from the data source.
-      operationId: User.count
-      parameters:
-        - name: where
-          in: query
-          description: Criteria to match model instances
-          required: false
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: object
-            properties:
-              count:
-                type: number
-                format: double
-      deprecated: false
-  /Users/change-stream:
-    post:
-      tags:
-        - User
-      summary: Create a change stream.
-      operationId: User.createChangeStream__post_Users_change-stream
-      parameters:
-        - name: options
-          in: formData
-          required: false
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: file
-      deprecated: false
-    get:
-      tags:
-        - User
-      summary: Create a change stream.
-      operationId: User.createChangeStream__get_Users_change-stream
-      parameters:
-        - name: options
-          in: query
-          required: false
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: file
-      deprecated: false
-  /Users/login:
-    post:
-      tags:
-        - User
-      summary: Login a user with username/email and password.
-      operationId: User.login
-      parameters:
-        - name: credentials
-          in: body
-          required: true
-          schema:
-            type: object
-        - name: include
-          in: query
-          description: >-
-            Related objects to include in the response. See the description of
-            return value for more details.
-          required: false
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            description: >+
-              The response body contains properties of the AccessToken created
-              on login.
-
-              Depending on the value of `include` parameter, the body may
-              contain additional properties:
-
-                - `user` - `{User}` - Data of the currently logged in user. (`include=user`)
-
-            type: object
-      deprecated: false
-  /Users/logout:
-    post:
-      tags:
-        - User
-      summary: Logout a user with access token.
-      operationId: User.logout
-      parameters: []
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
-  /Users/confirm:
-    get:
-      tags:
-        - User
-      summary: Confirm a user registration with email verification token.
-      operationId: User.confirm
-      parameters:
-        - name: uid
-          in: query
-          required: true
-          type: string
-        - name: token
-          in: query
-          required: true
-          type: string
-        - name: redirect
-          in: query
-          required: false
-          type: string
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
-  /Users/reset:
-    post:
-      tags:
-        - User
-      summary: Reset password for a user with email.
-      operationId: User.resetPassword
-      parameters:
-        - name: options
-          in: body
-          required: true
-          schema:
-            type: object
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
   '/Suppliers/{id}/products/{fk}':
     get:
       tags:
@@ -1376,53 +847,225 @@ paths:
           schema:
             $ref: '#/definitions/Inventory'
       deprecated: false
+  '/Users/{id}/accessTokens/{fk}':
+    get:
+      tags:
+        - ERPUser
+      summary: Find a related item by id for accessTokens.
+      operationId: ERPUser.prototype.__findById__accessTokens
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for accessTokens
+          required: true
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/AccessToken'
+      deprecated: false
+    delete:
+      tags:
+        - ERPUser
+      summary: Delete a related item by id for accessTokens.
+      operationId: ERPUser.prototype.__destroyById__accessTokens
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for accessTokens
+          required: true
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+    put:
+      tags:
+        - ERPUser
+      summary: Update a related item by id for accessTokens.
+      operationId: ERPUser.prototype.__updateById__accessTokens
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for accessTokens
+          required: true
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/AccessToken'
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/AccessToken'
+      deprecated: false
+  '/Users/{id}/accessTokens':
+    get:
+      tags:
+        - ERPUser
+      summary: Queries accessTokens of ERPUser.
+      operationId: ERPUser.prototype.__get__accessTokens
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccessToken'
+      deprecated: false
+    post:
+      tags:
+        - ERPUser
+      summary: Creates a new instance in accessTokens of this model.
+      operationId: ERPUser.prototype.__create__accessTokens
+      parameters:
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/AccessToken'
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/AccessToken'
+      deprecated: false
+    delete:
+      tags:
+        - ERPUser
+      summary: Deletes all accessTokens of this model.
+      operationId: ERPUser.prototype.__delete__accessTokens
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+  '/Users/{id}/accessTokens/count':
+    get:
+      tags:
+        - ERPUser
+      summary: Counts accessTokens of ERPUser.
+      operationId: ERPUser.prototype.__count__accessTokens
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              count:
+                type: number
+                format: double
+      deprecated: false
+  /Users/login:
+    post:
+      tags:
+        - ERPUser
+      summary: Login a user with username/email and password.
+      operationId: ERPUser.login
+      parameters:
+        - name: credentials
+          in: body
+          required: true
+          schema:
+            type: object
+        - name: include
+          in: query
+          description: >-
+            Related objects to include in the response. See the description of
+            return value for more details.
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            description: >+
+              The response body contains properties of the AccessToken created
+              on login.
+
+              Depending on the value of `include` parameter, the body may
+              contain additional properties:
+
+                - `user` - `{User}` - Data of the currently logged in user. (`include=user`)
+
+            type: object
+      deprecated: false
+  /Users/logout:
+    post:
+      tags:
+        - ERPUser
+      summary: Logout a user with access token.
+      operationId: ERPUser.logout
+      parameters: []
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
 definitions:
   x-any:
     properties: {}
-  AccessToken:
-    properties:
-      id:
-        type: string
-      ttl:
-        default: 1209600
-        description: time to live in seconds (2 weeks by default)
-        type: number
-        format: double
-      created:
-        type: string
-        format: date
-      userId:
-        type: string
-    required:
-      - id
-    additionalProperties: false
-  User:
-    properties:
-      realm:
-        type: string
-      username:
-        type: string
-      credentials:
-        type: object
-      challenges:
-        type: object
-      email:
-        type: string
-      emailVerified:
-        type: boolean
-      status:
-        type: string
-      created:
-        type: string
-        format: date
-      lastUpdated:
-        type: string
-        format: date
-      id:
-        type: string
-    required:
-      - email
-    additionalProperties: false
   Product:
     properties:
       name:
@@ -1517,6 +1160,23 @@ definitions:
       dcId:
         type: string
     additionalProperties: false
+  AccessToken:
+    properties:
+      id:
+        type: string
+      ttl:
+        default: 1209600
+        description: time to live in seconds (2 weeks by default)
+        type: number
+        format: double
+      created:
+        type: string
+        format: date
+      userId:
+        type: string
+    required:
+      - id
+    additionalProperties: false
   Address:
     properties:
       city:
@@ -1544,10 +1204,10 @@ definitions:
       - name
     additionalProperties: false
 tags:
-  - name: User
   - name: Supplier
   - name: Product
   - name: DistributionCenter
   - name: Shipment
   - name: Retailer
   - name: Inventory
+  - name: ERPUser
