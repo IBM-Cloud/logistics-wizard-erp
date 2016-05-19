@@ -1,5 +1,13 @@
 // Licensed under the Apache License. See footer for details.
+/**
+ * Helper module.
+ * @module model.helper
+ */
 module.exports = {
+  /**
+   * Disables all write methods on a model, keeping only the GET.
+   * @param Model - The model to process.
+   */
   readOnly: function(Model) {
     Model.disableRemoteMethod('create', true);
     Model.disableRemoteMethod('upsert', true);
@@ -11,6 +19,10 @@ module.exports = {
     Model.disableRemoteMethod('findOne', true);
     Model.disableRemoteMethod('exists', true);
   },
+  /**
+   * Keeps only the simple GET/POST/PUT/DELETE methods.
+   * @param Model - The model to process.
+   */
   simpleCrud: function(Model) {
     Model.disableRemoteMethod('upsert', true);
     Model.disableRemoteMethod("updateAll", true);
@@ -19,6 +31,11 @@ module.exports = {
     Model.disableRemoteMethod('findOne', true);
     Model.disableRemoteMethod('exists', true);    
   },
+  /**
+   * Keeps only the GET methods for the given relation
+   * @param Model - The model to process.
+   * @param relation - The relation to alter.
+   */
   readOnlyRelation: function(Model, relation) {
     Model.disableRemoteMethod('__create__' + relation, false);
     Model.disableRemoteMethod('__updateById__' + relation, false);
@@ -30,6 +47,11 @@ module.exports = {
     Model.disableRemoteMethod('__unlink__' + relation, false);
     Model.disableRemoteMethod('__exists__' + relation, false);
   },
+  /**
+   * Hides the given relation from the Model remote methods.
+   * @param Model - The model to process.
+   * @param relation - The relation to hide.
+   */
   hideRelation: function(Model, relation) {
     Model.disableRemoteMethod('__create__' + relation, false);
     Model.disableRemoteMethod('__get__' + relation, false);

@@ -1,7 +1,7 @@
 {
   "name": "ERPUser",
-  "base": "User",
   "plural": "Users",
+  "base": "User",
   "idInjection": true,
   "options": {
     "validateUpsert": true
@@ -9,6 +9,13 @@
   "properties": {},
   "validations": [],
   "relations": {},
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    }
+  ],
   "methods": {}
 }

@@ -24,6 +24,19 @@
       "foreignKey": "dcId"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "supplychainmanager",
+      "permission": "ALLOW"
+    }
+  ],
   "methods": {}
 }

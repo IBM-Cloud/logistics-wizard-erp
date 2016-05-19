@@ -1,18 +1,26 @@
 // Licensed under the Apache License. See footer for details.
-var helper = require("./helper.js");
+module.exports = function (app, done) {
 
-module.exports = function (ErpUser) {
+  app.models.Role.find(function (err, roles) {
+    if (err) {
+      done(err);
+    } else if (roles.length == 0) {
+      console.log("ERP roles not found. Creating...");
+      app.models.Role.create([{
+        name: app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE
+        }, {
+        name: app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE
+        }], function (err, roles) {
+        if (err) {
+          done(err);
+        } else {
+          console.log("Created", roles.length, "roles");
+          done();
+        }
+      });
+    }
+  });
 
-  // ERP roles named - they get initialized in server/boot/create-roles.js
-  ErpUser.SUPPLY_CHAIN_MANAGER_ROLE = "supplychainmanager";
-  ErpUser.RETAIL_STORE_MANAGER_ROLE = "retailstoremanager";
-  
-  // remove all remote API methods, leaving only login/logout and token management
-  helper.readOnly(ErpUser);
-  ErpUser.disableRemoteMethod('find', true);
-  ErpUser.disableRemoteMethod('findById', true);
-  ErpUser.disableRemoteMethod('confirm', true);
-  ErpUser.disableRemoteMethod('resetPassword', true);
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
