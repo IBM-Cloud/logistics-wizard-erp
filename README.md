@@ -139,8 +139,8 @@ The API allows to:
 * create, retrieve, update, delete Shipments.
 
 The API defines the following roles:
-* supply chain manager - can manage Shipments
-* auditor - can only view data
+* supply chain manager - can view all data and manage Shipments
+* retail store manager - can view all data except Inventory and Suppliers
 
 ### Logistics Wizard ERP Simulator
 
