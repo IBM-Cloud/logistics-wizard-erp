@@ -1107,7 +1107,7 @@ definitions:
   LineItem:
     properties:
       quantity:
-        default: '0'
+        default: 0
         type: number
         format: double
       id:
@@ -1150,7 +1150,7 @@ definitions:
   Inventory:
     properties:
       quantity:
-        default: '0'
+        default: 0
         type: number
         format: double
       id:
