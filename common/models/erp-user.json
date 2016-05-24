@@ -8,13 +8,25 @@
   },
   "properties": {},
   "validations": [],
-  "relations": {},
+  "relations": {
+    "demo": {
+      "type": "belongsTo",
+      "model": "Demo",
+      "foreignKey": "demoId"
+    }
+  },
   "acls": [
     {
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "$everyone",
       "permission": "DENY"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW",
+      "property": "getRoles"
     }
   ],
   "methods": {}

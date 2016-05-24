@@ -6,13 +6,78 @@ module.exports = function (ErpUser) {
   // ERP roles named - they get initialized in server/boot/create-roles.js
   ErpUser.SUPPLY_CHAIN_MANAGER_ROLE = "supplychainmanager";
   ErpUser.RETAIL_STORE_MANAGER_ROLE = "retailstoremanager";
-  
+
   // remove all remote API methods, leaving only login/logout and token management
   helper.readOnly(ErpUser);
   ErpUser.disableRemoteMethod('find', true);
   ErpUser.disableRemoteMethod('findById', true);
   ErpUser.disableRemoteMethod('confirm', true);
   ErpUser.disableRemoteMethod('resetPassword', true);
+
+  // hide the link back to the demo
+  helper.hideRelation(ErpUser, 'demo');
+
+  // callback(err, principal)
+  ErpUser.assignRole = function (user, roleName, callback) {
+    ErpUser.app.models.Role.find({
+      where: {
+        name: roleName
+      }
+    }, function (err, roles) {
+      roles[0].principals.create({
+        principalType: ErpUser.app.models.RoleMapping.USER,
+        principalId: user.id
+      }, function (err, principal) {
+        callback(err, principal);
+      });
+    });
+  };
+
+  ErpUser.getRoles = function (id, callback) {
+    ErpUser.app.models.Role.getRoles({
+        principalType: ErpUser.app.models.RoleMapping.USER,
+        principalId: id
+      },
+      function (err, roleIds) {
+        if (err) {
+          callback(err);
+        } else {
+          ErpUser.app.models.Role.find({
+              where: {
+                id: {
+                  inq: roleIds
+                }
+              }
+            },
+            function (err, roles) {
+              callback(err, roles);
+            });
+        }
+      });
+  }
+
+  ErpUser.remoteMethod("getRoles", {
+    description: "Gets the given user roles",
+    http: {
+      path: '/:id/roles',
+      verb: 'get'
+    },
+    accepts: [
+      {
+        arg: "id",
+        type: "string",
+        http: {
+          source: "path"
+        }
+      }
+    ],
+    returns: {
+      arg: "roles",
+      type: ["Role"],
+      root: true
+    }
+  });
+
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
