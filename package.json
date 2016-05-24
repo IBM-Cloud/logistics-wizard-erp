@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "async": "^2.0.0-rc.4",
+    "bcrypt": "^0.8.6",
     "bower": "^1.7.9",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
@@ -20,6 +21,7 @@
     "loopback-connector-cloudant": "^1.0.11",
     "loopback-connector-memory-idstr": "^1.0.0",
     "loopback-datasource-juggler": "^2.39.0",
+    "randomstring": "^1.1.5",
     "serve-favicon": "^2.0.1"
   },
   "devDependencies": {

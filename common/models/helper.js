@@ -5,6 +5,23 @@
  */
 module.exports = {
   /**
+   * Disables all remote methods on a model.
+   * @param Model - The model to process.
+   */
+  hideAll: function(Model) {
+    Model.disableRemoteMethod('find', true);
+    Model.disableRemoteMethod('findById', true);
+    Model.disableRemoteMethod('create', true);
+    Model.disableRemoteMethod('upsert', true);
+    Model.disableRemoteMethod('deleteById', true);
+    Model.disableRemoteMethod("updateAll", true);
+    Model.disableRemoteMethod("updateAttributes", false);
+    Model.disableRemoteMethod('createChangeStream', true);
+    Model.disableRemoteMethod('count', true);
+    Model.disableRemoteMethod('findOne', true);
+    Model.disableRemoteMethod('exists', true);
+  },
+  /**
    * Disables all write methods on a model, keeping only the GET.
    * @param Model - The model to process.
    */

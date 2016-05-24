@@ -72,5 +72,9 @@
   "ERPUser": {
     "dataSource": "db",
     "public": true
+  },
+  "Demo": {
+    "dataSource": "db",
+    "public": true
   }
 }
