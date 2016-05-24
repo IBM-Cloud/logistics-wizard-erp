@@ -66,6 +66,7 @@ module.exports = function (ErpUser) {
       {
         arg: "id",
         type: "string",
+        required: true,
         http: {
           source: "path"
         }
