@@ -21,3 +21,4 @@ client/vendor
 in-memory-database.json
 coverage
 .coveralls.yml
+out

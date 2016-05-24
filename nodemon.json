@@ -1,6 +1,6 @@
 {
   "verbose": true,
-  "ignore": ["in-memory-database.json", "seed/*"],
+  "ignore": ["in-memory-database.json", "client/**", "seed/**"],
   "execMap": {
     "rb": "ruby",
     "pde": "processing --sketch={{pwd}} --run"

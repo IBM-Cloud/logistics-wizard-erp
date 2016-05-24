@@ -4,3 +4,4 @@ in-memory-database.json
 *.md
 coverage
 .coveralls.yml
+out
