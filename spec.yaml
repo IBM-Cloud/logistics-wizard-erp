@@ -1063,9 +1063,79 @@ paths:
         '204':
           description: Request was successful
       deprecated: false
+  '/Users/{id}/roles':
+    get:
+      tags:
+        - ERPUser
+      summary: Gets the given user roles
+      operationId: ERPUser.getRoles
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Role'
+      deprecated: false
+  /Demos:
+    post:
+      tags:
+        - Demo
+      summary: Creates a new Demo environment
+      operationId: Demo.newDemo
+      parameters: []
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Demo'
+      deprecated: false
+  '/Demos/findByGuid/{guid}':
+    get:
+      tags:
+        - Demo
+      summary: Retrieves the Demo environment with the given guid
+      operationId: Demo.findByGuid
+      parameters:
+        - name: guid
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Demo'
+      deprecated: false
+  /Demos/loginAs:
+    post:
+      tags:
+        - Demo
+      summary: Logs in as the specified user belonging to the given demo environment
+      operationId: Demo.loginAs
+      parameters:
+        - name: guid
+          in: formData
+          required: true
+          type: string
+        - name: userId
+          in: formData
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/AccessToken'
+      deprecated: false
 definitions:
-  x-any:
-    properties: {}
   Product:
     properties:
       name:
@@ -1123,7 +1193,6 @@ definitions:
         default: NEW
         type: string
       createdAt:
-        default: $now
         type: string
         format: date
       updatedAt:
@@ -1177,6 +1246,36 @@ definitions:
     required:
       - id
     additionalProperties: false
+  Role:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      created:
+        type: string
+        format: date
+      modified:
+        type: string
+        format: date
+    required:
+      - name
+    additionalProperties: false
+  Demo:
+    properties:
+      createdAt:
+        type: string
+        format: date
+      email:
+        description: The owner of the demo session.
+        type: string
+      id:
+        type: string
+    required:
+      - createdAt
+    additionalProperties: false
   Address:
     properties:
       city:
@@ -1211,3 +1310,4 @@ tags:
   - name: Retailer
   - name: Inventory
   - name: ERPUser
+  - name: Demo
