@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "async": "^2.0.0-rc.4",
-    "bcrypt": "^0.8.6",
     "bower": "^1.7.9",
     "compression": "^1.0.3",
     "cors": "^2.5.2",

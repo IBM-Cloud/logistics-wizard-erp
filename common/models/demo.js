@@ -1,7 +1,7 @@
 // Licensed under the Apache License. See footer for details.
 var helper = require("./helper.js");
 var async = require("async");
-var bcrypt = require("bcrypt");
+var bcrypt = require("bcryptjs");
 var randomstring = require("randomstring");
 
 function makeUniqueSession(demo) {
