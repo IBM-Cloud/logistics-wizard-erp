@@ -1,6 +1,11 @@
 // Licensed under the Apache License. See footer for details.
 var supertest = require('supertest');
+var assert = require('chai').assert;
 var async = require('async');
+
+// workaround for "warning: possible EventEmitter memory leak detected"
+// seems to be linked to the number of unit tests in the file
+require('events').EventEmitter.prototype._maxListeners = 100;
 
 describe('Validates the Supply Chain Manager', function () {
 
@@ -65,14 +70,24 @@ describe('Validates the Supply Chain Manager', function () {
       .expect(200)
       .end(function (err, res) {
         // capture the token
-        api.loopbackAccessToken = res.body.id;
+        api.loopbackAccessToken = res.body;
+        done(err);
+      });
+  });
+
+  it('has the right rights', function (done) {
+    api.get("/Users/" + api.loopbackAccessToken.userId + "/roles")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .expect(200)
+      .end(function (err, res) {
+        assert.equal(app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE, res.body[0].name);
         done(err);
       });
   });
 
   it('can retrieve distribution centers when logged', function (done) {
     api.get("/DistributionCenters")
-      .set("Authorization", api.loopbackAccessToken)
+      .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
         done(err);
@@ -81,7 +96,7 @@ describe('Validates the Supply Chain Manager', function () {
 
   it('can retrieve inventories when logged', function (done) {
     api.get("/Inventories")
-      .set("Authorization", api.loopbackAccessToken)
+      .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
         done(err);
@@ -90,7 +105,7 @@ describe('Validates the Supply Chain Manager', function () {
 
   it('can retrieve products when logged', function (done) {
     api.get("/Products")
-      .set("Authorization", api.loopbackAccessToken)
+      .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
         done(err);
@@ -99,7 +114,7 @@ describe('Validates the Supply Chain Manager', function () {
 
   it('can retrieve retailers when logged', function (done) {
     api.get("/Retailers")
-      .set("Authorization", api.loopbackAccessToken)
+      .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
         done(err);
@@ -108,7 +123,7 @@ describe('Validates the Supply Chain Manager', function () {
 
   it('can retrieve shipments when logged', function (done) {
     api.get("/Shipments")
-      .set("Authorization", api.loopbackAccessToken)
+      .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
         done(err);
@@ -117,7 +132,7 @@ describe('Validates the Supply Chain Manager', function () {
 
   it('can create a new shipment when logged', function (done) {
     api.post("/Shipments")
-      .set("Authorization", api.loopbackAccessToken)
+      .set("Authorization", api.loopbackAccessToken.id)
       .send({
         "status": "NEW",
         "fromId": "0",
@@ -131,7 +146,7 @@ describe('Validates the Supply Chain Manager', function () {
 
   it('can retrieve suppliers when logged', function (done) {
     api.get("/Suppliers")
-      .set("Authorization", api.loopbackAccessToken)
+      .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
         done(err);
