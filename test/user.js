@@ -79,7 +79,6 @@ describe('Users', function () {
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
         email: "supplymanager@acme.com",
-        username: "Supply Manager",
         password: "supply"
       }))
       .expect(200)
@@ -98,6 +97,7 @@ describe('Users', function () {
         done(err);
       });
   });
+  
 });
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
