@@ -1,6 +1,7 @@
 // Licensed under the Apache License. See footer for details.
 var supertest = require('supertest');
 var assert = require('chai').assert;
+var fs = require('fs');
 
 describe('Demos', function () {
 
@@ -19,7 +20,10 @@ describe('Demos', function () {
     apiSupply = supertest(app);
     apiRetail = supertest(app);
 
-    done();
+    var retailers = JSON.parse(fs.readFileSync("./seed/retailer.json"));
+    app.models.Retailer.create(retailers, function (err, retailers) {
+      done(err);
+    });
   });
 
   var demoEnvironment;
@@ -54,6 +58,16 @@ describe('Demos', function () {
           assert.equal(1, demoEnvironmentFound.users[0].roles.length);
           assert.equal(1, demoEnvironmentFound.users[1].roles.length);
         }
+        done(err);
+      });
+  });
+
+  it('can retrieve the list of retailers', function (done) {
+    apiAnon.get("/Demos/" + demoEnvironment.guid + "/retailers")
+      .set('Content-Type', 'application/json')
+      .expect(200)
+      .end(function (err, res) {
+        assert.equal(4, res.body.length);
         done(err);
       });
   });

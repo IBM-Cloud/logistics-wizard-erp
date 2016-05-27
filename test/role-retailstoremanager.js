@@ -30,19 +30,9 @@ describe('Validates the Retail Store Manager', function () {
           });
       },
       function (user, callback) {
-          app.models.Role.find({
-            where: {
-              name: app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE
-            }
-          }, function (err, roles) {
-            console.log("Assigning role", roles[0].name, "to", user.email);
-            roles[0].principals.create({
-              principalType: app.models.RoleMapping.USER,
-              principalId: user.id
-            }, function (err, principal) {
-              callback();
-            });
-          });
+        app.models.ERPUser.assignRole(user, app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE, function(err, principal) {
+          callback();
+        });
       }],
       function (err, result) {
         done(err);

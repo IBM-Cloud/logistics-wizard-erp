@@ -74,6 +74,14 @@ module.exports = {
     Model.disableRemoteMethod('__get__' + relation, false);
     Model.disableRemoteMethod('__update__' + relation, false);
     Model.disableRemoteMethod('__destroy__' + relation, false);
+    Model.disableRemoteMethod('__delete__' + relation, false);
+    Model.disableRemoteMethod('__updateById__' + relation, false);
+    Model.disableRemoteMethod('__destroyById__' + relation, false);
+    Model.disableRemoteMethod('__count__' + relation, false);
+    Model.disableRemoteMethod('__findById__' + relation, false);
+    Model.disableRemoteMethod('__link__' + relation, false);
+    Model.disableRemoteMethod('__unlink__' + relation, false);
+    Model.disableRemoteMethod('__exists__' + relation, false);
   }
 }
 //------------------------------------------------------------------------------

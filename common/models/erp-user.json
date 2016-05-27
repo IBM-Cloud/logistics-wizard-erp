@@ -32,7 +32,7 @@
       "principalType": "ROLE",
       "principalId": "$owner",
       "permission": "ALLOW",
-      "property": "getRoles"
+      "property": "__get__roles"
     }
   ],
   "methods": {}

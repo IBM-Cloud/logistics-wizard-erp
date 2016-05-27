@@ -12,6 +12,7 @@ function makeUniqueSession(demo) {
 
 module.exports = function (Demo) {
   helper.hideAll(Demo);
+  helper.hideRelation(Demo, "users");
 
   Demo.newDemo = function (data, cb) {
 
@@ -89,7 +90,7 @@ module.exports = function (Demo) {
           function (err, demo) {
             callback(err, demo);
           });
-      // insert default shipments and inventories
+        // insert default shipments and inventories
       }
     ], function (err, result) {
       cb(err, result);
@@ -162,6 +163,58 @@ module.exports = function (Demo) {
     returns: {
       arg: "demo",
       type: "Demo",
+      root: true
+    }
+  });
+
+  Demo.retailers = function (guid, cb) {
+    async.waterfall([
+      // retrieve the demo
+      function (callback) {
+        Demo.findOne({
+          where: {
+            guid: guid
+          }
+        }, function (err, demo) {
+          if (!err && !demo) {
+            var notFound = new Error();
+            notFound.status = 404
+            callback(notFound);
+          } else {
+            callback(err);
+          }
+        });
+      },
+      // retrieve the user linked to this demo
+      function (callback) {
+        Demo.app.models.Retailer.find(function (err, retailers) {
+          callback(err, retailers);
+        });
+      }
+    ], function (err, retailers) {
+      cb(err, retailers);
+    });
+  };
+
+  Demo.remoteMethod('retailers', {
+    description: 'Returns all retailers',
+    http: {
+      path: '/:guid/retailers',
+      verb: 'get'
+    },
+    accepts: [
+      {
+        arg: "guid",
+        type: "string",
+        required: true,
+        http: {
+          source: "path"
+        }
+      }
+    ],
+    returns: {
+      arg: "retailers",
+      type: "[Retailer]",
       root: true
     }
   });

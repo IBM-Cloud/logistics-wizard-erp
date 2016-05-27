@@ -16,6 +16,7 @@ module.exports = function (ErpUser) {
 
   // hide the link back to the demo
   helper.hideRelation(ErpUser, 'demo');
+  helper.readOnlyRelation(ErpUser, 'roles');
 
   // callback(err, principal)
   ErpUser.assignRole = function (user, roleName, callback) {
@@ -39,52 +40,6 @@ module.exports = function (ErpUser) {
     ErpUser.app.models.AccessToken.destroyAll({userId: ctx.where.id}, function(err, info) {
       next();
     });
-  });
-
-  ErpUser.getRoles = function (id, callback) {
-    ErpUser.app.models.Role.getRoles({
-        principalType: ErpUser.app.models.RoleMapping.USER,
-        principalId: id
-      },
-      function (err, roleIds) {
-        if (err) {
-          callback(err);
-        } else {
-          ErpUser.app.models.Role.find({
-              where: {
-                id: {
-                  inq: roleIds
-                }
-              }
-            },
-            function (err, roles) {
-              callback(err, roles);
-            });
-        }
-      });
-  }
-
-  ErpUser.remoteMethod("getRoles", {
-    description: "Gets the given user roles",
-    http: {
-      path: '/:id/roles',
-      verb: 'get'
-    },
-    accepts: [
-      {
-        arg: "id",
-        type: "string",
-        required: true,
-        http: {
-          source: "path"
-        }
-      }
-    ],
-    returns: {
-      arg: "roles",
-      type: ["Role"],
-      root: true
-    }
   });
 
 };
