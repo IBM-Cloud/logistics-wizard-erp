@@ -10,10 +10,6 @@
       "type": "date",
       "required": true,
       "default": "$now"
-    },
-    "email": {
-      "type": "string",
-      "description": "The owner of the Demo environment."
     }
   },
   "validations": [],
