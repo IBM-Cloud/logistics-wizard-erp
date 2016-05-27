@@ -22,14 +22,6 @@ describe('Demos', function () {
     done();
   });
 
-  after(function (done) {
-    app.models.Demo.destroyAll(function (err, info) {
-      app.models.ERPUser.destroyAll(function (err, info) {
-        done(err);
-      });
-    });
-  });
-
   var demoEnvironment;
 
   it('can create a Demo environment', function (done) {
@@ -97,7 +89,7 @@ describe('Demos', function () {
   });
 
   it('can log in as a user without providing credentials', function (done) {
-    apiAnon.post("/Demos/loginAs")
+    apiSupply.post("/Demos/loginAs")
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
         guid: demoEnvironment.guid,
@@ -106,6 +98,44 @@ describe('Demos', function () {
       .expect(200)
       .end(function (err, res) {
         assert.isNotNull(res.body.id);
+        apiSupply.loopbackAccessToken = res.body;
+        done(err);
+      });
+  });
+
+  it('can query ERP API with a user', function (done) {
+    apiSupply.get('/Products')
+      .set("Authorization", apiSupply.loopbackAccessToken.id)
+      .expect(200)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+
+  it('can delete a demo environment', function (done) {
+    apiAnon.delete("/Demos/" + demoEnvironment.guid)
+      .set('Content-Type', 'application/json')
+      .expect(204)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it('can not retrieve a deleted environment', function (done) {
+    apiAnon.get("/Demos/findByGuid/" + demoEnvironment.guid)
+      .set('Content-Type', 'application/json')
+      .expect(404)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it('can not query ERP API with a user from a deleted environment', function (done) {
+    apiSupply.get('/Products')
+      .set("Authorization", apiSupply.loopbackAccessToken.id)
+      .expect(401)
+      .end(function (err, res) {
         done(err);
       });
   });

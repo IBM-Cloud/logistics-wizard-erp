@@ -3,7 +3,7 @@ var helper = require("./helper.js");
 
 module.exports = function (ErpUser) {
 
-  // ERP roles named - they get initialized in server/boot/create-roles.js
+  // ERP roles - they get initialized in server/boot/create-roles.js
   ErpUser.SUPPLY_CHAIN_MANAGER_ROLE = "supplychainmanager";
   ErpUser.RETAIL_STORE_MANAGER_ROLE = "retailstoremanager";
 
@@ -32,6 +32,14 @@ module.exports = function (ErpUser) {
       });
     });
   };
+
+  // Delete access tokens for the given user
+  ErpUser.observe('after delete', function (ctx, next) {
+    console.log("Deleting access tokens for user", ctx.where.id);
+    ErpUser.app.models.AccessToken.destroyAll({userId: ctx.where.id}, function(err, info) {
+      next();
+    });
+  });
 
   ErpUser.getRoles = function (id, callback) {
     ErpUser.app.models.Role.getRoles({

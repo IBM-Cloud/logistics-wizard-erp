@@ -20,7 +20,9 @@ module.exports = function (Demo) {
     async.waterfall([
       // create a new demo environment
       function (callback) {
-        Demo.create({ name: data.name }, function (err, demo) {
+        Demo.create({
+          name: data.name
+        }, function (err, demo) {
           callback(err, demo);
         });
       },
@@ -227,6 +229,85 @@ module.exports = function (Demo) {
       root: true
     }
   });
+
+  // Delete users associated to a demo environment
+  Demo.observe("after delete", function (context, next) {
+    console.log("Deleting users linked to demo", context.where.id);
+    Demo.app.models.ERPUser.find({
+      where: {
+        demoId: context.where.id
+      }
+    }, function (err, users) {
+      if (err) {
+        next(err);
+      } else if (users.length == 0) {
+        next();
+      } else {
+        async.waterfall(users.map(function (user) {
+          return function (callback) {
+            console.log("Deleting user", user.email);
+            user.destroy(function () {
+              callback();
+            });
+          }
+        }), function (err, result) {
+          next();
+        });
+      }
+    });
+  });
+
+  Demo.deleteByGuid = function (guid, cb) {
+    console.log("Deleting demo with guid", guid);
+    async.waterfall([
+      // retrieve the demo
+      function (callback) {
+          Demo.findOne({
+            where: {
+              guid: guid
+            }
+          }, function (err, demo) {
+            if (!err && !demo) {
+              var notFound = new Error();
+              notFound.status = 404
+              callback(notFound);
+            } else {
+              callback(err, demo);
+            }
+          });
+      },
+      // delete the demo
+      function (demo, callback) {
+          Demo.destroyById(demo.id,
+            function (err, info) {
+              console.log("Deleted demo", demo.id);
+              callback(err, demo);
+            });
+      }
+    ],
+      function (err, result) {
+        cb(err);
+      });
+  };
+
+  Demo.remoteMethod('deleteByGuid', {
+    description: 'Deletes the given demo environment',
+    http: {
+      path: '/:guid',
+      verb: 'delete'
+    },
+    accepts: [
+      {
+        arg: "guid",
+        type: "string",
+        required: true,
+        http: {
+          source: "path"
+        }
+      }
+    ]
+  });
+
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
