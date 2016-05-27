@@ -81,6 +81,15 @@ describe('Demos', function () {
       });
   });
 
+    it('gets an error if trying to retrieve retailers with an invalid environment', function (done) {
+    apiAnon.get("/Demos/blah/retailers")
+      .set('Content-Type', 'application/json')
+      .expect(404)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
   it('can log in as a user without providing credentials', function (done) {
     apiSupply.post("/Demos/loginAs")
       .set('Content-Type', 'application/json')
