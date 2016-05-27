@@ -13,14 +13,14 @@ function makeUniqueSession(demo) {
 module.exports = function (Demo) {
   helper.hideAll(Demo);
 
-  Demo.newDemo = function (cb) {
+  Demo.newDemo = function (data, cb) {
 
     var app = Demo.app;
 
     async.waterfall([
       // create a new demo environment
       function (callback) {
-        Demo.create({}, function (err, demo) {
+        Demo.create({ name: data.name }, function (err, demo) {
           callback(err, demo);
         });
       },
@@ -84,6 +84,15 @@ module.exports = function (Demo) {
       path: '/',
       verb: 'post'
     },
+    accepts: [
+      {
+        arg: 'data',
+        type: 'Demo',
+        http: {
+          source: 'body'
+        }
+      }
+    ],
     returns: {
       arg: "demo",
       type: "Demo",

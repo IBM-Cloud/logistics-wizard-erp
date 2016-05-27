@@ -1,5 +1,10 @@
 <div class="container" ng-controller="ViewDemoController">
   
+  <h2>
+    {{demo.name}} <small><span class="text-muted">{{demo.createdAt}}</span></small>
+  </h2>
+  <hr/>
+  
   <div class="panel panel-default" ng-repeat="user in demo.users">
     <div class="panel-heading">
       <h3 class="panel-title">{{user.username}} {{user.email}}</h3>

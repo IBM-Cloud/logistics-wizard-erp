@@ -10,6 +10,10 @@
       "type": "date",
       "required": true,
       "default": "$now"
+    },
+    "name": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],

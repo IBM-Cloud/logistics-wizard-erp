@@ -35,10 +35,14 @@ describe('Demos', function () {
   it('can create a Demo environment', function (done) {
     apiAnon.post("/Demos")
       .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        name: "My Demo"
+      }))
       .expect(200)
       .end(function (err, res) {
         if (!err) {
           demoEnvironment = res.body;
+          assert.equal("My Demo", demoEnvironment.name);
         }
         done(err);
       });

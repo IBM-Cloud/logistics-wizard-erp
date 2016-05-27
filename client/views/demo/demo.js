@@ -20,14 +20,16 @@
 
     $scope.newDemo = function () {
       console.log("Creating new Demo environment");
-      Demo.newDemo(function (demo) {
-        console.log(demo);
-        $state.go('demo/view', {
-          guid: demo.guid
+      Demo.newDemo({ name: $("#name").val() },
+        function (demo) {
+          console.log(demo);
+          $state.go('demo/view', {
+            guid: demo.guid
+          });
+        },
+        function (res) {
+          console.log(res);
         });
-      }, function (res) {
-        console.log(res);
-      });
     };
 
   }]);
