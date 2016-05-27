@@ -73,8 +73,24 @@ module.exports = function (Demo) {
           function (err, principal) {
             callback(err, demo)
           });
-      }
+      },
+      // returns the demo, its users and the roles
+      function (demo, callback) {
+        Demo.findById(demo.id, {
+            include: {
+              relation: 'users',
+              scope: {
+                include: {
+                  relation: 'roles'
+                }
+              }
+            }
+          },
+          function (err, demo) {
+            callback(err, demo);
+          });
       // insert default shipments and inventories
+      }
     ], function (err, result) {
       cb(err, result);
     });
@@ -103,39 +119,28 @@ module.exports = function (Demo) {
   });
 
   Demo.findByGuid = function (guid, cb) {
-    async.waterfall([
-      // retrieve the demo
-      function (callback) {
-        Demo.findOne({
-          where: {
-            guid: guid
+    Demo.findOne({
+        where: {
+          guid: guid
+        },
+        include: {
+          relation: 'users',
+          scope: {
+            include: {
+              relation: 'roles'
+            }
           }
-        }, function (err, demo) {
-          if (!err && !demo) {
-            var notFound = new Error();
-            notFound.status = 404
-            callback(notFound);
-          } else {
-            callback(err, demo);
-          }
-        });
+        }
       },
-      // retrieve the users linked to this demo
-      function (demo, callback) {
-        Demo.app.models.ERPUser.find({
-          where: {
-            demoId: demo.id
-          }
-        }, function (err, users) {
-          if (!err) {
-            demo.users = users;
-          }
-          callback(err, demo);
-        });
-      }
-    ], function (err, demo) {
-      cb(err, demo);
-    });
+      function (err, demo) {
+        if (!err && !demo) {
+          var notFound = new Error();
+          notFound.status = 404
+          cb(notFound);
+        } else {
+          cb(err, demo);
+        }
+      });
   };
 
   Demo.remoteMethod('findByGuid', {

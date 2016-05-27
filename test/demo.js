@@ -35,33 +35,10 @@ describe('Demos', function () {
         if (!err) {
           demoEnvironment = res.body;
           assert.equal("My Demo", demoEnvironment.name);
+          assert.equal(2, demoEnvironment.users.length);
+          assert.equal(1, demoEnvironment.users[0].roles.length);
+          assert.equal(1, demoEnvironment.users[1].roles.length);
         }
-        done(err);
-      });
-  });
-
-  it('creates one Supply Chain Manager user that can login', function (done) {
-    apiSupply.post("/Users/login")
-      .set('Content-Type', 'application/json')
-      .send(JSON.stringify({
-        email: demoEnvironment.users[0].email,
-        password: demoEnvironment.users[0].password
-      }))
-      .expect(200)
-      .end(function (err, res) {
-        done(err);
-      });
-  });
-
-  it('creates one Retail Store Manager user that can login', function (done) {
-    apiRetail.post("/Users/login")
-      .set('Content-Type', 'application/json')
-      .send(JSON.stringify({
-        email: demoEnvironment.users[1].email,
-        password: demoEnvironment.users[1].password
-      }))
-      .expect(200)
-      .end(function (err, res) {
         done(err);
       });
   });
@@ -74,6 +51,8 @@ describe('Demos', function () {
         if (!err) {
           var demoEnvironmentFound = res.body;
           assert.equal(2, demoEnvironmentFound.users.length);
+          assert.equal(1, demoEnvironmentFound.users[0].roles.length);
+          assert.equal(1, demoEnvironmentFound.users[1].roles.length);
         }
         done(err);
       });
