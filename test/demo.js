@@ -72,24 +72,6 @@ describe('Demos', function () {
       });
   });
 
-  it('gets an error if trying to retrieve a non-existent environment', function (done) {
-    apiAnon.get("/Demos/findByGuid/blah")
-      .set('Content-Type', 'application/json')
-      .expect(404)
-      .end(function (err, res) {
-        done(err);
-      });
-  });
-
-  it('gets an error if trying to retrieve retailers with an invalid environment', function (done) {
-    apiAnon.get("/Demos/blah/retailers")
-      .set('Content-Type', 'application/json')
-      .expect(404)
-      .end(function (err, res) {
-        done(err);
-      });
-  });
-
   it('can log in as a user without providing credentials', function (done) {
     apiSupply.post("/Demos/loginAs")
       .set('Content-Type', 'application/json')
@@ -159,6 +141,31 @@ describe('Demos', function () {
     apiSupply.get('/Products')
       .set("Authorization", apiSupply.loopbackAccessToken.id)
       .expect(401)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it('gets an error if trying to work with a non-existent environment', function (done) {
+    apiAnon.get("/Demos/findByGuid/blah")
+      .set('Content-Type', 'application/json')
+      .expect(404)
+      .end(function (err, res) {
+        if (err) {
+          done(err);
+        }
+      });
+    apiAnon.post("/Demos/blah/createUser")
+      .set('Content-Type', 'application/json')
+      .expect(404)
+      .end(function (err, res) {
+        if (err) {
+          done(err);
+        }
+      });
+    apiAnon.get("/Demos/blah/retailers")
+      .set('Content-Type', 'application/json')
+      .expect(404)
       .end(function (err, res) {
         done(err);
       });
