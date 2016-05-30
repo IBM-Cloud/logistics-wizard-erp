@@ -34,7 +34,7 @@ module.exports = function (Demo) {
           callback(err, demo);
         });
       },
-      // create two new users
+      // create the supply chain manager
       function (demo, callback) {
         var random = randomstring.generate(10)
         var supplyChainManager = {
@@ -44,33 +44,14 @@ module.exports = function (Demo) {
           demoId: demo.id
         }
 
-        var retailStoreManager = {
-          email: "ruth." + random + "@acme.com",
-          username: "Retail Store Manager (" + random + ")",
-          password: randomstring.generate(10),
-          demoId: demo.id
-        }
-
-        app.models.ERPUser.create([supplyChainManager, retailStoreManager], function (err, users) {
-          if (!err) {
-            supplyChainManager.id = users[0].id;
-            retailStoreManager.id = users[1].id;
-            demo.users = [supplyChainManager, retailStoreManager];
-          }
-          callback(err, demo, users);
+        app.models.ERPUser.create(supplyChainManager, function (err, user) {
+          callback(err, demo, user);
         });
       },
       // assign roles to the users
-      function (demo, users, callback) {
-        Demo.app.models.ERPUser.assignRole(users[0],
+      function (demo, user, callback) {
+        Demo.app.models.ERPUser.assignRole(user,
           Demo.app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE,
-          function (err, principal) {
-            callback(err, demo, users)
-          });
-      },
-      function (demo, users, callback) {
-        Demo.app.models.ERPUser.assignRole(users[1],
-          Demo.app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE,
           function (err, principal) {
             callback(err, demo)
           });
@@ -214,7 +195,7 @@ module.exports = function (Demo) {
     ],
     returns: {
       arg: "retailers",
-      type: "[Retailer]",
+      type: [ "Retailer" ],
       root: true
     }
   });
@@ -366,8 +347,8 @@ module.exports = function (Demo) {
     ]
   });
 
-  Demo.createUserByGuid = function (guid, cb) {
-    console.log("Adding new Retail Store Manager to demo with guid", guid);
+  Demo.createUserByGuid = function (guid, retailerId, cb) {
+    console.log("Adding new Retail Store Manager to demo with guid", guid, retailerId);
 
     var app = Demo.app;
 
@@ -381,15 +362,35 @@ module.exports = function (Demo) {
           }, function (err, demo) {
             if (!err && !demo) {
               var notFound = new Error();
-              notFound.status = 404
+              notFound.status = 404;
               callback(notFound);
             } else {
               callback(err, demo);
             }
           });
       },
-      // create the user
+      // retrieve the store
       function (demo, callback) {
+          app.models.Retailer.findById(retailerId, function (err, retailer) {
+            if (!err && !retailer) {
+              var notFound = new Error();
+              notFound.status = 404
+              callback(notFound);
+            } else {
+              // check that the store demoId is the same as the user demoId
+              if (retailer.demoId && retailer.demoId != demo.id) {
+                // can't assign a manager from another demo with this one
+                var invalidDemoId = new Error("Demo id does not match the one from the retail store");
+                invalidDemoId.status = 400;
+                callback(invalidDemoId);
+              } else {
+                callback(err, demo, retailer);
+              }
+            }
+          });
+      },
+      // create the user
+      function (demo, retailer, callback) {
           var random = randomstring.generate(10)
           var retailStoreManager = {
             email: "ruth." + random + "@acme.com",
@@ -399,16 +400,23 @@ module.exports = function (Demo) {
           }
 
           app.models.ERPUser.create(retailStoreManager, function (err, user) {
-            callback(err, demo, user);
+            callback(err, demo, retailer, user);
           });
       },
       // assign Retail manager role to the user
-      function (demo, user, callback) {
+      function (demo, retailer, user, callback) {
           Demo.app.models.ERPUser.assignRole(user,
             Demo.app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE,
             function (err, principal) {
-              callback(err, user)
+              callback(err, retailer, user)
             });
+      },
+      // assign the user as manager for the store
+      function (retailer, user, callback) {
+          retailer.managerId = user.id
+          retailer.save(function (err, updated) {
+            callback(err, user);
+          });
       }
     ],
       function (err, user) {
@@ -430,6 +438,11 @@ module.exports = function (Demo) {
         http: {
           source: "path"
         }
+      },
+      {
+        arg: "retailerId",
+        type: "string",
+        required: true
       }
     ],
     returns: {

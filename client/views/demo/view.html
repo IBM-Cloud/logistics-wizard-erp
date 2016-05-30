@@ -6,7 +6,14 @@
   <hr/>
 
   <div>
-    <button ng-click="addUser()" class="btn btn-default">Add Retail Store Manager</button>
+
+    <form class="form-inline">
+      <select class="form-control" id="retailerId">
+        <option value="{{retailer.id}}" ng-repeat="retailer in retailers">{{retailer.id}} - {{retailer.managerId}}</option>
+      </select>
+      <button ng-click="addUser()" class="btn btn-default">Add Retail Store Manager</button>
+    </form>
+
   </div>
   <hr/>
 

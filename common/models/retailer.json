@@ -8,19 +8,15 @@
   "properties": {},
   "validations": [],
   "relations": {
+    "manager": {
+      "type": "belongsTo",
+      "model": "ERPUser",
+      "foreignKey": "managerId"
+    },
     "retailerAddress": {
       "type": "embedsOne",
       "model": "Address",
       "property": "address",
-      "options": {
-        "validate": true,
-        "forceId": false
-      }
-    },
-    "retailerContact": {
-      "type": "embedsOne",
-      "model": "Contact",
-      "property": "contact",
       "options": {
         "validate": true,
         "forceId": false

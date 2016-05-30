@@ -40,14 +40,27 @@
     console.log("ViewDemoController()");
 
     $scope.demo = {};
+    $scope.retailers = [];
 
-    Demo.findByGuid({
-      guid: $stateParams.guid
-    }, function (demo) {
-      $scope.demo = demo;
-    }, function (res) {
-      console.log(res);
-    });
+    function load() {
+      Demo.findByGuid({
+        guid: $stateParams.guid
+      }, function (demo) {
+        $scope.demo = demo;
+      }, function (res) {
+        console.log(res);
+      });
+
+      Demo.retailers({
+        guid: $stateParams.guid
+      }, function (retailers) {
+        $scope.retailers = retailers;
+      }, function (res) {
+        console.log("error", res);
+      });
+    }
+
+    load();
 
     $scope.loginAs = function (user) {
       Demo.loginAs({
@@ -64,8 +77,10 @@
     $scope.addUser = function () {
       Demo.createUserByGuid({
         guid: $scope.demo.guid,
-      }, {}, function (demo) {
-        $scope.demo = demo;
+      }, {
+        retailerId: $("#retailerId").val()
+      }, function (demo) {
+        load();
       }, function (res) {
         console.log(res);
       });

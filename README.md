@@ -89,7 +89,7 @@ With the Logistics Wizard app, we focus on the planning and delivery of products
    */
   class Retailer {
     Address location;
-    Contact manager;
+    User manager;
   }
   /**
    */
@@ -97,6 +97,10 @@ With the Logistics Wizard app, we focus on the planning and delivery of products
     Product product;
     DistributionCenter dc;
     int quantity;
+  }
+  /**
+   */
+  class User {
   }
 )
 

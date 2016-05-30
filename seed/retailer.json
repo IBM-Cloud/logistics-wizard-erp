@@ -7,9 +7,6 @@
       "country": "US",
       "latitude": 35.71,
       "longitude": -78.63
-    },
-    "contact": {
-      "name": "Jack Cracker"
     }
   },
   {
@@ -20,9 +17,6 @@
       "country": "US",
       "latitude": 30.22,
       "longitude": -97.74
-    },
-    "contact": {
-      "name": "John Wayne"
     }
   },
   {
@@ -33,9 +27,6 @@
       "country": "US",
       "latitude": 37.72,
       "longitude": -122.44
-    },
-    "contact": {
-      "name": "Sandy Payne"
     }
   },
   {
@@ -46,9 +37,6 @@
       "country": "US",
       "latitude": 40.71,
       "longitude": -74.00
-    },
-    "contact": {
-      "name": "John Wayne"
     }
   }
 ]

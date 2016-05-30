@@ -1172,6 +1172,12 @@ module.factory(
       { 'id': '@id' },
       {
 
+        // INTERNAL. Use Retailer.manager() instead.
+        "prototype$__get__manager": {
+          url: urlBase + "/Retailers/:id/manager",
+          method: "GET"
+        },
+
         /**
          * @ngdoc method
          * @name lbServices.Retailer#findById
@@ -1262,6 +1268,42 @@ module.factory(
     */
     R.modelName = "Retailer";
 
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Retailer#manager
+         * @methodOf lbServices.Retailer
+         *
+         * @description
+         *
+         * Fetches belongsTo relation manager.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - PersistedModel id
+         *
+         *  - `refresh` – `{boolean=}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `ERPUser` object.)
+         * </em>
+         */
+        R.manager = function() {
+          var TargetResource = $injector.get("ERPUser");
+          var action = TargetResource["::get::Retailer::manager"];
+          return action.apply(R, arguments);
+        };
 
     return R;
   }]);
@@ -2082,6 +2124,12 @@ module.factory(
           method: "POST"
         },
 
+        // INTERNAL. Use Retailer.manager() instead.
+        "::get::Retailer::manager": {
+          url: urlBase + "/Retailers/:id/manager",
+          method: "GET"
+        },
+
         /**
          * @ngdoc method
          * @name lbServices.ERPUser#getCurrent
@@ -2290,13 +2338,13 @@ module.factory(
          *
          *  - `guid` – `{string}` - 
          *
-         * @param {function(Object,Object)=} successCb
+         * @param {function(Array.<Object>,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.
          *
          * @param {function(Object)=} errorCb Error callback with one argument:
          *   `httpResponse`.
          *
-         * @returns {Object} An empty reference that will be
+         * @returns {Array.<Object>} An empty reference that will be
          *   populated with the actual data once the response is returned
          *   from the server.
          *
@@ -2306,6 +2354,7 @@ module.factory(
          * </em>
          */
         "retailers": {
+          isArray: true,
           url: urlBase + "/Demos/:guid/retailers",
           method: "GET"
         },
@@ -2387,7 +2436,7 @@ module.factory(
          *
          * @description
          *
-         * Adds a new user to the given demo environment
+         * Adds a new Retail Store manager to the given demo environment
          *
          * @param {Object=} parameters Request parameters.
          *
@@ -2395,7 +2444,7 @@ module.factory(
          *
          * @param {Object} postData Request data.
          *
-         * This method does not accept any data. Supply an empty object.
+         *  - `retailerId` – `{string}` - 
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.

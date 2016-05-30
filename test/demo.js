@@ -39,9 +39,8 @@ describe('Demos', function () {
         if (!err) {
           demoEnvironment = res.body;
           assert.equal("My Demo", demoEnvironment.name);
-          assert.equal(2, demoEnvironment.users.length);
+          assert.equal(1, demoEnvironment.users.length);
           assert.equal(1, demoEnvironment.users[0].roles.length);
-          assert.equal(1, demoEnvironment.users[1].roles.length);
         }
         done(err);
       });
@@ -54,9 +53,8 @@ describe('Demos', function () {
       .end(function (err, res) {
         if (!err) {
           var demoEnvironmentFound = res.body;
-          assert.equal(2, demoEnvironmentFound.users.length);
+          assert.equal(1, demoEnvironmentFound.users.length);
           assert.equal(1, demoEnvironmentFound.users[0].roles.length);
-          assert.equal(1, demoEnvironmentFound.users[1].roles.length);
         }
         done(err);
       });
@@ -96,10 +94,13 @@ describe('Demos', function () {
       });
   });
 
-  it('can create a new Retailer', function (done) {
+  it('can create a new Retailer user', function (done) {
     var userCount = demoEnvironment.users.length;
     apiAnon.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        retailerId: "R1"
+      }))
       .expect(200)
       .end(function (err, res) {
         var user = res.body;
@@ -115,6 +116,19 @@ describe('Demos', function () {
       .end(function (err, res) {
         var updatedDemoEnvironment = res.body;
         assert.equal(demoEnvironment.users.length + 1, updatedDemoEnvironment.users.length);
+        done(err);
+      });
+  });
+
+  it('can not create a new Retailer user for non-existent retailer', function (done) {
+    var userCount = demoEnvironment.users.length;
+    apiAnon.post("/Demos/" + demoEnvironment.guid + "/createUser")
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        retailerId: "IdoNotExist"
+      }))
+      .expect(404)
+      .end(function (err, res) {
         done(err);
       });
   });
@@ -146,23 +160,52 @@ describe('Demos', function () {
       });
   });
 
-  it('gets an error if trying to work with a non-existent environment', function (done) {
+  it('can not get a non-existent demo', function (done) {
     apiAnon.get("/Demos/findByGuid/blah")
       .set('Content-Type', 'application/json')
       .expect(404)
       .end(function (err, res) {
-        if (err) {
-          done(err);
-        }
+        done(err);
       });
-    apiAnon.post("/Demos/blah/createUser")
+  });
+
+  it('can not delete a non-existent demo environment', function (done) {
+    apiAnon.delete("/Demos/blah")
       .set('Content-Type', 'application/json')
       .expect(404)
       .end(function (err, res) {
-        if (err) {
-          done(err);
-        }
+        done(err);
       });
+  });
+
+  it('can not login with a non-existent demo', function (done) {
+    apiSupply.post("/Demos/loginAs")
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        guid: "blah",
+        userId: demoEnvironment.users[0].id
+      }))
+      .expect(404)
+      .end(function (err, res) {
+        assert.isNotNull(res.body.id);
+        apiSupply.loopbackAccessToken = res.body;
+        done(err);
+      });
+  });
+
+  it('can not create a user for a non-existent demo', function (done) {
+    apiAnon.post("/Demos/blah/createUser")
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        retailerId: "R1"
+      }))
+      .expect(404)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it('can not get retailers from a non-existent demo', function (done) {
     apiAnon.get("/Demos/blah/retailers")
       .set('Content-Type', 'application/json')
       .expect(404)
