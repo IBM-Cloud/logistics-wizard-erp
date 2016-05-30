@@ -79,10 +79,9 @@ describe('Validates the Retail Store Manager', function () {
   });
 
   it('can login with proper credentials', function (done) {
-    api.post("/Demos/loginAs")
+    api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
-        guid: demoEnvironment.guid,
         userId: retailStoreManager.id
       }))
       .expect(200)

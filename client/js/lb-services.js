@@ -2028,62 +2028,6 @@ module.factory(
 
         /**
          * @ngdoc method
-         * @name lbServices.ERPUser#login
-         * @methodOf lbServices.ERPUser
-         *
-         * @description
-         *
-         * Login a user with username/email and password.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `include` – `{string=}` - Related objects to include in the response. See the description of return value for more details.
-         *   Default value: `user`.
-         *
-         *  - `rememberMe` - `boolean` - Whether the authentication credentials
-         *     should be remembered in localStorage across app/browser restarts.
-         *     Default: `true`.
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * The response body contains properties of the AccessToken created on login.
-         * Depending on the value of `include` parameter, the body may contain additional properties:
-         * 
-         *   - `user` - `{User}` - Data of the currently logged in user. (`include=user`)
-         * 
-         *
-         */
-        "login": {
-          params: {
-            include: "user"
-          },
-          interceptor: {
-            response: function(response) {
-              var accessToken = response.data;
-              LoopBackAuth.setUser(accessToken.id, accessToken.userId, accessToken.user);
-              LoopBackAuth.rememberMe = response.config.params.rememberMe !== false;
-              LoopBackAuth.save();
-              return response.resource;
-            }
-          },
-          url: urlBase + "/Users/login",
-          method: "POST"
-        },
-
-        /**
-         * @ngdoc method
          * @name lbServices.ERPUser#logout
          * @methodOf lbServices.ERPUser
          *
@@ -2370,12 +2314,9 @@ module.factory(
          *
          * @param {Object=} parameters Request parameters.
          *
-         *   This method does not accept any parameters.
-         *   Supply an empty object or omit this argument altogether.
+         *  - `guid` – `{string}` - 
          *
          * @param {Object} postData Request data.
-         *
-         *  - `guid` – `{string}` - 
          *
          *  - `userId` – `{string}` - 
          *
@@ -2395,7 +2336,7 @@ module.factory(
          * </em>
          */
         "loginAs": {
-          url: urlBase + "/Demos/loginAs",
+          url: urlBase + "/Demos/:guid/loginAs",
           method: "POST"
         },
 

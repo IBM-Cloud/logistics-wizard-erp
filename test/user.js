@@ -50,10 +50,9 @@ describe('Users', function () {
   });
 
   it('can login with proper credentials', function (done) {
-    api.post("/Demos/loginAs")
+    api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
-        guid: demoEnvironment.guid,
         userId: demoEnvironment.users[0].id
       }))
       .expect(200)

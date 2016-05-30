@@ -79,10 +79,9 @@ describe('Demos', function () {
   });
 
   it('can NOT log in with a non-existent user on a valid demo', function (done) {
-    apiSupply.post("/Demos/loginAs")
+    apiSupply.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
-        guid: demoEnvironment.guid,
         userId: "I do not exist"
       }))
       .expect(404)
@@ -92,10 +91,9 @@ describe('Demos', function () {
   });
 
   it('can log in as a user without providing credentials', function (done) {
-    apiSupply.post("/Demos/loginAs")
+    apiSupply.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
-        guid: demoEnvironment.guid,
         userId: demoEnvironment.users[0].id
       }))
       .expect(200)
@@ -200,10 +198,9 @@ describe('Demos', function () {
   });
 
   it('can not login with a non-existent demo', function (done) {
-    apiSupply.post("/Demos/loginAs")
+    apiSupply.post("/Demos/blah/loginAs")
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
-        guid: "blah",
         userId: demoEnvironment.users[0].id
       }))
       .expect(404)

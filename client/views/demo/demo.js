@@ -64,7 +64,8 @@
 
     $scope.loginAs = function (user) {
       Demo.loginAs({
-        guid: $scope.demo.guid,
+        guid: $scope.demo.guid
+      }, {
         userId: user.id
       }, function (accessToken) {
         console.log("Received", accessToken);

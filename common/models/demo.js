@@ -195,7 +195,7 @@ module.exports = function (Demo) {
     ],
     returns: {
       arg: "retailers",
-      type: [ "Retailer" ],
+      type: ["Retailer"],
       root: true
     }
   });
@@ -249,14 +249,17 @@ module.exports = function (Demo) {
   Demo.remoteMethod('loginAs', {
     description: 'Logs in as the specified user belonging to the given demo environment',
     http: {
-      path: '/loginAs',
+      path: '/:guid/loginAs',
       verb: 'post'
     },
     accepts: [
       {
         arg: "guid",
         type: "string",
-        required: true
+        required: true,
+        http: {
+          source: "path"
+        }
       },
       {
         arg: "userId",
