@@ -78,6 +78,19 @@ describe('Demos', function () {
       });
   });
 
+  it('can NOT log in with a non-existent user on a valid demo', function (done) {
+    apiSupply.post("/Demos/loginAs")
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        guid: demoEnvironment.guid,
+        userId: "I do not exist"
+      }))
+      .expect(404)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
   it('can log in as a user without providing credentials', function (done) {
     apiSupply.post("/Demos/loginAs")
       .set('Content-Type', 'application/json')

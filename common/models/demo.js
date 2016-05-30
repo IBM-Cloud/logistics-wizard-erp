@@ -211,7 +211,7 @@ module.exports = function (Demo) {
         }, function (err, demo) {
           if (!err && !demo) {
             var notFound = new Error();
-            notFound.status = 404
+            notFound.status = 404;
             callback(notFound);
           } else {
             callback(err, demo);
@@ -226,10 +226,12 @@ module.exports = function (Demo) {
             demoId: demo.id
           }
         }, function (err, user) {
-          if (user) {
-            callback(null, user);
+          if (!err && !user) {
+            var userNotFound = new Error("user not found");
+            userNotFound.status = 404;
+            callback(userNotFound);
           } else {
-            callback(err, null);
+            callback(err, user);
           }
         });
       },
