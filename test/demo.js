@@ -81,7 +81,7 @@ describe('Demos', function () {
       });
   });
 
-    it('gets an error if trying to retrieve retailers with an invalid environment', function (done) {
+  it('gets an error if trying to retrieve retailers with an invalid environment', function (done) {
     apiAnon.get("/Demos/blah/retailers")
       .set('Content-Type', 'application/json')
       .expect(404)
@@ -114,6 +114,28 @@ describe('Demos', function () {
       });
   });
 
+  it('can create a new Retailer', function (done) {
+    var userCount = demoEnvironment.users.length;
+    apiAnon.post("/Demos/" + demoEnvironment.guid + "/createUser")
+      .set('Content-Type', 'application/json')
+      .expect(200)
+      .end(function (err, res) {
+        var user = res.body;
+        assert.equal(demoEnvironment.id, user.demoId);
+        if (err) {
+          done(err);
+        }
+      });
+
+    apiAnon.get("/Demos/findByGuid/" + demoEnvironment.guid)
+      .set('Content-Type', 'application/json')
+      .expect(200)
+      .end(function (err, res) {
+        var updatedDemoEnvironment = res.body;
+        assert.equal(demoEnvironment.users.length + 1, updatedDemoEnvironment.users.length);
+        done(err);
+      });
+  });
 
   it('can delete a demo environment', function (done) {
     apiAnon.delete("/Demos/" + demoEnvironment.guid)

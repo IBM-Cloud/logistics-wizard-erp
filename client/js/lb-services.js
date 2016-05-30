@@ -58,45 +58,6 @@ module.factory(
       { 'id': '@id' },
       {
 
-        // INTERNAL. Use Supplier.products.findById() instead.
-        "prototype$__findById__products": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/Suppliers/:id/products/:fk",
-          method: "GET"
-        },
-
-        // INTERNAL. Use Supplier.products.destroyById() instead.
-        "prototype$__destroyById__products": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/Suppliers/:id/products/:fk",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use Supplier.products.updateById() instead.
-        "prototype$__updateById__products": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/Suppliers/:id/products/:fk",
-          method: "PUT"
-        },
-
-        // INTERNAL. Use Supplier.products.destroyAll() instead.
-        "prototype$__delete__products": {
-          url: urlBase + "/Suppliers/:id/products",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use Supplier.products.count() instead.
-        "prototype$__count__products": {
-          url: urlBase + "/Suppliers/:id/products/count",
-          method: "GET"
-        },
-
         /**
          * @ngdoc method
          * @name lbServices.Supplier#findById
@@ -181,195 +142,6 @@ module.factory(
     */
     R.modelName = "Supplier";
 
-    /**
-     * @ngdoc object
-     * @name lbServices.Supplier.products
-     * @header lbServices.Supplier.products
-     * @object
-     * @description
-     *
-     * The object `Supplier.products` groups methods
-     * manipulating `Product` instances related to `Supplier`.
-     *
-     * Call {@link lbServices.Supplier#products Supplier.products()}
-     * to query all related instances.
-     */
-
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Supplier.products#count
-         * @methodOf lbServices.Supplier.products
-         *
-         * @description
-         *
-         * Counts products of Supplier.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `where` – `{object=}` - Criteria to match model instances
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * Data properties:
-         *
-         *  - `count` – `{number=}` - 
-         */
-        R.products.count = function() {
-          var TargetResource = $injector.get("Product");
-          var action = TargetResource["::count::Supplier::products"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Supplier.products#destroyAll
-         * @methodOf lbServices.Supplier.products
-         *
-         * @description
-         *
-         * Deletes all products of this model.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * This method returns no data.
-         */
-        R.products.destroyAll = function() {
-          var TargetResource = $injector.get("Product");
-          var action = TargetResource["::delete::Supplier::products"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Supplier.products#destroyById
-         * @methodOf lbServices.Supplier.products
-         *
-         * @description
-         *
-         * Delete a related item by id for products.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `fk` – `{*}` - Foreign key for products
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * This method returns no data.
-         */
-        R.products.destroyById = function() {
-          var TargetResource = $injector.get("Product");
-          var action = TargetResource["::destroyById::Supplier::products"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Supplier.products#findById
-         * @methodOf lbServices.Supplier.products
-         *
-         * @description
-         *
-         * Find a related item by id for products.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `fk` – `{*}` - Foreign key for products
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Product` object.)
-         * </em>
-         */
-        R.products.findById = function() {
-          var TargetResource = $injector.get("Product");
-          var action = TargetResource["::findById::Supplier::products"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.Supplier.products#updateById
-         * @methodOf lbServices.Supplier.products
-         *
-         * @description
-         *
-         * Update a related item by id for products.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - PersistedModel id
-         *
-         *  - `fk` – `{*}` - Foreign key for products
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Product` object.)
-         * </em>
-         */
-        R.products.updateById = function() {
-          var TargetResource = $injector.get("Product");
-          var action = TargetResource["::updateById::Supplier::products"];
-          return action.apply(R, arguments);
-        };
 
     return R;
   }]);
@@ -472,45 +244,6 @@ module.factory(
         "find": {
           isArray: true,
           url: urlBase + "/Products",
-          method: "GET"
-        },
-
-        // INTERNAL. Use Supplier.products.findById() instead.
-        "::findById::Supplier::products": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/Suppliers/:id/products/:fk",
-          method: "GET"
-        },
-
-        // INTERNAL. Use Supplier.products.destroyById() instead.
-        "::destroyById::Supplier::products": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/Suppliers/:id/products/:fk",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use Supplier.products.updateById() instead.
-        "::updateById::Supplier::products": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/Suppliers/:id/products/:fk",
-          method: "PUT"
-        },
-
-        // INTERNAL. Use Supplier.products.destroyAll() instead.
-        "::delete::Supplier::products": {
-          url: urlBase + "/Suppliers/:id/products",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use Supplier.products.count() instead.
-        "::count::Supplier::products": {
-          url: urlBase + "/Suppliers/:id/products/count",
           method: "GET"
         },
 
@@ -2217,6 +1950,42 @@ module.factory(
 
         /**
          * @ngdoc method
+         * @name lbServices.ERPUser#prototype$__get__roles
+         * @methodOf lbServices.ERPUser
+         *
+         * @description
+         *
+         * Queries roles of ERPUser.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `filter` – `{object=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `ERPUser` object.)
+         * </em>
+         */
+        "prototype$__get__roles": {
+          isArray: true,
+          url: urlBase + "/Users/:id/roles",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
          * @name lbServices.ERPUser#login
          * @methodOf lbServices.ERPUser
          *
@@ -2311,40 +2080,6 @@ module.factory(
           },
           url: urlBase + "/Users/logout",
           method: "POST"
-        },
-
-        /**
-         * @ngdoc method
-         * @name lbServices.ERPUser#getRoles
-         * @methodOf lbServices.ERPUser
-         *
-         * @description
-         *
-         * Gets the given user roles
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{string}` - 
-         *
-         * @param {function(Array.<Object>,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Array.<Object>} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `ERPUser` object.)
-         * </em>
-         */
-        "getRoles": {
-          isArray: true,
-          url: urlBase + "/Users/:id/roles",
-          method: "GET"
         },
 
         /**
@@ -2544,6 +2279,39 @@ module.factory(
 
         /**
          * @ngdoc method
+         * @name lbServices.Demo#retailers
+         * @methodOf lbServices.Demo
+         *
+         * @description
+         *
+         * Returns all retailers
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `guid` – `{string}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Demo` object.)
+         * </em>
+         */
+        "retailers": {
+          url: urlBase + "/Demos/:guid/retailers",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
          * @name lbServices.Demo#loginAs
          * @methodOf lbServices.Demo
          *
@@ -2579,6 +2347,73 @@ module.factory(
          */
         "loginAs": {
           url: urlBase + "/Demos/loginAs",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Demo#deleteByGuid
+         * @methodOf lbServices.Demo
+         *
+         * @description
+         *
+         * Deletes the given demo environment
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `guid` – `{string}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "deleteByGuid": {
+          url: urlBase + "/Demos/:guid",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Demo#createUserByGuid
+         * @methodOf lbServices.Demo
+         *
+         * @description
+         *
+         * Adds a new user to the given demo environment
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `guid` – `{string}` - 
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method does not accept any data. Supply an empty object.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Demo` object.)
+         * </em>
+         */
+        "createUserByGuid": {
+          url: urlBase + "/Demos/:guid/createUser",
           method: "POST"
         },
       }

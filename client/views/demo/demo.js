@@ -20,7 +20,9 @@
 
     $scope.newDemo = function () {
       console.log("Creating new Demo environment");
-      Demo.newDemo({ name: $("#name").val() },
+      Demo.newDemo({
+          name: $("#name").val()
+        },
         function (demo) {
           console.log(demo);
           $state.go('demo/view', {
@@ -54,6 +56,16 @@
       }, function (accessToken) {
         console.log("Received", accessToken);
         $("#token-" + user.id).html(accessToken.id);
+      }, function (res) {
+        console.log(res);
+      });
+    }
+
+    $scope.addUser = function () {
+      Demo.createUserByGuid({
+        guid: $scope.demo.guid,
+      }, {}, function (demo) {
+        $scope.demo = demo;
       }, function (res) {
         console.log(res);
       });
