@@ -2,6 +2,7 @@
 var supertest = require('supertest');
 var assert = require('chai').assert;
 var async = require('async');
+var fs = require('fs');
 
 // workaround for "warning: possible EventEmitter memory leak detected"
 // seems to be linked to the number of unit tests in the file
@@ -19,30 +20,39 @@ describe('Validates the Retail Store Manager', function () {
     app.use(loopback.rest());
     api = supertest(app);
 
-    async.waterfall([
-      function (callback) {
-          app.models.ERPUser.create({
-            email: "retailmanager@acme.com",
-            username: "Retail Store Manager",
-            password: "retail"
-          }, function (err, user) {
-            callback(err, user);
-          });
-      },
-      function (user, callback) {
-        app.models.ERPUser.assignRole(user, app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE, function(err, principal) {
-          callback();
-        });
-      }],
-      function (err, result) {
-        done(err);
-      });
+    var retailers = JSON.parse(fs.readFileSync("./seed/retailer.json"));
+    app.models.Retailer.create(retailers, function (err, retailers) {
+      done(err);
+    });
   });
 
   after(function (done) {
-    app.models.ERPUser.destroyAll(function (err, info) {
-      done(err);
+    app.models.Retailer.destroyAll(function (err, info) {
+      app.models.ERPUser.destroyAll(function (err, info) {
+        done(err);
+      });
     });
+  });
+
+  var demoEnvironment;
+  var retailStoreManager;
+
+  it('can create a Demo environment', function (done) {
+    api.post("/Demos")
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        name: "My Demo"
+      }))
+      .expect(200)
+      .end(function (err, res) {
+        if (!err) {
+          demoEnvironment = res.body;
+          assert.equal("My Demo", demoEnvironment.name);
+          assert.equal(1, demoEnvironment.users.length);
+          assert.equal(1, demoEnvironment.users[0].roles.length);
+        }
+        done(err);
+      });
   });
 
   it('can NOT retrieve products without being logged', function (done) {
@@ -53,10 +63,28 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can login with proper credentials', function (done) {
-    api.post("/Users/login")
+  it('can create a new Retailer user', function (done) {
+    var userCount = demoEnvironment.users.length;
+    api.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set('Content-Type', 'application/json')
-      .send('{"email": "retailmanager@acme.com", "password": "retail"}')
+      .send(JSON.stringify({
+        retailerId: "R1"
+      }))
+      .expect(200)
+      .end(function (err, res) {
+        retailStoreManager = res.body;
+        assert.equal(demoEnvironment.id, retailStoreManager.demoId);
+        done(err);
+      });
+  });
+
+  it('can login with proper credentials', function (done) {
+    api.post("/Demos/loginAs")
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        guid: demoEnvironment.guid,
+        userId: retailStoreManager.id
+      }))
       .expect(200)
       .end(function (err, res) {
         // capture the token

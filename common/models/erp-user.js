@@ -13,6 +13,7 @@ module.exports = function (ErpUser) {
   ErpUser.disableRemoteMethod('findById', true);
   ErpUser.disableRemoteMethod('confirm', true);
   ErpUser.disableRemoteMethod('resetPassword', true);
+  ErpUser.disableRemoteMethod('login', true);
 
   // hide the link back to the demo
   helper.hideRelation(ErpUser, 'demo');

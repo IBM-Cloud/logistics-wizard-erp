@@ -18,31 +18,35 @@ describe('Validates the Supply Chain Manager', function () {
     app = require('..');
     app.use(loopback.rest());
     api = supertest(app);
-
-    async.waterfall([
-      function (callback) {
-          app.models.ERPUser.create({
-            email: "supplymanager@acme.com",
-            username: "Supply Chain Manager",
-            password: "supply"
-          }, function (err, user) {
-            callback(err, user);
-          });
-      },
-      function (user, callback) {
-          app.models.ERPUser.assignRole(user, app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE, function (err, principal) {
-            callback();
-          });
-      }],
-      function (err, result) {
-        done(err);
-      });
+    done();
   });
 
   after(function (done) {
-    app.models.ERPUser.destroyAll(function (err, info) {
-      done(err);
+    app.models.Retailer.destroyAll(function (err, info) {
+      app.models.ERPUser.destroyAll(function (err, info) {
+        done(err);
+      });
     });
+  });
+
+  var demoEnvironment;
+
+  it('can create a Demo environment', function (done) {
+    api.post("/Demos")
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        name: "My Demo"
+      }))
+      .expect(200)
+      .end(function (err, res) {
+        if (!err) {
+          demoEnvironment = res.body;
+          assert.equal("My Demo", demoEnvironment.name);
+          assert.equal(1, demoEnvironment.users.length);
+          assert.equal(1, demoEnvironment.users[0].roles.length);
+        }
+        done(err);
+      });
   });
 
   it('can NOT retrieve products without being logged', function (done) {
@@ -54,9 +58,12 @@ describe('Validates the Supply Chain Manager', function () {
   });
 
   it('can login with proper credentials', function (done) {
-    api.post("/Users/login")
+    api.post("/Demos/loginAs")
       .set('Content-Type', 'application/json')
-      .send('{"email": "supplymanager@acme.com", "password": "supply"}')
+      .send(JSON.stringify({
+        guid: demoEnvironment.guid,
+        userId: demoEnvironment.users[0].id
+      }))
       .expect(200)
       .end(function (err, res) {
         // capture the token

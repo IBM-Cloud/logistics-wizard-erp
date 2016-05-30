@@ -26,6 +26,14 @@ describe('Demos', function () {
     });
   });
 
+  after(function (done) {
+    app.models.Retailer.destroyAll(function (err, info) {
+      app.models.ERPUser.destroyAll(function (err, info) {
+        done(err);
+      });
+    });
+  });
+
   var demoEnvironment;
 
   it('can create a Demo environment', function (done) {
