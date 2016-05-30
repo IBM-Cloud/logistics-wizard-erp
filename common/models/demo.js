@@ -366,6 +366,79 @@ module.exports = function (Demo) {
     ]
   });
 
+  Demo.createUserByGuid = function (guid, cb) {
+    console.log("Adding new Retail Store Manager to demo with guid", guid);
+
+    var app = Demo.app;
+
+    async.waterfall([
+      // retrieve the demo
+      function (callback) {
+          Demo.findOne({
+            where: {
+              guid: guid
+            }
+          }, function (err, demo) {
+            if (!err && !demo) {
+              var notFound = new Error();
+              notFound.status = 404
+              callback(notFound);
+            } else {
+              callback(err, demo);
+            }
+          });
+      },
+      // create the user
+      function (demo, callback) {
+          var random = randomstring.generate(10)
+          var retailStoreManager = {
+            email: "ruth." + random + "@acme.com",
+            username: "Retail Store Manager (" + random + ")",
+            password: randomstring.generate(10),
+            demoId: demo.id
+          }
+
+          app.models.ERPUser.create(retailStoreManager, function (err, user) {
+            callback(err, demo, user);
+          });
+      },
+      // assign Retail manager role to the user
+      function (demo, user, callback) {
+          Demo.app.models.ERPUser.assignRole(user,
+            Demo.app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE,
+            function (err, principal) {
+              callback(err, user)
+            });
+      }
+    ],
+      function (err, user) {
+        cb(err, user);
+      });
+  };
+
+  Demo.remoteMethod('createUserByGuid', {
+    description: 'Adds a new Retail Store manager to the given demo environment',
+    http: {
+      path: '/:guid/createUser',
+      verb: 'post'
+    },
+    accepts: [
+      {
+        arg: "guid",
+        type: "string",
+        required: true,
+        http: {
+          source: "path"
+        }
+      }
+    ],
+    returns: {
+      arg: "user",
+      type: "ERPUser",
+      root: true
+    }
+  });
+
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
