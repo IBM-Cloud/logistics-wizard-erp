@@ -214,7 +214,7 @@ module.exports = function (Demo) {
       },
       function (err, demo) {
         if (!err && !demo) {
-          var notFound = new Error();
+          var notFound = new Error("No Demo with this guid");
           notFound.status = 404
           cb(notFound);
         } else {
@@ -256,7 +256,7 @@ module.exports = function (Demo) {
           }
         }, function (err, demo) {
           if (!err && !demo) {
-            var notFound = new Error();
+            var notFound = new Error("No Demo with this guid");
             notFound.status = 404
             callback(notFound);
           } else {
@@ -308,7 +308,7 @@ module.exports = function (Demo) {
           }
         }, function (err, demo) {
           if (!err && !demo) {
-            var notFound = new Error();
+            var notFound = new Error("No Demo with this guid");
             notFound.status = 404;
             callback(notFound);
           } else {
@@ -325,7 +325,7 @@ module.exports = function (Demo) {
           }
         }, function (err, user) {
           if (!err && !user) {
-            var userNotFound = new Error("user not found");
+            var userNotFound = new Error("No user with this id");
             userNotFound.status = 404;
             callback(userNotFound);
           } else {
@@ -410,7 +410,7 @@ module.exports = function (Demo) {
             }
           }, function (err, demo) {
             if (!err && !demo) {
-              var notFound = new Error();
+              var notFound = new Error("No Demo with this guid");
               notFound.status = 404
               callback(notFound);
             } else {
@@ -464,7 +464,7 @@ module.exports = function (Demo) {
             }
           }, function (err, demo) {
             if (!err && !demo) {
-              var notFound = new Error();
+              var notFound = new Error("No Demo with this guid");
               notFound.status = 404;
               callback(notFound);
             } else {
@@ -476,7 +476,7 @@ module.exports = function (Demo) {
       function (demo, callback) {
           app.models.Retailer.findById(retailerId, function (err, retailer) {
             if (!err && !retailer) {
-              var notFound = new Error();
+              var notFound = new Error("No retailer with this id");
               notFound.status = 404
               callback(notFound);
             } else {
