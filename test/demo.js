@@ -36,6 +36,15 @@ describe('Demos', function () {
 
   var demoEnvironment;
 
+  it('can populate the app with sample data', function (done) {
+    apiAnon.post("/Demos/seed")
+      .set('Content-Type', 'application/json')
+      .expect(204)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
   it('can create a Demo environment', function (done) {
     apiAnon.post("/Demos")
       .set('Content-Type', 'application/json')
@@ -227,6 +236,15 @@ describe('Demos', function () {
     apiAnon.get("/Demos/blah/retailers")
       .set('Content-Type', 'application/json')
       .expect(404)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it('can delete all sample data', function (done) {
+    apiAnon.post("/Demos/reset")
+      .set('Content-Type', 'application/json')
+      .expect(204)
       .end(function (err, res) {
         done(err);
       });

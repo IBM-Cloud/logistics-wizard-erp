@@ -34,6 +34,23 @@
         });
     };
 
+    $scope.injectData = function () {
+      Demo.seed(function () {
+        console.log("Seeded");
+      }, function (res) {
+        console.log(res);
+      });
+    };
+
+    $scope.resetData = function () {
+      Demo.reset(function () {
+        console.log("Reset complete");
+      }, function (res) {
+        console.log(res);
+      });
+    };
+
+
   }]);
 
   app.controller('ViewDemoController', ['$scope', '$state', '$stateParams', 'Demo', function ($scope, $state, $stateParams, Demo) {

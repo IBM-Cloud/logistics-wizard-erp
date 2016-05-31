@@ -3,6 +3,7 @@ var helper = require("./helper.js");
 var async = require("async");
 var bcrypt = require("bcryptjs");
 var randomstring = require("randomstring");
+var fs = require('fs');
 
 function makeUniqueSession(demo) {
   var SALT_WORK_FACTOR = 10;
@@ -13,6 +14,103 @@ function makeUniqueSession(demo) {
 module.exports = function (Demo) {
   helper.hideAll(Demo);
   helper.hideRelation(Demo, "users");
+
+  function seed(model, callback) {
+    console.log("Seeding", model.definition.name);
+    model.count(function (err, count) {
+      if (err) {
+        console.log(err);
+        callback(null);
+      } else if (count == 0) {
+        var objects = JSON.parse(fs.readFileSync("./seed/" + model.definition.name.toLowerCase() + ".json"));
+        console.log("Injecting", objects.length, model.definition.name);
+        model.create(objects, function (err, records) {
+          if (err) {
+            console.log("Failed to create", model.definition.name, err);
+          } else {
+            console.log("Created", records.length, model.definition.name);
+          }
+          callback(null);
+        });
+      } else {
+        console.log("There are already", count, model.definition.name);
+        callback(null);
+      }
+    });
+  };
+
+  Demo.seed = function (cb) {
+    console.log("Seeding...");
+    async.waterfall(
+        [ //
+          Demo.app.models.Supplier,
+          Demo.app.models.Product,
+          Demo.app.models.DistributionCenter,
+          Demo.app.models.Inventory,
+          Demo.app.models.Retailer,
+          Demo.app.models.Shipment,
+          Demo.app.models.LineItem,
+        ].map(function (model) {
+        return function (callback) {
+          seed(model, callback);
+        };
+      }),
+      function (err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Inject complete");
+        }
+        cb(err);
+      });
+  };
+
+  Demo.remoteMethod('seed', {
+    description: 'Injects sample data in the service',
+    http: {
+      path: '/seed',
+      verb: 'post'
+    },
+    accepts: []
+  });
+
+  Demo.reset = function (cb) {
+    async.waterfall([
+      Demo.app.models.Supplier,
+      Demo.app.models.Product,
+      Demo.app.models.DistributionCenter,
+      Demo.app.models.Inventory,
+      Demo.app.models.Retailer,
+      Demo.app.models.Shipment,
+      Demo.app.models.LineItem,
+      Demo.app.models.Demo,
+      Demo.app.models.ERPUser
+    ].map(function (model) {
+        return function (callback) {
+          console.log("Deleting all", model.definition.name);
+          model.destroyAll(function (err, result) {
+            callback(err);
+          });
+        };
+      }),
+      function (err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Reset complete");
+        }
+        cb(err);
+      });
+  };
+
+  Demo.remoteMethod('reset', {
+    description: 'Resets the demo data',
+    http: {
+      path: '/reset',
+      verb: 'post'
+    },
+    accepts: []
+  });
 
   Demo.newDemo = function (data, cb) {
 
