@@ -11,128 +11,6 @@ consumes:
 produces:
   - application/json
 paths:
-  '/Suppliers/{id}/products/{fk}':
-    get:
-      tags:
-        - Supplier
-      summary: Find a related item by id for products.
-      operationId: Supplier.prototype.__findById__products
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for products
-          required: true
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/Product'
-      deprecated: false
-    delete:
-      tags:
-        - Supplier
-      summary: Delete a related item by id for products.
-      operationId: Supplier.prototype.__destroyById__products
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for products
-          required: true
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
-    put:
-      tags:
-        - Supplier
-      summary: Update a related item by id for products.
-      operationId: Supplier.prototype.__updateById__products
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for products
-          required: true
-          type: string
-          format: JSON
-        - name: data
-          in: body
-          required: false
-          schema:
-            $ref: '#/definitions/Product'
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/Product'
-      deprecated: false
-  '/Suppliers/{id}/products':
-    delete:
-      tags:
-        - Supplier
-      summary: Deletes all products of this model.
-      operationId: Supplier.prototype.__delete__products
-      parameters:
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
-  '/Suppliers/{id}/products/count':
-    get:
-      tags:
-        - Supplier
-      summary: Counts products of Supplier.
-      operationId: Supplier.prototype.__count__products
-      parameters:
-        - name: where
-          in: query
-          description: Criteria to match model instances
-          required: false
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: object
-            properties:
-              count:
-                type: number
-                format: double
-      deprecated: false
   '/Suppliers/{id}':
     get:
       tags:
@@ -647,6 +525,29 @@ paths:
           schema:
             $ref: '#/definitions/Shipment'
       deprecated: false
+  '/Retailers/{id}/manager':
+    get:
+      tags:
+        - Retailer
+      summary: Fetches belongsTo relation manager.
+      operationId: Retailer.prototype.__get__manager
+      parameters:
+        - name: refresh
+          in: query
+          required: false
+          type: boolean
+        - name: id
+          in: path
+          description: PersistedModel id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/ERPUser'
+      deprecated: false
   '/Retailers/{id}':
     get:
       tags:
@@ -1017,59 +918,18 @@ paths:
                 type: number
                 format: double
       deprecated: false
-  /Users/login:
-    post:
-      tags:
-        - ERPUser
-      summary: Login a user with username/email and password.
-      operationId: ERPUser.login
-      parameters:
-        - name: credentials
-          in: body
-          required: true
-          schema:
-            type: object
-        - name: include
-          in: query
-          description: >-
-            Related objects to include in the response. See the description of
-            return value for more details.
-          required: false
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            description: >+
-              The response body contains properties of the AccessToken created
-              on login.
-
-              Depending on the value of `include` parameter, the body may
-              contain additional properties:
-
-                - `user` - `{User}` - Data of the currently logged in user. (`include=user`)
-
-            type: object
-      deprecated: false
-  /Users/logout:
-    post:
-      tags:
-        - ERPUser
-      summary: Logout a user with access token.
-      operationId: ERPUser.logout
-      parameters: []
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
   '/Users/{id}/roles':
     get:
       tags:
         - ERPUser
-      summary: Gets the given user roles
-      operationId: ERPUser.getRoles
+      summary: Queries roles of ERPUser.
+      operationId: ERPUser.prototype.__get__roles
       parameters:
+        - name: filter
+          in: query
+          required: false
+          type: string
+          format: JSON
         - name: id
           in: path
           description: User id
@@ -1084,13 +944,29 @@ paths:
             items:
               $ref: '#/definitions/Role'
       deprecated: false
+  /Users/logout:
+    post:
+      tags:
+        - ERPUser
+      summary: Logout a user with access token.
+      operationId: ERPUser.logout
+      parameters: []
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
   /Demos:
     post:
       tags:
         - Demo
       summary: Creates a new Demo environment
       operationId: Demo.newDemo
-      parameters: []
+      parameters:
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/Demo'
       responses:
         '200':
           description: Request was successful
@@ -1114,7 +990,26 @@ paths:
           schema:
             $ref: '#/definitions/Demo'
       deprecated: false
-  /Demos/loginAs:
+  '/Demos/{guid}/retailers':
+    get:
+      tags:
+        - Demo
+      summary: Returns all retailers
+      operationId: Demo.retailers
+      parameters:
+        - name: guid
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Retailer'
+      deprecated: false
+  '/Demos/{guid}/loginAs':
     post:
       tags:
         - Demo
@@ -1122,7 +1017,7 @@ paths:
       operationId: Demo.loginAs
       parameters:
         - name: guid
-          in: formData
+          in: path
           required: true
           type: string
         - name: userId
@@ -1135,18 +1030,43 @@ paths:
           schema:
             $ref: '#/definitions/AccessToken'
       deprecated: false
+  '/Demos/{guid}':
+    delete:
+      tags:
+        - Demo
+      summary: Deletes the given demo environment
+      operationId: Demo.deleteByGuid
+      parameters:
+        - name: guid
+          in: path
+          required: true
+          type: string
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+  '/Demos/{guid}/createUser':
+    post:
+      tags:
+        - Demo
+      summary: Adds a new Retail Store manager to the given demo environment
+      operationId: Demo.createUserByGuid
+      parameters:
+        - name: guid
+          in: path
+          required: true
+          type: string
+        - name: retailerId
+          in: formData
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/ERPUser'
+      deprecated: false
 definitions:
-  Product:
-    properties:
-      name:
-        type: string
-      id:
-        type: string
-      supplierId:
-        type: string
-    required:
-      - name
-    additionalProperties: false
   Supplier:
     properties:
       name:
@@ -1165,14 +1085,25 @@ definitions:
       contact:
         $ref: '#/definitions/Contact'
     additionalProperties: false
+  Product:
+    properties:
+      name:
+        type: string
+      id:
+        type: string
+      supplierId:
+        type: string
+    required:
+      - name
+    additionalProperties: false
   Retailer:
     properties:
       id:
         type: string
       address:
         $ref: '#/definitions/Address'
-      contact:
-        $ref: '#/definitions/Contact'
+      managerId:
+        type: string
     additionalProperties: false
   LineItem:
     properties:
@@ -1215,6 +1146,35 @@ definitions:
     required:
       - status
       - createdAt
+    additionalProperties: false
+  ERPUser:
+    properties:
+      realm:
+        type: string
+      username:
+        type: string
+      credentials:
+        type: object
+      challenges:
+        type: object
+      email:
+        type: string
+      emailVerified:
+        type: boolean
+      status:
+        type: string
+      created:
+        type: string
+        format: date
+      lastUpdated:
+        type: string
+        format: date
+      id:
+        type: string
+      demoId:
+        type: string
+    required:
+      - email
     additionalProperties: false
   Inventory:
     properties:
@@ -1268,13 +1228,13 @@ definitions:
       createdAt:
         type: string
         format: date
-      email:
-        description: The owner of the demo session.
+      name:
         type: string
       id:
         type: string
     required:
       - createdAt
+      - name
     additionalProperties: false
   Address:
     properties:
