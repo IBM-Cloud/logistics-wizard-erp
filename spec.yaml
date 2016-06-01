@@ -1230,6 +1230,8 @@ definitions:
         format: date
       name:
         type: string
+      guid:
+        type: string
       id:
         type: string
     required:
