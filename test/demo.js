@@ -133,11 +133,11 @@ describe('Demos', function () {
       .end(function (err, res) {
         var user = res.body;
         assert.equal(demoEnvironment.id, user.demoId);
-        if (err) {
-          done(err);
-        }
+        done(err);
       });
+  });
 
+  it('can find the new Retailer user in the demo environment', function (done) {
     apiAnon.get("/Demos/findByGuid/" + demoEnvironment.guid)
       .set('Content-Type', 'application/json')
       .expect(200)

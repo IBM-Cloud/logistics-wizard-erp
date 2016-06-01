@@ -1,8 +1,4 @@
 {
-  "db": {
-    "name": "db",
-    "connector": "memory-idstr"
-  },
   "transient": {
     "name": "transient",
     "connector": "transient"

@@ -119,6 +119,7 @@ module.exports = function (Demo) {
     async.waterfall([
       // create a new demo environment
       function (callback) {
+        console.log("Creating new Demo instance");
         Demo.create({
           name: data.name
         }, function (err, demo) {
@@ -127,6 +128,7 @@ module.exports = function (Demo) {
       },
       // make a unique guid for the demo environment
       function (demo, callback) {
+        console.log("Generating guid for Demo");
         demo.guid = makeUniqueSession(demo);
         Demo.upsert(demo, function (err, demo) {
           callback(err, demo);
@@ -134,6 +136,7 @@ module.exports = function (Demo) {
       },
       // create the supply chain manager
       function (demo, callback) {
+        console.log("Creating Supply Chain Manager user");
         var random = randomstring.generate(10)
         var supplyChainManager = {
           email: "chris." + random + "@acme.com",
@@ -148,6 +151,7 @@ module.exports = function (Demo) {
       },
       // assign roles to the users
       function (demo, user, callback) {
+        console.log("Assigning role to Supply Chain Manager");
         Demo.app.models.ERPUser.assignRole(user,
           Demo.app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE,
           function (err, principal) {
@@ -156,6 +160,7 @@ module.exports = function (Demo) {
       },
       // returns the demo, its users and the roles
       function (demo, callback) {
+        console.log("Retrieving Demo and its users");
         Demo.findById(demo.id, {
             include: {
               relation: 'users',

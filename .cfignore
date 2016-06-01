@@ -5,3 +5,4 @@ in-memory-database.json
 coverage
 .coveralls.yml
 out
+server/datasources.local.json

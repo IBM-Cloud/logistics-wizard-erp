@@ -1,2 +1,8 @@
+declared-services:
+  logistics-wizard-erp-db:
+    label: cloudantNoSQLDB
+    plan: Shared
 applications:
-  - name: logistics-wizard-erp
+- services:
+  - logistics-wizard-erp-db
+  name: logistics-wizard-erp
