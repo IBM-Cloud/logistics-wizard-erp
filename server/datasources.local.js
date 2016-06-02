@@ -1,4 +1,5 @@
 // Licensed under the Apache License. See footer for details.
+var winston = require("winston");
 
 // default to in-memory datasource
 var datasources = {
@@ -12,7 +13,7 @@ var datasources = {
 if (process.env.VCAP_SERVICES) {
   var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
   if (vcapServices.hasOwnProperty("cloudantNoSQLDB")) {
-    console.log("Using Cloudant as datasource");
+    winston.info("Using Cloudant as datasource");
     datasources.db = {
       connector: "cloudant",
       url: vcapServices.cloudantNoSQLDB[0].credentials.url,
@@ -25,17 +26,17 @@ if (process.env.VCAP_SERVICES) {
 var localDatasources = null
 try {
   localDatasources = require("./datasources.local.json");
-  console.log("Loaded local datasources");
+  winston.info("Loaded local datasources");
 
   if (localDatasources.hasOwnProperty("db")) {
-    console.log("Using locally defined datasource");
+    winston.info("Using locally defined datasource");
     datasources.db = localDatasources.db;
   }
 } catch (e) {
-  console.error(e);
+  winston.error(e);
 }
 
-console.log("Datasources are", datasources);
+winston.info("Datasources are", datasources);
 module.exports = datasources;
 
 //------------------------------------------------------------------------------

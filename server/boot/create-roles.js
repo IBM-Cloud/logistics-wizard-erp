@@ -1,4 +1,6 @@
 // Licensed under the Apache License. See footer for details.
+var winston = require("winston");
+
 module.exports = function (app) {
 
   function createRoles() {
@@ -8,28 +10,28 @@ module.exports = function (app) {
         // but there is not event emitted that would allow us to register a listener to create
         // the roles. As we need to wait for those to be created, we check here the error and retry
         if (err.scope == "couch" && err.error == "no_usable_index") {
-          console.log("Database is not ready, retrying...");
+          winston.warn("Database is not ready, retrying...");
           process.nextTick(function () {
             createRoles();
           });
         } else {
-          console.log("find:", err);
+          winston.error("find:", err);
         }
       } else if (roles.length == 0) {
-        console.log("ERP roles not found. Creating...");
+        winston.info("ERP roles not found. Creating...");
         app.models.Role.create([{
           name: app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE
             }, {
           name: app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE
             }], function (err, roles) {
           if (err) {
-            console.log("create:", err);
+            winston.error("create:", err);
           } else {
-            console.log("Created", roles.length, "roles");
+            winston.info("Created", roles.length, "roles");
           }
         });
       } else {
-        console.log("Existing ERP roles", roles.map(function (role) {
+        winston.info("Existing ERP roles", roles.map(function (role) {
           return role.name;
         }));
       }
