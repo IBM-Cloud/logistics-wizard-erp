@@ -2,6 +2,7 @@
   "name": "Inventory",
   "base": "PersistedModel",
   "idInjection": true,
+  "strictDelete": "true",
   "options": {
     "validateUpsert": true
   },

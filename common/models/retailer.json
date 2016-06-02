@@ -2,6 +2,7 @@
   "name": "Retailer",
   "base": "PersistedModel",
   "idInjection": true,
+  "strictDelete": "true",
   "options": {
     "validateUpsert": true
   },
