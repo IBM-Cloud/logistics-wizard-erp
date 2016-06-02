@@ -1,25 +1,52 @@
 // Licensed under the Apache License. See footer for details.
+// initialize our logging framework
+var winston = require('winston');
+winston.level = process.env.LOG_LEVEL || 'info';
+
 var loopback = require('loopback');
 var boot = require('loopback-boot');
-
 var app = module.exports = loopback();
 
-app.start = function() {
+app.start = function () {
   // start the web server
-  return app.listen(function() {
+  return app.listen(function () {
     app.emit('started');
     var baseUrl = app.get('url').replace(/\/$/, '');
-    console.log('Web server listening at: %s', baseUrl);
+    winston.info('Web server listening at: %s', baseUrl);
     if (app.get('loopback-component-explorer')) {
       var explorerPath = app.get('loopback-component-explorer').mountPath;
-      console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
+      winston.info('Browse your REST API at %s%s', baseUrl, explorerPath);
     }
   });
 };
 
+// inject the current user as a context parameter of requests
+app.use(loopback.context());
+app.use(loopback.token());
+app.use(function setCurrentUser(req, res, next) {
+  if (!req.accessToken) {
+    return next();
+  }
+
+  app.models.ERPUser.findById(req.accessToken.userId, function (err, user) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return next(new Error('No user with this access token was found.'));
+    }
+    var loopbackContext = loopback.getCurrentContext();
+    if (loopbackContext) {
+      req.accessToken.currentUser = user;
+      loopbackContext.set('currentUser', user);
+    }
+    next();
+  });
+});
+
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
-boot(app, __dirname, function(err) {
+boot(app, __dirname, function (err) {
   if (err) throw err;
 
   // start the server if `$ node server.js`
