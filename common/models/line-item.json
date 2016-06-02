@@ -14,7 +14,17 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "demo": {
+      "type": "belongsTo",
+      "model": "Demo",
+      "foreignKey": "demoId"
+    }
+  },
+  "mixins": {
+    "Isolated": {}
+  },
+  "hidden": ["demoId"],
   "acls": [
     {
       "accessType": "*",

@@ -1,6 +1,7 @@
 // Licensed under the Apache License. See footer for details.
 var supertest = require('supertest');
 var assert = require('chai').assert;
+var async = require('async');
 var fs = require('fs');
 
 describe('Demos', function () {
@@ -20,21 +21,14 @@ describe('Demos', function () {
     apiSupply = supertest(app);
     apiRetail = supertest(app);
 
-    var retailers = JSON.parse(fs.readFileSync("./seed/retailer.json"));
-    app.models.Retailer.create(retailers, function (err, retailers) {
-      done(err);
-    });
+    done();
   });
 
   after(function (done) {
-    app.models.Retailer.destroyAll(function (err, info) {
-      app.models.ERPUser.destroyAll(function (err, info) {
-        done(err);
-      });
+    app.models.ERPUser.destroyAll(function (err, info) {
+      done(err);
     });
   });
-
-  var demoEnvironment;
 
   it('can populate the app with sample data', function (done) {
     apiAnon.post("/Demos/seed")
@@ -44,6 +38,8 @@ describe('Demos', function () {
         done(err);
       });
   });
+
+  var demoEnvironment;
 
   it('can create a Demo environment', function (done) {
     apiAnon.post("/Demos")
@@ -77,12 +73,15 @@ describe('Demos', function () {
       });
   });
 
+  var demoEnvironmentRetailers = [];
+
   it('can retrieve the list of retailers', function (done) {
     apiAnon.get("/Demos/" + demoEnvironment.guid + "/retailers")
       .set('Content-Type', 'application/json')
       .expect(200)
       .end(function (err, res) {
         assert.equal(4, res.body.length);
+        demoEnvironmentRetailers = res.body;
         done(err);
       });
   });
@@ -127,7 +126,7 @@ describe('Demos', function () {
     apiAnon.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
-        retailerId: "R1"
+        retailerId: demoEnvironmentRetailers[0].id
       }))
       .expect(200)
       .end(function (err, res) {
@@ -224,7 +223,7 @@ describe('Demos', function () {
     apiAnon.post("/Demos/blah/createUser")
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
-        retailerId: "R1"
+        retailerId: demoEnvironmentRetailers[0].id
       }))
       .expect(404)
       .end(function (err, res) {
@@ -239,6 +238,28 @@ describe('Demos', function () {
       .end(function (err, res) {
         done(err);
       });
+  });
+
+  it('has no data leftover in Demo environment', function (done) {
+    var tasks = app.models.Demo.ISOLATED_MODELS.map(function (model) {
+      return function (callback) {
+        model.find({
+          where: {
+            demoId: demoEnvironment.id
+          }
+        }, function (err, items) {
+          if (err) {
+            callback(err);
+          } else {
+            assert.equal(0, items.length, "Database still contain items for " + model.modelName);
+            callback(null);
+          }
+        });
+      }
+    });
+    async.waterfall(tasks, function (err, result) {
+      done(err);
+    });
   });
 
   it('can delete all sample data', function (done) {

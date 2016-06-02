@@ -19,18 +19,12 @@ describe('Validates the Retail Store Manager', function () {
     app = require('..');
     app.use(loopback.rest());
     api = supertest(app);
-
-    var retailers = JSON.parse(fs.readFileSync("./seed/retailer.json"));
-    app.models.Retailer.create(retailers, function (err, retailers) {
-      done(err);
-    });
+    done();
   });
 
   after(function (done) {
-    app.models.Retailer.destroyAll(function (err, info) {
-      app.models.ERPUser.destroyAll(function (err, info) {
-        done(err);
-      });
+    app.models.ERPUser.destroyAll(function (err, info) {
+      done(err);
     });
   });
 
@@ -63,12 +57,25 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
+  var demoEnvironmentRetailers = [];
+
+  it('can retrieve the list of retailers', function (done) {
+    api.get("/Demos/" + demoEnvironment.guid + "/retailers")
+      .set('Content-Type', 'application/json')
+      .expect(200)
+      .end(function (err, res) {
+        assert.equal(4, res.body.length);
+        demoEnvironmentRetailers = res.body;
+        done(err);
+      });
+  });
+
   it('can create a new Retailer user', function (done) {
     var userCount = demoEnvironment.users.length;
     api.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
-        retailerId: "R1"
+        retailerId: demoEnvironmentRetailers[0].id
       }))
       .expect(200)
       .end(function (err, res) {

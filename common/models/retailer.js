@@ -5,6 +5,7 @@ module.exports = function(Retailer) {
   helper.readOnly(Retailer);
   helper.hideRelation(Retailer, "retailerAddress");
   helper.hideRelation(Retailer, "retailerContact");
+  helper.hideRelation(Retailer, "demo");
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
