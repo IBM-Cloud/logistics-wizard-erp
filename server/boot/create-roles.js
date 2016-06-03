@@ -1,7 +1,7 @@
 // Licensed under the Apache License. See footer for details.
 var winston = require("winston");
 
-module.exports = function (app) {
+module.exports = function (app, next) {
 
   function createRoles() {
     app.models.Role.find(function (err, roles) {
@@ -16,9 +16,10 @@ module.exports = function (app) {
           });
         } else {
           winston.error("find:", err);
+          next();
         }
       } else if (roles.length == 0) {
-        winston.info("ERP roles not found. Creating...");
+        winston.warn("ERP roles not found. Creating...");
         app.models.Role.create([{
           name: app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE
             }, {
@@ -27,18 +28,21 @@ module.exports = function (app) {
           if (err) {
             winston.error("create:", err);
           } else {
-            winston.info("Created", roles.length, "roles");
+            winston.warn("Created", roles.length, "roles");
           }
+          next(err);
         });
       } else {
         winston.info("Existing ERP roles", roles.map(function (role) {
           return role.name;
         }));
+        next();
       }
     });
   }
 
   createRoles();
+
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");

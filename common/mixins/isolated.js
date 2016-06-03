@@ -1,69 +1,95 @@
 // Licensed under the Apache License. See footer for details.
 var winston = require("winston");
 
+/**
+ * Overrides check access to inject the demoId of the current user in create and queries
+ * in order to limit the visibility of objects between demo environments
+ */
 module.exports = function (Model, options) {
 
-  // assign demo id to the new instances of model objects
-  Model.observe('before save', function (ctx, next) {
-    winston.debug(ctx.Model.modelName, "before save");
+  // keep the old version of checkAccess
+  Model.__checkAccess = Model.checkAccess;
 
-    var inst = ctx.instance || ctx.currentInstance;
-    if (inst.demoId) {
-      next();
-    } else {
-      var loopbackContext = Model.app.loopback.getCurrentContext();
-      if (!loopbackContext) { // no context to find a demoId, we can't proceed
-        next(new Error("No demoId specified"));
+  // define our own
+  Model.checkAccess = function (token, modelId, sharedMethod, ctx, callback) {
+    var model = this;
+
+    if (!token) {
+      return Model.__checkAccess(token, modelId, sharedMethod, ctx, callback);
+    }
+
+    // find the user behind the token
+    Model.app.models.ERPUser.findById(token.userId, function (err, user) {
+      if (err) {
+        return callback(err);
+      }
+
+      // if there is an instance behind this call,
+      // it should already be within the user demo environment
+      if (ctx.instance) {
+        // if it does not have a demoId, this is unexpected as
+        // this mixin should only be installed on objects specific to a demo environment
+        if (!ctx.instance.demoId) {
+          winston.error(model.modelName, "Instance has no demoId!", ctx.instance);
+          return callback(new Error("Object is not attached to a demo"));
+        } else if (ctx.instance.demoId != user.demoId) {
+          // if it has a different demoId then this user is not allowed to access it
+          var notFound = new Error("Object not found in this demo");
+          notFound.status = 404;
+          return callback(notFound);
+        }
+      }
+
+      // there is no instance but a modelId is specified
+      // this is typically the case in calls like /Model/id/relations
+      if (!ctx.instance && modelId) {
+        // find the instance
+        Model.findById(modelId, function (err, object) {
+          if (object && object.demoId != user.demoId) {
+            // if it has a different demoId then this user is not allowed to access it
+            var notFound = new Error("Object not found in this demo");
+            notFound.status = 404;
+            return callback(notFound);
+          } else {
+            // otherwise proceed to inject the demoId where needed
+            injectDemoId(user, token, modelId, sharedMethod, ctx, callback);
+          }
+        });
       } else {
-        var currentUser = loopbackContext.get('currentUser');
-        if (!currentUser) { // no current user to find a demoId, we can't proceed
-          next(new Error("No demoId specified"));
-        } else {
-          inst.demoId = currentUser.demoId;
-          next();
-        }
+        // otherwise proceed to inject the demoId where needed
+        injectDemoId(user, token, modelId, sharedMethod, ctx, callback);
       }
+
+    });
+  };
+
+  function injectDemoId(user, token, modelId, sharedMethod, ctx, callback) {
+    // if we are create a new object
+    // then inject the demoId of the current user
+    if ("create" == sharedMethod.name) {
+      ctx.req.remotingContext.args.data.demoId = user.demoId;
     }
-  });
-
-  // take the demoId from the currentUser and
-  // inject it in the where query for this object
-  Model.observe('access', function (ctx, next) {
-    winston.debug(ctx.Model.modelName, "before access");
-
-    var demoIdSpecified = false;
-
-    // first infer the demoId from the currentUser
-    var loopbackContext = Model.app.loopback.getCurrentContext();
-    if (loopbackContext) {
-      var currentUser = loopbackContext.get('currentUser');
-      if (currentUser) {
-        if (ctx.query.where) {
-          ctx.query.where.demoId = currentUser.demoId;
-        } else {
-          ctx.query.where = {
-            demoId: currentUser.demoId
-          };
-        }
-        demoIdSpecified = true;
-      }
+    // if we are create an object through a relation /Model/:id/relation
+    // then inject the demoId of the current user
+    else if (sharedMethod.name.indexOf("__create__") == 0) {
+      ctx.req.remotingContext.args.data.__data.demoId = user.demoId;
     }
 
-    // if we were not able to find a current user, this might be coming
-    // from an internal call or from the "Demo" API that does not require a user,
-    // just make sure a demoId was specified anyway in the query
-    if (!demoIdSpecified && ctx.query.where && ctx.query.where.demoId) {
-      demoIdSpecified = true;
+    // inject the demoId in the filter "where" clause
+    if (!ctx.args.filter) {
+      ctx.args.filter = {};
     }
-
-    if (!demoIdSpecified) {
-      winston.warn(ctx.Model.modelName, "no demoId found");
+    if (!ctx.args.filter.where) {
+      ctx.args.filter.where = {};
     }
-    
-    next();
-  });
+    ctx.args.filter.where.demoId = user.demoId;
 
+    // let the regular check happens,
+    // we ensured that the demoId will be added to new item and to any query
+    Model.__checkAccess(token, modelId, sharedMethod, ctx, callback);
+  }
 }
+
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.

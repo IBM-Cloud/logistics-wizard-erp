@@ -20,34 +20,14 @@ app.start = function () {
   });
 };
 
-// inject the current user as a context parameter of requests
-app.use(loopback.context());
-app.use(loopback.token());
-app.use(function setCurrentUser(req, res, next) {
-  if (!req.accessToken) {
-    return next();
-  }
-
-  app.models.ERPUser.findById(req.accessToken.userId, function (err, user) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return next(new Error('No user with this access token was found.'));
-    }
-    var loopbackContext = loopback.getCurrentContext();
-    if (loopbackContext) {
-      req.accessToken.currentUser = user;
-      loopbackContext.set('currentUser', user);
-    }
-    next();
-  });
-});
-
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function (err) {
   if (err) throw err;
+
+  // notify that the app has booted, ready to be started
+  app.booted = true;
+  app.emit('booted');
 
   // start the server if `$ node server.js`
   if (require.main === module)

@@ -50,6 +50,9 @@ module.exports = function (Demo) {
             if (model.modelName == "Shipment") {
               object.toId = object.toId + "-" + object.demoId;
             }
+            if (model.modelName == "LineItem") {
+              object.shipmentId = object.shipmentId + "-" + object.demoId;
+            }
           });
         }
         winston.info("Injecting", objects.length, model.definition.name);

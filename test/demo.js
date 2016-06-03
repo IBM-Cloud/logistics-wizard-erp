@@ -21,13 +21,13 @@ describe('Demos', function () {
     apiSupply = supertest(app);
     apiRetail = supertest(app);
 
-    done();
-  });
-
-  after(function (done) {
-    app.models.ERPUser.destroyAll(function (err, info) {
-      done(err);
-    });
+    if (!app.booted) {
+      app.once("booted", function () {
+        done();
+      });
+    } else {
+      done();
+    }
   });
 
   it('can populate the app with sample data', function (done) {

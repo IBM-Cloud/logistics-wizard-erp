@@ -15,13 +15,13 @@ describe('Users', function () {
     apiAnon = supertest(app);
     api = supertest(app);
 
-    done();
-  });
-
-  after(function (done) {
-    app.models.ERPUser.destroyAll(function (err, info) {
-      done(err);
-    });
+    if (!app.booted) {
+      app.once("booted", function () {
+        done();
+      });
+    } else {
+      done();
+    }
   });
 
   var demoEnvironment;
@@ -104,6 +104,15 @@ describe('Users', function () {
   it('can NOT logout if no logged in', function (done) {
     apiAnon.post("/Users/logout")
       .expect(500)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it('can delete all sample data', function (done) {
+    api.post("/Demos/reset")
+      .set('Content-Type', 'application/json')
+      .expect(204)
       .end(function (err, res) {
         done(err);
       });

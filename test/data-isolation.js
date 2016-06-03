@@ -20,7 +20,13 @@ describe('Data Isolation', function () {
     apiSupply1 = supertest(app);
     apiSupply2 = supertest(app);
 
-    done();
+    if (!app.booted) {
+      app.once("booted", function () {
+        done();
+      });
+    } else {
+      done();
+    }
   });
 
   var demoEnvironment1,
@@ -86,6 +92,20 @@ describe('Data Isolation', function () {
       });
   });
 
+  it('can attach a line item to the shipment', function (done) {
+    apiSupply1.post("/Shipments/" + newShipment.id + "/items")
+      .set("Authorization", apiSupply1.loopbackAccessToken.id)
+      .send({
+        "productId": "I4",
+        "quantity": 100
+      })
+      .expect(200)
+      .end(function (err, res) {
+        assert.equal(newShipment.id, res.body.shipmentId);
+        done(err);
+      });
+  });
+
   // this shipment is not visible in D2
   it('can see the shipment it created in D1', function (done) {
     apiSupply1.get("/Shipments")
@@ -112,6 +132,18 @@ describe('Data Isolation', function () {
       });
   });
 
+  it('can see shipment items from D1 by id', function (done) {
+    apiSupply1.get("/Shipments/" + newShipment.id + "/items")
+      .set("Authorization", apiSupply1.loopbackAccessToken.id)
+      .set('Content-Type', 'application/json')
+      .expect(200)
+      .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
+        done(err);
+      });
+  });
+
+
   // log in as Supply Chain Manager in D2
   it('can log in D2', function (done) {
     apiSupply2.post("/Demos/" + demoEnvironment2.guid + "/loginAs")
@@ -125,6 +157,7 @@ describe('Data Isolation', function () {
         done(err);
       });
   });
+
 
   // this shipment is not visible in D2
   it('can not see shipment from D1 in D2 Shipments', function (done) {
@@ -146,7 +179,7 @@ describe('Data Isolation', function () {
     apiSupply2.get("/Shipments/" + newShipment.id)
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
       .set('Content-Type', 'application/json')
-      .expect(404)
+      .expect(404) // this shipment should not be visible so Not Found
       .end(function (err, res) {
         done(err);
       });
@@ -157,18 +190,31 @@ describe('Data Isolation', function () {
     apiSupply2.get("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
       .set('Content-Type', 'application/json')
-      .expect(404)
+      .expect(404) // this shipment should not be visible so Not Found
       .end(function (err, res) {
         done(err);
       });
   });
 
   it('can not update shipments from D1 in D2', function (done) {
-    newShipment.updatedAt = new Date();
+    newShipment.deliveredAt = new Date();
     apiSupply2.put("/Shipments/" + newShipment.id)
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
       .set('Content-Type', 'application/json')
       .send(JSON.stringify(newShipment))
+      .expect(404) // this shipment should not be visible so Not Found
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it('can not add items to shipments from D1 in D2', function (done) {
+    apiSupply2.post("/Shipments/" + newShipment.id + "/items")
+      .set("Authorization", apiSupply2.loopbackAccessToken.id)
+      .send({
+        "productId": "I5",
+        "quantity": 100
+      })
       .expect(404) // this shipment should not be visible so Not Found
       .end(function (err, res) {
         done(err);
