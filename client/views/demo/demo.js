@@ -50,7 +50,6 @@
       });
     };
 
-
   }]);
 
   app.controller('ViewDemoController', ['$scope', '$state', '$stateParams', 'Demo', function ($scope, $state, $stateParams, Demo) {
@@ -103,6 +102,19 @@
         console.log(res);
       });
     }
+
+    $scope.deleteDemo = function () {
+      Demo.deleteByGuid({
+        guid: $scope.demo.guid
+      }, function () {
+        console.log("Deleted demo");
+        $state.go("demo");
+      }, function (res) {
+        console.log(res);
+      });
+    }
+
+
   }]);
 
 })();

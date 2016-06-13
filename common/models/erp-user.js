@@ -1,5 +1,6 @@
 // Licensed under the Apache License. See footer for details.
 var winston = require("winston");
+var async = require("async");
 var helper = require("./helper.js");
 
 module.exports = function (ErpUser) {
@@ -39,10 +40,26 @@ module.exports = function (ErpUser) {
   // Delete access tokens for the given user
   ErpUser.observe('after delete', function (ctx, next) {
     if (ctx.where.id) {
-      winston.debug("Deleting access tokens for user", ctx.where.id);
-      ErpUser.app.models.AccessToken.destroyAll({
-        userId: ctx.where.id
-      }, function (err, info) {
+      winston.info("Deleting access tokens and roles for user", ctx.where.id);
+      async.waterfall([
+        // delete its token
+        function (callback) {
+          ErpUser.app.models.AccessToken.destroyAll({
+            userId: ctx.where.id
+          }, function (err, info) {
+            callback();
+          });
+        },
+        // delete its roles
+        function (callback) {
+          ErpUser.app.models.RoleMapping.destroyAll({
+            principalType: ErpUser.app.models.RoleMapping.USER,
+            principalId: ctx.where.id
+          }, function (err, info) {
+            callback();
+          });
+        },
+      ], function (err, result) {
         next();
       });
     } else {
