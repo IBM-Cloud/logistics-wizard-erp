@@ -2,7 +2,7 @@
 var winston = require("winston");
 
 /**
- * Overrides check access to inject the demoId of the current user in create and queries
+ * Overrides checkAccess to inject the demoId of the current user in create and queries
  * in order to limit the visibility of objects between demo environments
  */
 module.exports = function (Model, options) {
@@ -69,7 +69,7 @@ module.exports = function (Model, options) {
     if ("create" == sharedMethod.name) {
       ctx.req.remotingContext.args.data.demoId = user.demoId;
     }
-    // if we are create an object through a relation /Model/:id/relation
+    // if we are creating an object through a relation /Model/:id/relation
     // then inject the demoId of the current user
     else if (sharedMethod.name.indexOf("__create__") == 0) {
       ctx.req.remotingContext.args.data.__data.demoId = user.demoId;

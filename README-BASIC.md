@@ -33,8 +33,7 @@ Before deploying any of the pieces of the application, it is recommended that yo
   [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy)
   
 1. Once deployed, the target space is populated with
-  * a Service Discovery **logistics-wizard-discovery**
-  * a database **logistics-wizard-erp-database**
+  * a database **logistics-wizard-erp-db**
   * the ERP simulator app **logistics-wizard-erp**
   
   Note: if a service with the same name already exists in the space, it will be reused.
@@ -53,11 +52,11 @@ The simulator comes with a sample data set and a simple user interface to initia
 
 ### Swagger
 
-The ERP service API is designed with Swagger and defined [here](spec.yaml).
-
-Swagger is a simple yet powerful representation of a RESTful API. The Swagger specification has been donated to the [Open API Initiative](https://github.com/OAI/OpenAPI-Specification) as part of an effort to define a standard specification format for REST APIs.
+The ERP service API is designed with Swagger and defined [here](spec.yaml). Swagger is a simple yet powerful representation of a RESTful API. The Swagger specification has been donated to the [Open API Initiative](https://github.com/OAI/OpenAPI-Specification) as part of an effort to define a standard specification format for REST APIs.
 
 1. Review the API specification in the online [Swagger Editor](http://editor.swagger.io/#/?import=https://raw.githubusercontent.com/IBM-Bluemix/logistics-wizard-erp/master/spec.yaml).
+
+This Swagger specification has been generated from the Loopback model using the ```slc loopback:export-api-def -o spec.yaml``` command.
 
 ### Loopback
 
@@ -68,8 +67,6 @@ The ERP simulator uses [Loopback](https://strongloop.com/) for its implementatio
   * Use geolocation, file, and push services for mobile apps.
   * Easily create client apps using Android, iOS, and JavaScript SDKs.
   * Run your application on-premises or in the cloud.
-
-For the simulator, the API is generated using the [Swagger generator](https://docs.strongloop.com/display/public/LB/Swagger+generator) included in Loopback.
 
 1. Connect to http://[your-erp-service-url]/explorer/ to look at the ERP service API.
 

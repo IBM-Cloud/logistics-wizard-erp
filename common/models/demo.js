@@ -14,7 +14,9 @@ function makeUniqueSession(demo) {
 
 module.exports = function (Demo) {
 
-  //console.log(Demo.definition.modelBuilder.models);
+  // There are the models that are indexed per "demoId"
+  // They all have the "isolated" mixin in their JSON definition
+  // together with a "belongsTo" directed to the Demo object
   Demo.ISOLATED_MODELS = [ //
     Demo.definition.modelBuilder.models.Inventory,
     Demo.definition.modelBuilder.models.Retailer,
@@ -22,9 +24,21 @@ module.exports = function (Demo) {
     Demo.definition.modelBuilder.models.LineItem
   ];
 
+  // There are the models shared by all demo environments.
+  // They can not be updated.
+  Demo.STATIC_MODELS = [
+    Demo.definition.modelBuilder.models.Supplier,
+    Demo.definition.modelBuilder.models.Product,
+    Demo.definition.modelBuilder.models.DistributionCenter
+  ];
+
   helper.hideAll(Demo);
   helper.hideRelation(Demo, "users");
 
+  /**
+   * Injects data from the "seed" directory for the given model.
+   * If demoId is not null, then all ids read from the seed data and suffixed with the demoId.
+   */
   function seed(model, demoId, callback) {
     winston.info("Seeding " + model.definition.name);
 
@@ -71,14 +85,10 @@ module.exports = function (Demo) {
     });
   };
 
+  // Seed the database with data for static models
   Demo.seed = function (cb) {
     winston.info("Seeding...");
-    async.waterfall(
-        [
-          Demo.app.models.Supplier,
-          Demo.app.models.Product,
-          Demo.app.models.DistributionCenter
-        ].map(function (model) {
+    async.waterfall(Demo.STATIC_MODELS.map(function (model) {
         return function (callback) {
           seed(model, undefined, callback);
         };
@@ -102,6 +112,7 @@ module.exports = function (Demo) {
     accepts: []
   });
 
+  // Remove all data from all models
   Demo.reset = function (cb) {
     async.waterfall([
       Demo.app.models.Supplier,
@@ -141,6 +152,9 @@ module.exports = function (Demo) {
     accepts: []
   });
 
+  /**
+   * Create a new demo environment, seeding the environment with data
+   */
   Demo.newDemo = function (data, cb) {
 
     var app = Demo.app;
@@ -166,13 +180,7 @@ module.exports = function (Demo) {
       // insert default data, indexed on the demo.id
       function (demo, callback) {
         winston.info("Inserting demo data");
-        async.waterfall(
-        [ //
-          Demo.app.models.Inventory,
-          Demo.app.models.Retailer,
-          Demo.app.models.Shipment,
-          Demo.app.models.LineItem
-        ].map(function (model) {
+        async.waterfall(Demo.ISOLATED_MODELS.map(function (model) {
             return function (seedCallback) {
               seed(model, demo.id, seedCallback);
             };
@@ -254,6 +262,9 @@ module.exports = function (Demo) {
     }
   });
 
+  /**
+   * Returns the demo with the given GUID.
+   */
   Demo.findByGuid = function (guid, cb) {
     Demo.findOne({
         where: {
@@ -302,6 +313,9 @@ module.exports = function (Demo) {
     }
   });
 
+  /**
+   * Returns all retailers in the given demo environment.
+   */
   Demo.retailers = function (guid, cb) {
     async.waterfall([
       // retrieve the demo
@@ -358,6 +372,9 @@ module.exports = function (Demo) {
     }
   });
 
+  /**
+   * Returns a loopback token for the given user in the specified demo environment.
+   */
   Demo.loginAs = function (guid, userId, cb) {
     async.waterfall([
       // retrieve the demo
@@ -432,17 +449,14 @@ module.exports = function (Demo) {
     }
   });
 
-  // Delete users associated to a demo environment
+  /**
+   * Reacts to delete of a demo environment and deletes the associated data and users.
+   */
   Demo.observe("after delete", function (context, next) {
     if (context.where.id) {
       // delete all objects linked to the demo
       var tasks = [];
-      [ //
-        Demo.app.models.Inventory,
-        Demo.app.models.Retailer,
-        Demo.app.models.Shipment,
-        Demo.app.models.LineItem
-      ].forEach(function (model) {
+      Demo.ISOLATED_MODELS.forEach(function (model) {
         tasks.push(function (callback) {
           winston.info("Deleting", model.modelName, "linked to demo", context.where.id);
           model.destroyAll({
@@ -490,6 +504,9 @@ module.exports = function (Demo) {
     }
   });
 
+  /**
+   * Deletes the demo environment with the given guid
+   */
   Demo.deleteByGuid = function (guid, cb) {
     winston.info("Deleting demo with guid", guid);
     async.waterfall([
@@ -541,6 +558,9 @@ module.exports = function (Demo) {
     ]
   });
 
+  /**
+   * Creates a new user in the given demo environment making this user the manager of the given store.
+   */
   Demo.createUserByGuid = function (guid, retailerId, cb) {
     winston.info("Adding new Retail Store Manager to demo with guid", guid, retailerId);
 
