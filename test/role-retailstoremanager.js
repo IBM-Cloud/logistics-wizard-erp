@@ -19,23 +19,26 @@ describe('Validates the Retail Store Manager', function () {
     app = require('..');
     app.use(loopback.rest());
     api = supertest(app);
-
-    var retailers = JSON.parse(fs.readFileSync("./seed/retailer.json"));
-    app.models.Retailer.create(retailers, function (err, retailers) {
-      done(err);
-    });
-  });
-
-  after(function (done) {
-    app.models.Retailer.destroyAll(function (err, info) {
-      app.models.ERPUser.destroyAll(function (err, info) {
-        done(err);
+    if (!app.booted) {
+      app.once("booted", function () {
+        done();
       });
-    });
+    } else {
+      done();
+    }
   });
 
   var demoEnvironment;
   var retailStoreManager;
+
+  it('can populate the app with sample data', function (done) {
+    api.post("/Demos/seed")
+      .set('Content-Type', 'application/json')
+      .expect(204)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
 
   it('can create a Demo environment', function (done) {
     api.post("/Demos")
@@ -63,12 +66,25 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
+  var demoEnvironmentRetailers = [];
+
+  it('can retrieve the list of retailers', function (done) {
+    api.get("/Demos/" + demoEnvironment.guid + "/retailers")
+      .set('Content-Type', 'application/json')
+      .expect(200)
+      .end(function (err, res) {
+        assert.equal(4, res.body.length);
+        demoEnvironmentRetailers = res.body;
+        done(err);
+      });
+  });
+
   it('can create a new Retailer user', function (done) {
     var userCount = demoEnvironment.users.length;
     api.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set('Content-Type', 'application/json')
       .send(JSON.stringify({
-        retailerId: "R1"
+        retailerId: demoEnvironmentRetailers[0].id
       }))
       .expect(200)
       .end(function (err, res) {
@@ -111,7 +127,7 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can retrieve inventories when logged', function (done) {
+  it('can NOT retrieve inventories when logged', function (done) {
     api.get("/Inventories")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(401)
@@ -125,6 +141,7 @@ describe('Validates the Retail Store Manager', function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
         done(err);
       });
   });
@@ -134,6 +151,7 @@ describe('Validates the Retail Store Manager', function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
         done(err);
       });
   });
@@ -143,6 +161,7 @@ describe('Validates the Retail Store Manager', function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
         done(err);
       });
   });
@@ -165,6 +184,24 @@ describe('Validates the Retail Store Manager', function () {
     api.get("/Suppliers")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(401)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it('can delete a demo environment', function (done) {
+    api.delete("/Demos/" + demoEnvironment.guid)
+      .set('Content-Type', 'application/json')
+      .expect(204)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it('can delete all sample data', function (done) {
+    api.post("/Demos/reset")
+      .set('Content-Type', 'application/json')
+      .expect(204)
       .end(function (err, res) {
         done(err);
       });

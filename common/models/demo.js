@@ -1,4 +1,5 @@
 // Licensed under the Apache License. See footer for details.
+var winston = require('winston');
 var helper = require("./helper.js");
 var async = require("async");
 var bcrypt = require("bcryptjs");
@@ -12,61 +13,98 @@ function makeUniqueSession(demo) {
 }
 
 module.exports = function (Demo) {
+
+  // There are the models that are indexed per "demoId"
+  // They all have the "isolated" mixin in their JSON definition
+  // together with a "belongsTo" directed to the Demo object
+  Demo.ISOLATED_MODELS = [ //
+    Demo.definition.modelBuilder.models.Inventory,
+    Demo.definition.modelBuilder.models.Retailer,
+    Demo.definition.modelBuilder.models.Shipment,
+    Demo.definition.modelBuilder.models.LineItem
+  ];
+
+  // There are the models shared by all demo environments.
+  // They can not be updated.
+  Demo.STATIC_MODELS = [
+    Demo.definition.modelBuilder.models.Supplier,
+    Demo.definition.modelBuilder.models.Product,
+    Demo.definition.modelBuilder.models.DistributionCenter
+  ];
+
   helper.hideAll(Demo);
   helper.hideRelation(Demo, "users");
 
-  function seed(model, callback) {
-    console.log("Seeding", model.definition.name);
-    model.count(function (err, count) {
+  /**
+   * Injects data from the "seed" directory for the given model.
+   * If demoId is not null, then all ids read from the seed data and suffixed with the demoId.
+   */
+  function seed(model, demoId, callback) {
+    winston.info("Seeding " + model.definition.name);
+
+    var where = {};
+    if (demoId) {
+      where.demoId = demoId;
+    }
+
+    model.count(where, function (err, count) {
       if (err) {
-        console.log(err);
-        callback(null);
+        winston.error(err);
+        callback(err);
       } else if (count == 0) {
         var objects = JSON.parse(fs.readFileSync("./seed/" + model.definition.name.toLowerCase() + ".json"));
-        console.log("Injecting", objects.length, model.definition.name);
+        // inject the demoId if needed
+        if (demoId) {
+          objects.forEach(function (object) {
+            object.demoId = demoId;
+            if (object.id) {
+              object.id = object.id + "-" + object.demoId;
+            }
+            // if Shipment and toId (RetailerId) then fix the toId too
+            if (model.modelName == "Shipment") {
+              object.toId = object.toId + "-" + object.demoId;
+            }
+            if (model.modelName == "LineItem") {
+              object.shipmentId = object.shipmentId + "-" + object.demoId;
+            }
+          });
+        }
+        winston.info("Injecting", objects.length, model.definition.name);
         model.create(objects, function (err, records) {
           if (err) {
-            console.log("Failed to create", model.definition.name, err);
+            winston.error("Failed to create", model.definition.name, err);
           } else {
-            console.log("Created", records.length, model.definition.name);
+            winston.info("Created", records.length, model.definition.name);
           }
           callback(null);
         });
       } else {
-        console.log("There are already", count, model.definition.name);
+        winston.warn("There are already", count, model.definition.name);
         callback(null);
       }
     });
   };
 
+  // Seed the database with data for static models
   Demo.seed = function (cb) {
-    console.log("Seeding...");
-    async.waterfall(
-        [ //
-          Demo.app.models.Supplier,
-          Demo.app.models.Product,
-          Demo.app.models.DistributionCenter,
-          Demo.app.models.Inventory,
-          Demo.app.models.Retailer,
-          Demo.app.models.Shipment,
-          Demo.app.models.LineItem,
-        ].map(function (model) {
+    winston.info("Seeding...");
+    async.waterfall(Demo.STATIC_MODELS.map(function (model) {
         return function (callback) {
-          seed(model, callback);
+          seed(model, undefined, callback);
         };
       }),
       function (err, result) {
         if (err) {
-          console.log(err);
+          winston.error(err);
         } else {
-          console.log("Inject complete");
+          winston.info("Inject complete");
         }
         cb(err);
       });
   };
 
   Demo.remoteMethod('seed', {
-    description: 'Injects sample data in the service',
+    description: 'Injects sample shared data in the service',
     http: {
       path: '/seed',
       verb: 'post'
@@ -74,6 +112,7 @@ module.exports = function (Demo) {
     accepts: []
   });
 
+  // Remove all data from all models
   Demo.reset = function (cb) {
     async.waterfall([
       Demo.app.models.Supplier,
@@ -84,10 +123,11 @@ module.exports = function (Demo) {
       Demo.app.models.Shipment,
       Demo.app.models.LineItem,
       Demo.app.models.Demo,
-      Demo.app.models.ERPUser
+      Demo.app.models.ERPUser,
+      Demo.app.models.AccessToken
     ].map(function (model) {
         return function (callback) {
-          console.log("Deleting all", model.definition.name);
+          winston.info("Deleting all", model.definition.name);
           model.destroyAll(function (err, result) {
             callback(err);
           });
@@ -95,16 +135,16 @@ module.exports = function (Demo) {
       }),
       function (err, result) {
         if (err) {
-          console.log(err);
+          winston.error(err);
         } else {
-          console.log("Reset complete");
+          winston.info("Reset complete");
         }
         cb(err);
       });
   };
 
   Demo.remoteMethod('reset', {
-    description: 'Resets the demo data',
+    description: 'Deletes all data',
     http: {
       path: '/reset',
       verb: 'post'
@@ -112,6 +152,9 @@ module.exports = function (Demo) {
     accepts: []
   });
 
+  /**
+   * Create a new demo environment, seeding the environment with data
+   */
   Demo.newDemo = function (data, cb) {
 
     var app = Demo.app;
@@ -119,7 +162,7 @@ module.exports = function (Demo) {
     async.waterfall([
       // create a new demo environment
       function (callback) {
-        console.log("Creating new Demo instance");
+        winston.info("Creating new Demo instance");
         Demo.create({
           name: data.name
         }, function (err, demo) {
@@ -128,15 +171,32 @@ module.exports = function (Demo) {
       },
       // make a unique guid for the demo environment
       function (demo, callback) {
-        console.log("Generating guid for Demo");
+        winston.info("Generating guid for Demo");
         demo.guid = makeUniqueSession(demo);
         Demo.upsert(demo, function (err, demo) {
           callback(err, demo);
         });
       },
+      // insert default data, indexed on the demo.id
+      function (demo, callback) {
+        winston.info("Inserting demo data");
+        async.waterfall(Demo.ISOLATED_MODELS.map(function (model) {
+            return function (seedCallback) {
+              seed(model, demo.id, seedCallback);
+            };
+          }),
+          function (err, result) {
+            if (err) {
+              winston.error(err);
+            } else {
+              winston.info("Inject complete");
+            }
+            callback(err, demo);
+          });
+      },
       // create the supply chain manager
       function (demo, callback) {
-        console.log("Creating Supply Chain Manager user");
+        winston.info("Creating Supply Chain Manager user");
         var random = randomstring.generate(10)
         var supplyChainManager = {
           email: "chris." + random + "@acme.com",
@@ -151,7 +211,7 @@ module.exports = function (Demo) {
       },
       // assign roles to the users
       function (demo, user, callback) {
-        console.log("Assigning role to Supply Chain Manager");
+        winston.info("Assigning role to Supply Chain Manager");
         Demo.app.models.ERPUser.assignRole(user,
           Demo.app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE,
           function (err, principal) {
@@ -160,7 +220,7 @@ module.exports = function (Demo) {
       },
       // returns the demo, its users and the roles
       function (demo, callback) {
-        console.log("Retrieving Demo and its users");
+        winston.info("Retrieving Demo and its users");
         Demo.findById(demo.id, {
             include: {
               relation: 'users',
@@ -174,7 +234,6 @@ module.exports = function (Demo) {
           function (err, demo) {
             callback(err, demo);
           });
-        // insert default shipments and inventories
       }
     ], function (err, result) {
       cb(err, result);
@@ -203,6 +262,9 @@ module.exports = function (Demo) {
     }
   });
 
+  /**
+   * Returns the demo with the given GUID.
+   */
   Demo.findByGuid = function (guid, cb) {
     Demo.findOne({
         where: {
@@ -251,6 +313,9 @@ module.exports = function (Demo) {
     }
   });
 
+  /**
+   * Returns all retailers in the given demo environment.
+   */
   Demo.retailers = function (guid, cb) {
     async.waterfall([
       // retrieve the demo
@@ -265,13 +330,17 @@ module.exports = function (Demo) {
             notFound.status = 404
             callback(notFound);
           } else {
-            callback(err);
+            callback(err, demo);
           }
         });
       },
-      // retrieve the user linked to this demo
-      function (callback) {
-        Demo.app.models.Retailer.find(function (err, retailers) {
+      // retrieve the retailers linked to this demo
+      function (demo, callback) {
+        Demo.app.models.Retailer.find({
+          where: {
+            demoId: demo.id
+          }
+        }, function (err, retailers) {
           callback(err, retailers);
         });
       }
@@ -303,6 +372,9 @@ module.exports = function (Demo) {
     }
   });
 
+  /**
+   * Returns a loopback token for the given user in the specified demo environment.
+   */
   Demo.loginAs = function (guid, userId, cb) {
     async.waterfall([
       // retrieve the demo
@@ -377,35 +449,66 @@ module.exports = function (Demo) {
     }
   });
 
-  // Delete users associated to a demo environment
+  /**
+   * Reacts to delete of a demo environment and deletes the associated data and users.
+   */
   Demo.observe("after delete", function (context, next) {
-    console.log("Deleting users linked to demo", context.where.id);
-    Demo.app.models.ERPUser.find({
-      where: {
-        demoId: context.where.id
-      }
-    }, function (err, users) {
-      if (err) {
-        next(err);
-      } else if (users.length == 0) {
-        next();
-      } else {
-        async.waterfall(users.map(function (user) {
-          return function (callback) {
-            console.log("Deleting user", user.email);
-            user.destroy(function () {
+    if (context.where.id) {
+      // delete all objects linked to the demo
+      var tasks = [];
+      Demo.ISOLATED_MODELS.forEach(function (model) {
+        tasks.push(function (callback) {
+          winston.info("Deleting", model.modelName, "linked to demo", context.where.id);
+          model.destroyAll({
+            demoId: context.where.id
+          }, function (err, info) {
+            if (err) {
+              winston.error(err);
+            }
+            callback(null);
+          });
+        });
+      });
+
+      // and its users
+      tasks.push(function (callback) {
+        winston.info("Deleting users linked to demo", context.where.id);
+        Demo.app.models.ERPUser.find({
+          where: {
+            demoId: context.where.id
+          }
+        }, function (err, users) {
+          if (err || users.length == 0) {
+            callback();
+          } else {
+            async.waterfall(users.map(function (user) {
+              return function (callback) {
+                winston.info("Deleting user", user.email);
+                user.destroy(function () {
+                  callback();
+                });
+              }
+            }), function (err, result) {
               callback();
             });
           }
-        }), function (err, result) {
-          next();
         });
-      }
-    });
+      });
+
+      async.waterfall(tasks, function (err, result) {
+        next();
+      });
+
+    } else {
+      next();
+    }
   });
 
+  /**
+   * Deletes the demo environment with the given guid
+   */
   Demo.deleteByGuid = function (guid, cb) {
-    console.log("Deleting demo with guid", guid);
+    winston.info("Deleting demo with guid", guid);
     async.waterfall([
       // retrieve the demo
       function (callback) {
@@ -427,7 +530,7 @@ module.exports = function (Demo) {
       function (demo, callback) {
           Demo.destroyById(demo.id,
             function (err, info) {
-              console.log("Deleted demo", demo.id);
+              winston.info("Deleted demo", demo.id);
               callback(err, demo);
             });
       }
@@ -455,8 +558,11 @@ module.exports = function (Demo) {
     ]
   });
 
+  /**
+   * Creates a new user in the given demo environment making this user the manager of the given store.
+   */
   Demo.createUserByGuid = function (guid, retailerId, cb) {
-    console.log("Adding new Retail Store Manager to demo with guid", guid, retailerId);
+    winston.info("Adding new Retail Store Manager to demo with guid", guid, retailerId);
 
     var app = Demo.app;
 
@@ -479,21 +585,18 @@ module.exports = function (Demo) {
       },
       // retrieve the store
       function (demo, callback) {
-          app.models.Retailer.findById(retailerId, function (err, retailer) {
+          app.models.Retailer.findOne({
+            where: {
+              id: retailerId,
+              demoId: demo.id
+            }
+          }, function (err, retailer) {
             if (!err && !retailer) {
               var notFound = new Error("No retailer with this id");
               notFound.status = 404
               callback(notFound);
             } else {
-              // check that the store demoId is the same as the user demoId
-              if (retailer.demoId && retailer.demoId != demo.id) {
-                // can't assign a manager from another demo with this one
-                var invalidDemoId = new Error("Demo id does not match the one from the retail store");
-                invalidDemoId.status = 400;
-                callback(invalidDemoId);
-              } else {
-                callback(err, demo, retailer);
-              }
+              callback(err, demo, retailer);
             }
           });
       },

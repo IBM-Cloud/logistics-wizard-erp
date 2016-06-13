@@ -2,6 +2,7 @@
   "name": "Inventory",
   "base": "PersistedModel",
   "idInjection": true,
+  "strictDelete": "true",
   "options": {
     "validateUpsert": true
   },
@@ -22,8 +23,17 @@
       "type": "belongsTo",
       "model": "DistributionCenter",
       "foreignKey": "dcId"
+    },
+    "demo": {
+      "type": "belongsTo",
+      "model": "Demo",
+      "foreignKey": "demoId"
     }
   },
+  "mixins": {
+    "Isolated": {}
+  },
+  "hidden": ["demoId"],
   "acls": [
     {
       "accessType": "*",

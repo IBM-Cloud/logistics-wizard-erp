@@ -1,9 +1,10 @@
 // Licensed under the Apache License. See footer for details.
 var helper = require("./helper.js");
 
-module.exports = function(Shipment) {
+module.exports = function (Shipment) {
   helper.simpleCrud(Shipment);
   helper.hideRelation(Shipment, "address");
+  helper.hideRelation(Shipment, "demo");
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");

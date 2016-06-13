@@ -1,5 +1,7 @@
 // Licensed under the Apache License. See footer for details.
-module.exports = function (app) {
+var winston = require("winston");
+
+module.exports = function (app, next) {
 
   function createRoles() {
     app.models.Role.find(function (err, roles) {
@@ -8,35 +10,39 @@ module.exports = function (app) {
         // but there is not event emitted that would allow us to register a listener to create
         // the roles. As we need to wait for those to be created, we check here the error and retry
         if (err.scope == "couch" && err.error == "no_usable_index") {
-          console.log("Database is not ready, retrying...");
+          winston.warn("Database is not ready, retrying...");
           process.nextTick(function () {
             createRoles();
           });
         } else {
-          console.log("find:", err);
+          winston.error("find:", err);
+          next();
         }
       } else if (roles.length == 0) {
-        console.log("ERP roles not found. Creating...");
+        winston.warn("ERP roles not found. Creating...");
         app.models.Role.create([{
           name: app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE
             }, {
           name: app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE
             }], function (err, roles) {
           if (err) {
-            console.log("create:", err);
+            winston.error("create:", err);
           } else {
-            console.log("Created", roles.length, "roles");
+            winston.warn("Created", roles.length, "roles");
           }
+          next(err);
         });
       } else {
-        console.log("Existing ERP roles", roles.map(function (role) {
+        winston.info("Existing ERP roles", roles.map(function (role) {
           return role.name;
         }));
+        next();
       }
     });
   }
 
   createRoles();
+
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");

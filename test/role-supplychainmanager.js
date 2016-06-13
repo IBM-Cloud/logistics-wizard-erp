@@ -18,15 +18,23 @@ describe('Validates the Supply Chain Manager', function () {
     app = require('..');
     app.use(loopback.rest());
     api = supertest(app);
-    done();
+
+    if (!app.booted) {
+      app.once("booted", function () {
+        done();
+      });
+    } else {
+      done();
+    }
   });
 
-  after(function (done) {
-    app.models.Retailer.destroyAll(function (err, info) {
-      app.models.ERPUser.destroyAll(function (err, info) {
+  it('can populate the app with sample data', function (done) {
+    api.post("/Demos/seed")
+      .set('Content-Type', 'application/json')
+      .expect(204)
+      .end(function (err, res) {
         done(err);
       });
-    });
   });
 
   var demoEnvironment;
@@ -86,6 +94,7 @@ describe('Validates the Supply Chain Manager', function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
         done(err);
       });
   });
@@ -95,6 +104,7 @@ describe('Validates the Supply Chain Manager', function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
         done(err);
       });
   });
@@ -104,6 +114,7 @@ describe('Validates the Supply Chain Manager', function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
         done(err);
       });
   });
@@ -113,6 +124,7 @@ describe('Validates the Supply Chain Manager', function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
         done(err);
       });
   });
@@ -122,6 +134,7 @@ describe('Validates the Supply Chain Manager', function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
         done(err);
       });
   });
@@ -129,11 +142,10 @@ describe('Validates the Supply Chain Manager', function () {
   it('can create a new shipment when logged', function (done) {
     api.post("/Shipments")
       .set("Authorization", api.loopbackAccessToken.id)
-      .send({
-        "status": "NEW",
-        "fromId": "0",
-        "toId": "1"
-      })
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        "status": "NEW"
+      }))
       .expect(200)
       .end(function (err, res) {
         done(err);
@@ -144,6 +156,25 @@ describe('Validates the Supply Chain Manager', function () {
     api.get("/Suppliers")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
+      .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
+        done(err);
+      });
+  });
+
+  it('can delete a demo environment', function (done) {
+    api.delete("/Demos/" + demoEnvironment.guid)
+      .set('Content-Type', 'application/json')
+      .expect(204)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it('can delete all sample data', function (done) {
+    api.post("/Demos/reset")
+      .set('Content-Type', 'application/json')
+      .expect(204)
       .end(function (err, res) {
         done(err);
       });

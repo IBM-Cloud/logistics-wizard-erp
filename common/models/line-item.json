@@ -2,6 +2,7 @@
   "name": "LineItem",
   "base": "PersistedModel",
   "idInjection": true,
+  "strictDelete": "true",
   "options": {
     "validateUpsert": true
   },
@@ -13,7 +14,17 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "demo": {
+      "type": "belongsTo",
+      "model": "Demo",
+      "foreignKey": "demoId"
+    }
+  },
+  "mixins": {
+    "Isolated": {}
+  },
+  "hidden": ["demoId"],
   "acls": [
     {
       "accessType": "*",

@@ -2,6 +2,7 @@
   "name": "Address",
   "base": "Model",
   "idInjection": true,
+  "strictDelete": "true",
   "options": {
     "validateUpsert": true
   },

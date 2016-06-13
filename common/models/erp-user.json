@@ -3,6 +3,7 @@
   "plural": "Users",
   "base": "User",
   "idInjection": true,
+  "strictDelete": "true",
   "options": {
     "validateUpsert": true
   },

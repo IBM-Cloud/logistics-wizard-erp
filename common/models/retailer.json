@@ -2,6 +2,7 @@
   "name": "Retailer",
   "base": "PersistedModel",
   "idInjection": true,
+  "strictDelete": "true",
   "options": {
     "validateUpsert": true
   },
@@ -21,8 +22,17 @@
         "validate": true,
         "forceId": false
       }
+    },
+    "demo": {
+      "type": "belongsTo",
+      "model": "Demo",
+      "foreignKey": "demoId"
     }
   },
+  "mixins": {
+    "Isolated": {}
+  },
+  "hidden": ["demoId"],
   "acls": [
     {
       "accessType": "*",
