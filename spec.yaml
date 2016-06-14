@@ -966,7 +966,7 @@ paths:
           in: body
           required: false
           schema:
-            $ref: '#/definitions/Demo'
+            $ref: '#/definitions/NewDemo'
       responses:
         '200':
           description: Request was successful
@@ -1149,24 +1149,11 @@ definitions:
     additionalProperties: false
   ERPUser:
     properties:
-      realm:
-        type: string
       username:
         type: string
-      credentials:
-        type: object
-      challenges:
-        type: object
       email:
         type: string
-      emailVerified:
-        type: boolean
-      status:
-        type: string
       created:
-        type: string
-        format: date
-      lastUpdated:
         type: string
         format: date
       id:
@@ -1176,6 +1163,15 @@ definitions:
     required:
       - email
     additionalProperties: false
+  ERPUserWithRoles:
+    allOf:
+      - $ref: "#/definitions/ERPUser"
+      - properties:
+          roles:
+            type: array
+            items:
+              $ref: "#/definitions/Role"
+        additionalProperties: false
   Inventory:
     properties:
       quantity:
@@ -1223,6 +1219,11 @@ definitions:
     required:
       - name
     additionalProperties: false
+  NewDemo:
+    properties:
+      name:
+        type: string
+    additionalProperties: false
   Demo:
     properties:
       createdAt:
@@ -1234,6 +1235,10 @@ definitions:
         type: string
       id:
         type: string
+      users:
+        type: array
+        items:
+          $ref: "#/definitions/ERPUserWithRoles"
     required:
       - createdAt
       - name

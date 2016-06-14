@@ -7,7 +7,14 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "realm": false,
+    "credentials": null,
+    "challenges": null,
+    "emailVerified": false,
+    "status": false,
+    "lastUpdated": false
+  },
   "validations": [],
   "relations": {
     "demo": {
