@@ -58,7 +58,7 @@ describe('Users', function () {
       .expect(200)
       .end(function (err, res) {
         // capture the token
-        api.loopbackAccessToken = res.body;
+        api.loopbackAccessToken = res.body.token;
         done(err);
       });
   });

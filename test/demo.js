@@ -107,7 +107,7 @@ describe('Demos', function () {
       .expect(200)
       .end(function (err, res) {
         assert.isNotNull(res.body.id);
-        apiSupply.loopbackAccessToken = res.body;
+        apiSupply.loopbackAccessToken = res.body.token;
         done(err);
       });
   });
