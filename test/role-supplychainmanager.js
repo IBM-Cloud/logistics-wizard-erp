@@ -74,7 +74,9 @@ describe('Validates the Supply Chain Manager', function () {
       .expect(200)
       .end(function (err, res) {
         // capture the token
-        api.loopbackAccessToken = res.body;
+        api.loopbackAccessToken = res.body.token;
+        assert.equal(demoEnvironment.users[0].id, res.body.user.id);
+        assert.equal(app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE, res.body.user.roles[0].name);
         done(err);
       });
   });

@@ -400,6 +400,9 @@ module.exports = function (Demo) {
           where: {
             id: userId,
             demoId: demo.id
+          },
+          include: {
+            relation: 'roles'
           }
         }, function (err, user) {
           if (!err && !user) {
@@ -414,11 +417,14 @@ module.exports = function (Demo) {
       // issue a token for this user
       function (user, callback) {
         user.createAccessToken(Demo.app.models.User.DEFAULT_TTL, function (err, token) {
-          callback(err, token);
+          callback(err, {
+            token: token,
+            user: user
+          });
         });
       }
-    ], function (err, token) {
-      cb(err, token);
+    ], function (err, result) {
+      cb(err, result);
     });
   };
 
@@ -444,8 +450,8 @@ module.exports = function (Demo) {
       }
     ],
     returns: {
-      arg: "token",
-      type: "AccessToken",
+      arg: "result",
+      type: "LoginResponse",
       root: true
     }
   });

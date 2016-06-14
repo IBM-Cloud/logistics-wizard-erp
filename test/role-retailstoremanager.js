@@ -103,7 +103,9 @@ describe('Validates the Retail Store Manager', function () {
       .expect(200)
       .end(function (err, res) {
         // capture the token
-        api.loopbackAccessToken = res.body;
+        api.loopbackAccessToken = res.body.token;
+        assert.equal(retailStoreManager.id, res.body.user.id);
+        assert.equal(app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE, res.body.user.roles[0].name);
         done(err);
       });
   });

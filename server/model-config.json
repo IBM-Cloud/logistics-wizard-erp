@@ -76,5 +76,9 @@
   "Demo": {
     "dataSource": "db",
     "public": true
+  },
+  "LoginResponse": {
+    "dataSource": null,
+    "public": false
   }
 }

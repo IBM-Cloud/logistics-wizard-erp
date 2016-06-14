@@ -83,9 +83,9 @@
         guid: $scope.demo.guid
       }, {
         userId: user.id
-      }, function (accessToken) {
-        console.log("Received", accessToken);
-        $("#token-" + user.id).html(accessToken.id);
+      }, function (loginResponse) {
+        console.log("Received", loginResponse);
+        $("#token-" + user.id).html(loginResponse.token.id);
       }, function (res) {
         console.log(res);
       });

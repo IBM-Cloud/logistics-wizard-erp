@@ -69,7 +69,7 @@ describe('Data Isolation', function () {
       }))
       .expect(200)
       .end(function (err, res) {
-        apiSupply1.loopbackAccessToken = res.body;
+        apiSupply1.loopbackAccessToken = res.body.token;
         done(err);
       });
   });
@@ -153,7 +153,7 @@ describe('Data Isolation', function () {
       }))
       .expect(200)
       .end(function (err, res) {
-        apiSupply2.loopbackAccessToken = res.body;
+        apiSupply2.loopbackAccessToken = res.body.token;
         done(err);
       });
   });

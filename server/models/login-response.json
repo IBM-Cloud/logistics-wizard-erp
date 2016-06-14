@@ -1,0 +1,19 @@
+{
+  "name": "LoginResponse",
+  "base": "TransientModel",
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "token": {
+      "type": "AccessToken"
+    },
+    "user": {
+      "type": "ERPUser"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

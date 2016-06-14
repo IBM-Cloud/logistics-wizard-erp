@@ -7,6 +7,12 @@ var loopback = require('loopback');
 var boot = require('loopback-boot');
 var app = module.exports = loopback();
 
+// This model has no database attached, no id.
+// It is used in REST response where we want to combine multiple objects.
+loopback.modelBuilder.define('TransientModel', {}, {
+  idInjection: false
+});
+
 app.start = function () {
   // start the web server
   return app.listen(function () {

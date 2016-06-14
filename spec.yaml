@@ -1028,7 +1028,7 @@ paths:
         '200':
           description: Request was successful
           schema:
-            $ref: '#/definitions/AccessToken'
+            $ref: '#/definitions/LoginResponse'
       deprecated: false
   '/Demos/{guid}':
     delete:
@@ -1242,6 +1242,13 @@ definitions:
     required:
       - createdAt
       - name
+    additionalProperties: false
+  LoginResponse:
+    properties:
+      token:
+        $ref: '#/definitions/AccessToken'
+      user:
+        $ref: '#/definitions/ERPUserWithRoles'
     additionalProperties: false
   Address:
     properties:
