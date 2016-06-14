@@ -250,6 +250,7 @@ module.exports = function (Demo) {
       {
         arg: 'data',
         type: 'Demo',
+        required: true,
         http: {
           source: 'body'
         }

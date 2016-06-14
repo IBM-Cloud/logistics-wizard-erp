@@ -964,7 +964,7 @@ paths:
       parameters:
         - name: data
           in: body
-          required: false
+          required: true
           schema:
             $ref: '#/definitions/NewDemo'
       responses:
