@@ -1160,18 +1160,14 @@ definitions:
         type: string
       demoId:
         type: string
+      roles:
+        type: array
+        items:
+          $ref: "#/definitions/Role"
     required:
+      - id
       - email
     additionalProperties: false
-  ERPUserWithRoles:
-    allOf:
-      - $ref: "#/definitions/ERPUser"
-      - properties:
-          roles:
-            type: array
-            items:
-              $ref: "#/definitions/Role"
-        additionalProperties: false
   Inventory:
     properties:
       quantity:
@@ -1238,7 +1234,7 @@ definitions:
       users:
         type: array
         items:
-          $ref: "#/definitions/ERPUserWithRoles"
+          $ref: "#/definitions/ERPUser"
     required:
       - createdAt
       - name
@@ -1248,7 +1244,7 @@ definitions:
       token:
         $ref: '#/definitions/AccessToken'
       user:
-        $ref: '#/definitions/ERPUserWithRoles'
+        $ref: '#/definitions/ERPUser'
     additionalProperties: false
   Address:
     properties:
