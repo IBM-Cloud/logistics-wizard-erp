@@ -600,8 +600,12 @@ module.exports = function (Demo) {
           }, function (err, retailer) {
             if (!err && !retailer) {
               var notFound = new Error("No retailer with this id");
-              notFound.status = 404
+              notFound.status = 404;
               callback(notFound);
+            } else if (retailer && retailer.managerId) {
+              var alreadyAssigned = new Error("A manager is already assigned to this retail store");
+              alreadyAssigned.status = 400;
+              callback(alreadyAssigned);
             } else {
               callback(err, demo, retailer);
             }

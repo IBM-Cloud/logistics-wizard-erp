@@ -94,6 +94,18 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
+  it('can NOT create a new Retailer user with the same store', function (done) {
+    api.post("/Demos/" + demoEnvironment.guid + "/createUser")
+      .set('Content-Type', 'application/json')
+      .send(JSON.stringify({
+        retailerId: demoEnvironmentRetailers[0].id
+      }))
+      .expect(400)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
   it('can login with proper credentials', function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set('Content-Type', 'application/json')
