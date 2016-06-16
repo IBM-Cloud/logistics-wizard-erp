@@ -7,6 +7,32 @@ var winston = require("winston");
  */
 module.exports = function (Model, options) {
 
+  function injectDemoId(user, token, modelId, sharedMethod, ctx, callback) {
+    // if we are create a new object
+    // then inject the demoId of the current user
+    if ("create" == sharedMethod.name) {
+      ctx.req.remotingContext.args.data.demoId = user.demoId;
+    }
+    // if we are creating an object through a relation /Model/:id/relation
+    // then inject the demoId of the current user
+    else if (sharedMethod.name.indexOf("__create__") == 0) {
+      ctx.req.remotingContext.args.data.__data.demoId = user.demoId;
+    }
+
+    // inject the demoId in the filter "where" clause
+    if (!ctx.args.filter) {
+      ctx.args.filter = {};
+    }
+    if (!ctx.args.filter.where) {
+      ctx.args.filter.where = {};
+    }
+    ctx.args.filter.where.demoId = user.demoId;
+
+    // let the regular check happens,
+    // we ensured that the demoId will be added to new item and to any query
+    Model.__checkAccess(token, modelId, sharedMethod, ctx, callback);
+  }
+  
   // keep the old version of checkAccess
   Model.__checkAccess = Model.checkAccess;
 
@@ -63,31 +89,6 @@ module.exports = function (Model, options) {
     });
   };
 
-  function injectDemoId(user, token, modelId, sharedMethod, ctx, callback) {
-    // if we are create a new object
-    // then inject the demoId of the current user
-    if ("create" == sharedMethod.name) {
-      ctx.req.remotingContext.args.data.demoId = user.demoId;
-    }
-    // if we are creating an object through a relation /Model/:id/relation
-    // then inject the demoId of the current user
-    else if (sharedMethod.name.indexOf("__create__") == 0) {
-      ctx.req.remotingContext.args.data.__data.demoId = user.demoId;
-    }
-
-    // inject the demoId in the filter "where" clause
-    if (!ctx.args.filter) {
-      ctx.args.filter = {};
-    }
-    if (!ctx.args.filter.where) {
-      ctx.args.filter.where = {};
-    }
-    ctx.args.filter.where.demoId = user.demoId;
-
-    // let the regular check happens,
-    // we ensured that the demoId will be added to new item and to any query
-    Model.__checkAccess(token, modelId, sharedMethod, ctx, callback);
-  }
 };
 
 //------------------------------------------------------------------------------

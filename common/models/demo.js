@@ -613,13 +613,13 @@ module.exports = function (Demo) {
       },
       // create the user
       function (demo, retailer, callback) {
-          var random = randomstring.generate(10)
+          var random = randomstring.generate(10);
           var retailStoreManager = {
             email: "ruth." + random + "@acme.com",
             username: "Retail Store Manager (" + random + ")",
             password: randomstring.generate(10),
             demoId: demo.id
-          }
+          };
 
           app.models.ERPUser.create(retailStoreManager, function (err, user) {
             callback(err, demo, retailer, user);
