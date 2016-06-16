@@ -88,7 +88,7 @@ module.exports = function (Model, options) {
     // we ensured that the demoId will be added to new item and to any query
     Model.__checkAccess(token, modelId, sharedMethod, ctx, callback);
   }
-}
+};
 
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");

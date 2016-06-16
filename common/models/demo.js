@@ -1,15 +1,15 @@
 // Licensed under the Apache License. See footer for details.
-var winston = require('winston');
+var winston = require("winston");
 var helper = require("./helper.js");
 var async = require("async");
 var bcrypt = require("bcryptjs");
 var randomstring = require("randomstring");
-var fs = require('fs');
+var fs = require("fs");
 
 function makeUniqueSession(demo) {
   var SALT_WORK_FACTOR = 10;
   var salt = bcrypt.genSaltSync(SALT_WORK_FACTOR);
-  return new Buffer(bcrypt.hashSync(demo.id + " " + demo.createdAt, salt)).toString('base64');
+  return new Buffer(bcrypt.hashSync(demo.id + " " + demo.createdAt, salt)).toString("base64");
 }
 
 module.exports = function (Demo) {
@@ -90,7 +90,7 @@ module.exports = function (Demo) {
     winston.info("Seeding...");
     async.waterfall(Demo.STATIC_MODELS.map(function (model) {
         return function (callback) {
-          seed(model, undefined, callback);
+          seed(model, null, callback);
         };
       }),
       function (err, result) {
@@ -103,11 +103,11 @@ module.exports = function (Demo) {
       });
   };
 
-  Demo.remoteMethod('seed', {
-    description: 'Injects sample shared data in the service',
+  Demo.remoteMethod("seed", {
+    description: "Injects sample shared data in the service",
     http: {
-      path: '/seed',
-      verb: 'post'
+      path: "/seed",
+      verb: "post"
     },
     accepts: []
   });
@@ -143,11 +143,11 @@ module.exports = function (Demo) {
       });
   };
 
-  Demo.remoteMethod('reset', {
-    description: 'Deletes all data',
+  Demo.remoteMethod("reset", {
+    description: "Deletes all data",
     http: {
-      path: '/reset',
-      verb: 'post'
+      path: "/reset",
+      verb: "post"
     },
     accepts: []
   });
@@ -197,7 +197,7 @@ module.exports = function (Demo) {
       // create the supply chain manager
       function (demo, callback) {
         winston.info("Creating Supply Chain Manager user");
-        var random = randomstring.generate(10)
+        var random = randomstring.generate(10);
         var supplyChainManager = {
           email: "chris." + random + "@acme.com",
           username: "Supply Chain Manager (" + random + ")",
@@ -215,7 +215,7 @@ module.exports = function (Demo) {
         Demo.app.models.ERPUser.assignRole(user,
           Demo.app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE,
           function (err, principal) {
-            callback(err, demo)
+            callback(err, demo);
           });
       },
       // returns the demo, its users and the roles
@@ -223,10 +223,10 @@ module.exports = function (Demo) {
         winston.info("Retrieving Demo and its users");
         Demo.findById(demo.id, {
             include: {
-              relation: 'users',
+              relation: "users",
               scope: {
                 include: {
-                  relation: 'roles'
+                  relation: "roles"
                 }
               }
             }
@@ -240,19 +240,19 @@ module.exports = function (Demo) {
     });
   };
 
-  Demo.remoteMethod('newDemo', {
-    description: 'Creates a new Demo environment',
+  Demo.remoteMethod("newDemo", {
+    description: "Creates a new Demo environment",
     http: {
-      path: '/',
-      verb: 'post'
+      path: "/",
+      verb: "post"
     },
     accepts: [
       {
-        arg: 'data',
-        type: 'Demo',
+        arg: "data",
+        type: "Demo",
         required: true,
         http: {
-          source: 'body'
+          source: "body"
         }
       }
     ],
@@ -272,10 +272,10 @@ module.exports = function (Demo) {
           guid: guid
         },
         include: {
-          relation: 'users',
+          relation: "users",
           scope: {
             include: {
-              relation: 'roles'
+              relation: "roles"
             }
           }
         }
@@ -283,7 +283,7 @@ module.exports = function (Demo) {
       function (err, demo) {
         if (!err && !demo) {
           var notFound = new Error("No Demo with this guid");
-          notFound.status = 404
+          notFound.status = 404;
           cb(notFound);
         } else {
           cb(err, demo);
@@ -291,11 +291,11 @@ module.exports = function (Demo) {
       });
   };
 
-  Demo.remoteMethod('findByGuid', {
-    description: 'Retrieves the Demo environment with the given guid',
+  Demo.remoteMethod("findByGuid", {
+    description: "Retrieves the Demo environment with the given guid",
     http: {
-      path: '/findByGuid/:guid',
-      verb: 'get'
+      path: "/findByGuid/:guid",
+      verb: "get"
     },
     accepts: [
       {
@@ -328,7 +328,7 @@ module.exports = function (Demo) {
         }, function (err, demo) {
           if (!err && !demo) {
             var notFound = new Error("No Demo with this guid");
-            notFound.status = 404
+            notFound.status = 404;
             callback(notFound);
           } else {
             callback(err, demo);
@@ -350,11 +350,11 @@ module.exports = function (Demo) {
     });
   };
 
-  Demo.remoteMethod('retailers', {
-    description: 'Returns all retailers',
+  Demo.remoteMethod("retailers", {
+    description: "Returns all retailers",
     http: {
-      path: '/:guid/retailers',
-      verb: 'get'
+      path: "/:guid/retailers",
+      verb: "get"
     },
     accepts: [
       {
@@ -402,7 +402,7 @@ module.exports = function (Demo) {
             demoId: demo.id
           },
           include: {
-            relation: 'roles'
+            relation: "roles"
           }
         }, function (err, user) {
           if (!err && !user) {
@@ -428,11 +428,11 @@ module.exports = function (Demo) {
     });
   };
 
-  Demo.remoteMethod('loginAs', {
-    description: 'Logs in as the specified user belonging to the given demo environment',
+  Demo.remoteMethod("loginAs", {
+    description: "Logs in as the specified user belonging to the given demo environment",
     http: {
-      path: '/:guid/loginAs',
-      verb: 'post'
+      path: "/:guid/loginAs",
+      verb: "post"
     },
     accepts: [
       {
@@ -547,11 +547,11 @@ module.exports = function (Demo) {
       });
   };
 
-  Demo.remoteMethod('deleteByGuid', {
-    description: 'Deletes the given demo environment',
+  Demo.remoteMethod("deleteByGuid", {
+    description: "Deletes the given demo environment",
     http: {
-      path: '/:guid',
-      verb: 'delete'
+      path: "/:guid",
+      verb: "delete"
     },
     accepts: [
       {
@@ -630,12 +630,12 @@ module.exports = function (Demo) {
           Demo.app.models.ERPUser.assignRole(user,
             Demo.app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE,
             function (err, principal) {
-              callback(err, retailer, user)
+              callback(err, retailer, user);
             });
       },
       // assign the user as manager for the store
       function (retailer, user, callback) {
-          retailer.managerId = user.id
+          retailer.managerId = user.id;
           retailer.save(function (err, updated) {
             callback(err, user);
           });
@@ -646,11 +646,11 @@ module.exports = function (Demo) {
       });
   };
 
-  Demo.remoteMethod('createUserByGuid', {
-    description: 'Adds a new Retail Store manager to the given demo environment',
+  Demo.remoteMethod("createUserByGuid", {
+    description: "Adds a new Retail Store manager to the given demo environment",
     http: {
-      path: '/:guid/createUser',
-      verb: 'post'
+      path: "/:guid/createUser",
+      verb: "post"
     },
     accepts: [
       {

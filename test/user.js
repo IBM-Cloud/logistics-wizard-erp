@@ -1,15 +1,16 @@
 // Licensed under the Apache License. See footer for details.
-var supertest = require('supertest');
+var supertest = require("supertest");
 
-describe('Users', function () {
+describe("Users", function () {
 
   var loopback;
   var app;
-  var apiAnon, apiSupply, apiRetail;
+  var apiAnon;
+  var api;
 
   before(function (done) {
-    loopback = require('loopback');
-    app = require('..');
+    loopback = require("loopback");
+    app = require("..");
     app.use(loopback.rest());
 
     apiAnon = supertest(app);
@@ -26,9 +27,9 @@ describe('Users', function () {
 
   var demoEnvironment;
 
-  it('can create a Demo environment', function (done) {
+  it("can create a Demo environment", function (done) {
     api.post("/Demos")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         name: "My Demo"
       }))
@@ -41,7 +42,7 @@ describe('Users', function () {
       });
   });
 
-  it('can NOT retrieve products without being logged', function (done) {
+  it("can NOT retrieve products without being logged", function (done) {
     api.get("/Products")
       .expect(401)
       .end(function (err, res) {
@@ -49,9 +50,9 @@ describe('Users', function () {
       });
   });
 
-  it('can login with proper credentials', function (done) {
+  it("can login with proper credentials", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         userId: demoEnvironment.users[0].id
       }))
@@ -63,7 +64,7 @@ describe('Users', function () {
       });
   });
 
-  it('can NOT logout with a wrong token', function (done) {
+  it("can NOT logout with a wrong token", function (done) {
     api.post("/Users/logout")
       .set("Authorization", "NOT A VALID TOKEN")
       .expect(500)
@@ -72,7 +73,7 @@ describe('Users', function () {
       });
   });
 
-  it('can logout if previously logged in', function (done) {
+  it("can logout if previously logged in", function (done) {
     api.post("/Users/logout")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(204)
@@ -81,27 +82,34 @@ describe('Users', function () {
       });
   });
 
-  it('can NOT log in with invalid info', function (done) {
+  it("can NOT log in with invalid info", function (done) {
     apiAnon.post("/Users/login")
-      .set('Content-Type', 'application/json')
-      .send('{"email": "john@acme.com", "password": "doe"}')
+      .set("Content-Type", "application/json")
+      .send(JSON.stringify({
+        email: "john@acme.com",
+        password: "doe"
+      }))
       .expect(404)
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('can NOT register a user', function (done) {
+  it("can NOT register a user", function (done) {
     apiAnon.post("/Users")
-      .set('Content-Type', 'application/json')
-      .send('{"email": "john@acme.com", "username": "john", "password": "doe"}')
+      .set("Content-Type", "application/json")
+      .send(JSON.stringify({
+        email: "john@ acme.com",
+        username: "john",
+        password: "doe"
+      }))
       .expect(404)
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('can NOT logout if no logged in', function (done) {
+  it("can NOT logout if no logged in", function (done) {
     apiAnon.post("/Users/logout")
       .expect(500)
       .end(function (err, res) {
@@ -109,9 +117,9 @@ describe('Users', function () {
       });
   });
 
-  it('can delete all sample data', function (done) {
+  it("can delete all sample data", function (done) {
     api.post("/Demos/reset")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(204)
       .end(function (err, res) {
         done(err);

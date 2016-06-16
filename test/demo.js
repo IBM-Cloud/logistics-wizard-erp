@@ -1,10 +1,10 @@
 // Licensed under the Apache License. See footer for details.
-var supertest = require('supertest');
-var assert = require('chai').assert;
-var async = require('async');
-var fs = require('fs');
+var supertest = require("supertest");
+var assert = require("chai").assert;
+var async = require("async");
+var fs = require("fs");
 
-describe('Demos', function () {
+describe("Demos", function () {
 
   var loopback;
   var app;
@@ -13,8 +13,8 @@ describe('Demos', function () {
   var apiRetail;
 
   before(function (done) {
-    loopback = require('loopback');
-    app = require('..');
+    loopback = require("loopback");
+    app = require("..");
     app.use(loopback.rest());
 
     apiAnon = supertest(app);
@@ -30,9 +30,9 @@ describe('Demos', function () {
     }
   });
 
-  it('can populate the app with sample data', function (done) {
+  it("can populate the app with sample data", function (done) {
     apiAnon.post("/Demos/seed")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(204)
       .end(function (err, res) {
         done(err);
@@ -41,9 +41,9 @@ describe('Demos', function () {
 
   var demoEnvironment;
 
-  it('can create a Demo environment', function (done) {
+  it("can create a Demo environment", function (done) {
     apiAnon.post("/Demos")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         name: "My Demo"
       }))
@@ -59,9 +59,9 @@ describe('Demos', function () {
       });
   });
 
-  it('can retrieve a previous environment', function (done) {
+  it("can retrieve a previous environment", function (done) {
     apiAnon.get("/Demos/findByGuid/" + demoEnvironment.guid)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(200)
       .end(function (err, res) {
         if (!err) {
@@ -75,9 +75,9 @@ describe('Demos', function () {
 
   var demoEnvironmentRetailers = [];
 
-  it('can retrieve the list of retailers', function (done) {
+  it("can retrieve the list of retailers", function (done) {
     apiAnon.get("/Demos/" + demoEnvironment.guid + "/retailers")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(200)
       .end(function (err, res) {
         assert.equal(4, res.body.length);
@@ -86,9 +86,9 @@ describe('Demos', function () {
       });
   });
 
-  it('can NOT log in with a non-existent user on a valid demo', function (done) {
+  it("can NOT log in with a non-existent user on a valid demo", function (done) {
     apiSupply.post("/Demos/" + demoEnvironment.guid + "/loginAs")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         userId: "I do not exist"
       }))
@@ -98,9 +98,9 @@ describe('Demos', function () {
       });
   });
 
-  it('can log in as a user without providing credentials', function (done) {
+  it("can log in as a user without providing credentials", function (done) {
     apiSupply.post("/Demos/" + demoEnvironment.guid + "/loginAs")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         userId: demoEnvironment.users[0].id
       }))
@@ -112,8 +112,8 @@ describe('Demos', function () {
       });
   });
 
-  it('can query ERP API with a user', function (done) {
-    apiSupply.get('/Products')
+  it("can query ERP API with a user", function (done) {
+    apiSupply.get("/Products")
       .set("Authorization", apiSupply.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
@@ -121,10 +121,10 @@ describe('Demos', function () {
       });
   });
 
-  it('can create a new Retailer user', function (done) {
+  it("can create a new Retailer user", function (done) {
     var userCount = demoEnvironment.users.length;
     apiAnon.post("/Demos/" + demoEnvironment.guid + "/createUser")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         retailerId: demoEnvironmentRetailers[0].id
       }))
@@ -136,9 +136,9 @@ describe('Demos', function () {
       });
   });
 
-  it('can find the new Retailer user in the demo environment', function (done) {
+  it("can find the new Retailer user in the demo environment", function (done) {
     apiAnon.get("/Demos/findByGuid/" + demoEnvironment.guid)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(200)
       .end(function (err, res) {
         var updatedDemoEnvironment = res.body;
@@ -147,10 +147,10 @@ describe('Demos', function () {
       });
   });
 
-  it('can not create a new Retailer user for non-existent retailer', function (done) {
+  it("can not create a new Retailer user for non-existent retailer", function (done) {
     var userCount = demoEnvironment.users.length;
     apiAnon.post("/Demos/" + demoEnvironment.guid + "/createUser")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         retailerId: "IdoNotExist"
       }))
@@ -160,26 +160,26 @@ describe('Demos', function () {
       });
   });
 
-  it('can delete a demo environment', function (done) {
+  it("can delete a demo environment", function (done) {
     apiAnon.delete("/Demos/" + demoEnvironment.guid)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(204)
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('can not retrieve a deleted environment', function (done) {
+  it("can not retrieve a deleted environment", function (done) {
     apiAnon.get("/Demos/findByGuid/" + demoEnvironment.guid)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(404)
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('can not query ERP API with a user from a deleted environment', function (done) {
-    apiSupply.get('/Products')
+  it("can not query ERP API with a user from a deleted environment", function (done) {
+    apiSupply.get("/Products")
       .set("Authorization", apiSupply.loopbackAccessToken.id)
       .expect(401)
       .end(function (err, res) {
@@ -187,27 +187,27 @@ describe('Demos', function () {
       });
   });
 
-  it('can not get a non-existent demo', function (done) {
+  it("can not get a non-existent demo", function (done) {
     apiAnon.get("/Demos/findByGuid/blah")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(404)
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('can not delete a non-existent demo environment', function (done) {
+  it("can not delete a non-existent demo environment", function (done) {
     apiAnon.delete("/Demos/blah")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(404)
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('can not login with a non-existent demo', function (done) {
+  it("can not login with a non-existent demo", function (done) {
     apiSupply.post("/Demos/blah/loginAs")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         userId: demoEnvironment.users[0].id
       }))
@@ -219,9 +219,9 @@ describe('Demos', function () {
       });
   });
 
-  it('can not create a user for a non-existent demo', function (done) {
+  it("can not create a user for a non-existent demo", function (done) {
     apiAnon.post("/Demos/blah/createUser")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         retailerId: demoEnvironmentRetailers[0].id
       }))
@@ -231,16 +231,16 @@ describe('Demos', function () {
       });
   });
 
-  it('can not get retailers from a non-existent demo', function (done) {
+  it("can not get retailers from a non-existent demo", function (done) {
     apiAnon.get("/Demos/blah/retailers")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(404)
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('has no data leftover in Demo environment', function (done) {
+  it("has no data leftover in Demo environment", function (done) {
     var tasks = app.models.Demo.ISOLATED_MODELS.map(function (model) {
       return function (callback) {
         model.find({
@@ -255,16 +255,16 @@ describe('Demos', function () {
             callback(null);
           }
         });
-      }
+      };
     });
     async.waterfall(tasks, function (err, result) {
       done(err);
     });
   });
 
-  it('can delete all sample data', function (done) {
+  it("can delete all sample data", function (done) {
     apiAnon.post("/Demos/reset")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(204)
       .end(function (err, res) {
         done(err);

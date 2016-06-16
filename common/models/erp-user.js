@@ -11,15 +11,15 @@ module.exports = function (ErpUser) {
 
   // remove all remote API methods, leaving only login/logout and token management
   helper.readOnly(ErpUser);
-  ErpUser.disableRemoteMethod('find', true);
-  ErpUser.disableRemoteMethod('findById', true);
-  ErpUser.disableRemoteMethod('confirm', true);
-  ErpUser.disableRemoteMethod('resetPassword', true);
-  ErpUser.disableRemoteMethod('login', true);
+  ErpUser.disableRemoteMethod("find", true);
+  ErpUser.disableRemoteMethod("findById", true);
+  ErpUser.disableRemoteMethod("confirm", true);
+  ErpUser.disableRemoteMethod("resetPassword", true);
+  ErpUser.disableRemoteMethod("login", true);
 
   // hide the link back to the demo
-  helper.hideRelation(ErpUser, 'demo');
-  helper.readOnlyRelation(ErpUser, 'roles');
+  helper.hideRelation(ErpUser, "demo");
+  helper.readOnlyRelation(ErpUser, "roles");
 
   // callback(err, principal)
   ErpUser.assignRole = function (user, roleName, callback) {
@@ -38,7 +38,7 @@ module.exports = function (ErpUser) {
   };
 
   // Delete access tokens for the given user
-  ErpUser.observe('after delete', function (ctx, next) {
+  ErpUser.observe("after delete", function (ctx, next) {
     if (ctx.where.id) {
       winston.info("Deleting access tokens and roles for user", ctx.where.id);
       async.waterfall([

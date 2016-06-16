@@ -1,21 +1,21 @@
 // Licensed under the Apache License. See footer for details.
-var supertest = require('supertest');
-var assert = require('chai').assert;
-var async = require('async');
+var supertest = require("supertest");
+var assert = require("chai").assert;
+var async = require("async");
 
 // workaround for "warning: possible EventEmitter memory leak detected"
 // seems to be linked to the number of unit tests in the file
-require('events').EventEmitter.prototype._maxListeners = 100;
+require("events").EventEmitter.prototype._maxListeners = 100;
 
-describe('Validates the Supply Chain Manager', function () {
+describe("Validates the Supply Chain Manager", function () {
 
   var loopback;
   var app;
   var api;
 
   before(function (done) {
-    loopback = require('loopback');
-    app = require('..');
+    loopback = require("loopback");
+    app = require("..");
     app.use(loopback.rest());
     api = supertest(app);
 
@@ -28,9 +28,9 @@ describe('Validates the Supply Chain Manager', function () {
     }
   });
 
-  it('can populate the app with sample data', function (done) {
+  it("can populate the app with sample data", function (done) {
     api.post("/Demos/seed")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(204)
       .end(function (err, res) {
         done(err);
@@ -39,9 +39,9 @@ describe('Validates the Supply Chain Manager', function () {
 
   var demoEnvironment;
 
-  it('can create a Demo environment', function (done) {
+  it("can create a Demo environment", function (done) {
     api.post("/Demos")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         name: "My Demo"
       }))
@@ -57,7 +57,7 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('can NOT retrieve products without being logged', function (done) {
+  it("can NOT retrieve products without being logged", function (done) {
     api.get("/Products")
       .expect(401)
       .end(function (err, res) {
@@ -65,9 +65,9 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('can login with proper credentials', function (done) {
+  it("can login with proper credentials", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         userId: demoEnvironment.users[0].id
       }))
@@ -81,7 +81,7 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('has the right rights', function (done) {
+  it("has the right rights", function (done) {
     api.get("/Users/" + api.loopbackAccessToken.userId + "/roles")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -91,7 +91,7 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('can retrieve distribution centers when logged', function (done) {
+  it("can retrieve distribution centers when logged", function (done) {
     api.get("/DistributionCenters")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -101,7 +101,7 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('can retrieve inventories when logged', function (done) {
+  it("can retrieve inventories when logged", function (done) {
     api.get("/Inventories")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -111,7 +111,7 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('can retrieve products when logged', function (done) {
+  it("can retrieve products when logged", function (done) {
     api.get("/Products")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -121,7 +121,7 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('can retrieve retailers when logged', function (done) {
+  it("can retrieve retailers when logged", function (done) {
     api.get("/Retailers")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -131,7 +131,7 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('can retrieve shipments when logged', function (done) {
+  it("can retrieve shipments when logged", function (done) {
     api.get("/Shipments")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -141,10 +141,10 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('can create a new shipment when logged', function (done) {
+  it("can create a new shipment when logged", function (done) {
     api.post("/Shipments")
       .set("Authorization", api.loopbackAccessToken.id)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         "status": "NEW"
       }))
@@ -154,7 +154,7 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('can retrieve suppliers when logged', function (done) {
+  it("can retrieve suppliers when logged", function (done) {
     api.get("/Suppliers")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -164,18 +164,18 @@ describe('Validates the Supply Chain Manager', function () {
       });
   });
 
-  it('can delete a demo environment', function (done) {
+  it("can delete a demo environment", function (done) {
     api.delete("/Demos/" + demoEnvironment.guid)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(204)
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('can delete all sample data', function (done) {
+  it("can delete all sample data", function (done) {
     api.post("/Demos/reset")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(204)
       .end(function (err, res) {
         done(err);

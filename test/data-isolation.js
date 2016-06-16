@@ -1,19 +1,19 @@
 // Licensed under the Apache License. See footer for details.
-var supertest = require('supertest');
-var assert = require('chai').assert;
-var fs = require('fs');
+var supertest = require("supertest");
+var assert = require("chai").assert;
+var fs = require("fs");
 
-describe('Data Isolation', function () {
+describe("Data Isolation", function () {
 
   var loopback;
   var app;
   var apiAnon;
-  var apiSupply;
-  var apiRetail;
+  var apiSupply1;
+  var apiSupply2;
 
   before(function (done) {
-    loopback = require('loopback');
-    app = require('..');
+    loopback = require("loopback");
+    app = require("..");
     app.use(loopback.rest());
 
     apiAnon = supertest(app);
@@ -33,9 +33,9 @@ describe('Data Isolation', function () {
     demoEnvironment2;
 
   // create D1 demo env
-  it('can create D1 demo environment', function (done) {
+  it("can create D1 demo environment", function (done) {
     apiAnon.post("/Demos")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         name: "D1"
       }))
@@ -47,9 +47,9 @@ describe('Data Isolation', function () {
   });
 
   // create D2 demo env
-  it('can create D2 demo environment', function (done) {
+  it("can create D2 demo environment", function (done) {
     apiAnon.post("/Demos")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         name: "D2"
       }))
@@ -61,9 +61,9 @@ describe('Data Isolation', function () {
   });
 
   // log in as Supply Chain Manager in D1
-  it('can log in D1', function (done) {
+  it("can log in D1", function (done) {
     apiSupply1.post("/Demos/" + demoEnvironment1.guid + "/loginAs")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         userId: demoEnvironment1.users[0].id
       }))
@@ -77,7 +77,7 @@ describe('Data Isolation', function () {
   var newShipment;
 
   // create a shipment in D1
-  it('can create a new shipment in D1', function (done) {
+  it("can create a new shipment in D1", function (done) {
     apiSupply1.post("/Shipments")
       .set("Authorization", apiSupply1.loopbackAccessToken.id)
       .send({
@@ -92,7 +92,7 @@ describe('Data Isolation', function () {
       });
   });
 
-  it('can attach a line item to the shipment', function (done) {
+  it("can attach a line item to the shipment", function (done) {
     apiSupply1.post("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", apiSupply1.loopbackAccessToken.id)
       .send({
@@ -107,10 +107,10 @@ describe('Data Isolation', function () {
   });
 
   // this shipment is not visible in D2
-  it('can see the shipment it created in D1', function (done) {
+  it("can see the shipment it created in D1", function (done) {
     apiSupply1.get("/Shipments")
       .set("Authorization", apiSupply1.loopbackAccessToken.id)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(200)
       .end(function (err, res) {
         assert.equal(1, res.body.filter(function (shipment) {
@@ -120,11 +120,11 @@ describe('Data Isolation', function () {
       });
   });
 
-  it('can update the shipment in D1', function (done) {
+  it("can update the shipment in D1", function (done) {
     newShipment.updatedAt = new Date();
     apiSupply1.put("/Shipments/" + newShipment.id)
       .set("Authorization", apiSupply1.loopbackAccessToken.id)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify(newShipment))
       .expect(200)
       .end(function (err, res) {
@@ -132,10 +132,10 @@ describe('Data Isolation', function () {
       });
   });
 
-  it('can see shipment items from D1 by id', function (done) {
+  it("can see shipment items from D1 by id", function (done) {
     apiSupply1.get("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", apiSupply1.loopbackAccessToken.id)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(200)
       .end(function (err, res) {
         assert.isAbove(res.body.length, 0);
@@ -145,9 +145,9 @@ describe('Data Isolation', function () {
 
 
   // log in as Supply Chain Manager in D2
-  it('can log in D2', function (done) {
+  it("can log in D2", function (done) {
     apiSupply2.post("/Demos/" + demoEnvironment2.guid + "/loginAs")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         userId: demoEnvironment2.users[0].id
       }))
@@ -160,10 +160,10 @@ describe('Data Isolation', function () {
 
 
   // this shipment is not visible in D2
-  it('can not see shipment from D1 in D2 Shipments', function (done) {
+  it("can not see shipment from D1 in D2 Shipments", function (done) {
     apiSupply2.get("/Shipments")
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(200)
       .end(function (err, res) {
         assert.isAbove(res.body.length, 0);
@@ -175,10 +175,10 @@ describe('Data Isolation', function () {
   });
 
   // this shipment is not visible in D2
-  it('can not see shipment from D1 in D2 by id', function (done) {
+  it("can not see shipment from D1 in D2 by id", function (done) {
     apiSupply2.get("/Shipments/" + newShipment.id)
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(404) // this shipment should not be visible so Not Found
       .end(function (err, res) {
         done(err);
@@ -186,21 +186,21 @@ describe('Data Isolation', function () {
   });
 
   // this shipment is not visible in D2
-  it('can not see shipment items from D1 in D2 by id', function (done) {
+  it("can not see shipment items from D1 in D2 by id", function (done) {
     apiSupply2.get("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(404) // this shipment should not be visible so Not Found
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('can not update shipments from D1 in D2', function (done) {
+  it("can not update shipments from D1 in D2", function (done) {
     newShipment.deliveredAt = new Date();
     apiSupply2.put("/Shipments/" + newShipment.id)
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify(newShipment))
       .expect(404) // this shipment should not be visible so Not Found
       .end(function (err, res) {
@@ -208,7 +208,7 @@ describe('Data Isolation', function () {
       });
   });
 
-  it('can not add items to shipments from D1 in D2', function (done) {
+  it("can not add items to shipments from D1 in D2", function (done) {
     apiSupply2.post("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
       .send({
@@ -221,10 +221,10 @@ describe('Data Isolation', function () {
       });
   });
 
-  it('can not delete shipments from D1 in D2', function (done) {
+  it("can not delete shipments from D1 in D2", function (done) {
     apiSupply2.delete("/Shipments/" + newShipment.id)
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(404) // this shipment should not be visible so Not Found
       .end(function (err, res) {
         done(err);

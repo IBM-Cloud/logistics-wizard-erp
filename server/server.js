@@ -1,27 +1,27 @@
 // Licensed under the Apache License. See footer for details.
 // initialize our logging framework
-var winston = require('winston');
-winston.level = process.env.LOG_LEVEL || 'info';
+var winston = require("winston");
+winston.level = process.env.LOG_LEVEL || "info";
 
-var loopback = require('loopback');
-var boot = require('loopback-boot');
+var loopback = require("loopback");
+var boot = require("loopback-boot");
 var app = module.exports = loopback();
 
 // This model has no database attached, no id.
 // It is used in REST response where we want to combine multiple objects.
-loopback.modelBuilder.define('TransientModel', {}, {
+loopback.modelBuilder.define("TransientModel", {}, {
   idInjection: false
 });
 
 app.start = function () {
   // start the web server
   return app.listen(function () {
-    app.emit('started');
-    var baseUrl = app.get('url').replace(/\/$/, '');
-    winston.info('Web server listening at: %s', baseUrl);
-    if (app.get('loopback-component-explorer')) {
-      var explorerPath = app.get('loopback-component-explorer').mountPath;
-      winston.info('Browse your REST API at %s%s', baseUrl, explorerPath);
+    app.emit("started");
+    var baseUrl = app.get("url").replace(/\/$/, "");
+    winston.info("Web server listening at: %s", baseUrl);
+    if (app.get("loopback-component-explorer")) {
+      var explorerPath = app.get("loopback-component-explorer").mountPath;
+      winston.info("Browse your REST API at %s%s", baseUrl, explorerPath);
     }
   });
 };
@@ -29,15 +29,18 @@ app.start = function () {
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function (err) {
-  if (err) throw err;
+  if (err) {
+    throw err;
+  }
 
   // notify that the app has booted, ready to be started
   app.booted = true;
-  app.emit('booted');
+  app.emit("booted");
 
   // start the server if `$ node server.js`
-  if (require.main === module)
+  if (require.main === module) {
     app.start();
+  }
 });
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");

@@ -1,22 +1,22 @@
 // Licensed under the Apache License. See footer for details.
-var supertest = require('supertest');
-var assert = require('chai').assert;
-var async = require('async');
-var fs = require('fs');
+var supertest = require("supertest");
+var assert = require("chai").assert;
+var async = require("async");
+var fs = require("fs");
 
 // workaround for "warning: possible EventEmitter memory leak detected"
 // seems to be linked to the number of unit tests in the file
-require('events').EventEmitter.prototype._maxListeners = 100;
+require("events").EventEmitter.prototype._maxListeners = 100;
 
-describe('Validates the Retail Store Manager', function () {
+describe("Validates the Retail Store Manager", function () {
 
   var loopback;
   var app;
   var api;
 
   before(function (done) {
-    loopback = require('loopback');
-    app = require('..');
+    loopback = require("loopback");
+    app = require("..");
     app.use(loopback.rest());
     api = supertest(app);
     if (!app.booted) {
@@ -31,18 +31,18 @@ describe('Validates the Retail Store Manager', function () {
   var demoEnvironment;
   var retailStoreManager;
 
-  it('can populate the app with sample data', function (done) {
+  it("can populate the app with sample data", function (done) {
     api.post("/Demos/seed")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(204)
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('can create a Demo environment', function (done) {
+  it("can create a Demo environment", function (done) {
     api.post("/Demos")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         name: "My Demo"
       }))
@@ -58,7 +58,7 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can NOT retrieve products without being logged', function (done) {
+  it("can NOT retrieve products without being logged", function (done) {
     api.get("/Products")
       .expect(401)
       .end(function (err, res) {
@@ -68,9 +68,9 @@ describe('Validates the Retail Store Manager', function () {
 
   var demoEnvironmentRetailers = [];
 
-  it('can retrieve the list of retailers', function (done) {
+  it("can retrieve the list of retailers", function (done) {
     api.get("/Demos/" + demoEnvironment.guid + "/retailers")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(200)
       .end(function (err, res) {
         assert.equal(4, res.body.length);
@@ -79,10 +79,10 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can create a new Retailer user', function (done) {
+  it("can create a new Retailer user", function (done) {
     var userCount = demoEnvironment.users.length;
     api.post("/Demos/" + demoEnvironment.guid + "/createUser")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         retailerId: demoEnvironmentRetailers[0].id
       }))
@@ -94,9 +94,9 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can NOT create a new Retailer user with the same store', function (done) {
+  it("can NOT create a new Retailer user with the same store", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/createUser")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         retailerId: demoEnvironmentRetailers[0].id
       }))
@@ -106,9 +106,9 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can login with proper credentials', function (done) {
+  it("can login with proper credentials", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .send(JSON.stringify({
         userId: retailStoreManager.id
       }))
@@ -122,7 +122,7 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('has the right rights', function (done) {
+  it("has the right rights", function (done) {
     api.get("/Users/" + api.loopbackAccessToken.userId + "/roles")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -132,7 +132,7 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can retrieve distribution centers when logged', function (done) {
+  it("can retrieve distribution centers when logged", function (done) {
     api.get("/DistributionCenters")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -141,7 +141,7 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can NOT retrieve inventories when logged', function (done) {
+  it("can NOT retrieve inventories when logged", function (done) {
     api.get("/Inventories")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(401)
@@ -150,7 +150,7 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can retrieve products when logged', function (done) {
+  it("can retrieve products when logged", function (done) {
     api.get("/Products")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -160,7 +160,7 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can retrieve retailers when logged', function (done) {
+  it("can retrieve retailers when logged", function (done) {
     api.get("/Retailers")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -170,7 +170,7 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can retrieve shipments when logged', function (done) {
+  it("can retrieve shipments when logged", function (done) {
     api.get("/Shipments")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
@@ -180,7 +180,7 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can NOT create a new shipment when logged', function (done) {
+  it("can NOT create a new shipment when logged", function (done) {
     api.post("/Shipments")
       .set("Authorization", api.loopbackAccessToken.id)
       .send({
@@ -194,7 +194,7 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can NOT retrieve suppliers when logged', function (done) {
+  it("can NOT retrieve suppliers when logged", function (done) {
     api.get("/Suppliers")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(401)
@@ -203,18 +203,18 @@ describe('Validates the Retail Store Manager', function () {
       });
   });
 
-  it('can delete a demo environment', function (done) {
+  it("can delete a demo environment", function (done) {
     api.delete("/Demos/" + demoEnvironment.guid)
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(204)
       .end(function (err, res) {
         done(err);
       });
   });
 
-  it('can delete all sample data', function (done) {
+  it("can delete all sample data", function (done) {
     api.post("/Demos/reset")
-      .set('Content-Type', 'application/json')
+      .set("Content-Type", "application/json")
       .expect(204)
       .end(function (err, res) {
         done(err);

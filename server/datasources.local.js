@@ -7,7 +7,7 @@ var datasources = {
     "name": "db",
     "connector": "memory-idstr"
   }
-}
+};
 
 // then use VCAP_SERVICES
 if (process.env.VCAP_SERVICES) {
@@ -23,7 +23,7 @@ if (process.env.VCAP_SERVICES) {
 }
 
 // and allow override with a local datasource definition
-var localDatasources = null
+var localDatasources = null;
 try {
   localDatasources = require("./datasources.local.json");
   winston.info("Loaded local datasources");
