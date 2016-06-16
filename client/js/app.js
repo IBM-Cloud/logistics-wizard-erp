@@ -3,15 +3,15 @@
 (function () {
 
   // angular app initialization
-  var app = angular.module('erpApp', [
-    'lbServices',
-    'ui.router']);
+  var app = angular.module("erpApp", [
+    "lbServices",
+    "ui.router"]);
 
   app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/demo");
   });
 
-})();
+}());
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.

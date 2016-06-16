@@ -494,7 +494,7 @@ module.exports = function (Demo) {
                 user.destroy(function () {
                   callback();
                 });
-              }
+              };
             }), function (err, result) {
               callback();
             });
@@ -526,7 +526,7 @@ module.exports = function (Demo) {
           }, function (err, demo) {
             if (!err && !demo) {
               var notFound = new Error("No Demo with this guid");
-              notFound.status = 404
+              notFound.status = 404;
               callback(notFound);
             } else {
               callback(err, demo);
