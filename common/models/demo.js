@@ -83,7 +83,7 @@ module.exports = function (Demo) {
         callback(null);
       }
     });
-  };
+  }
 
   // Seed the database with data for static models
   Demo.seed = function (cb) {
@@ -203,7 +203,7 @@ module.exports = function (Demo) {
           username: "Supply Chain Manager (" + random + ")",
           password: randomstring.generate(10),
           demoId: demo.id
-        }
+        };
 
         app.models.ERPUser.create(supplyChainManager, function (err, user) {
           callback(err, demo, user);

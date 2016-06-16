@@ -1,4 +1,5 @@
 // Licensed under the Apache License. See footer for details.
+/*global require, describe, it, before */
 var supertest = require("supertest");
 var assert = require("chai").assert;
 var fs = require("fs");
