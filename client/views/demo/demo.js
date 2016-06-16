@@ -1,21 +1,22 @@
 // Licensed under the Apache License. See footer for details.
+/*global angular, console, $*/
 (function () {
 
-  var app = angular.module('erpApp');
+  var app = angular.module("erpApp");
 
   app.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
-      .state('demo', {
-        url: '/demo',
-        templateUrl: 'views/demo/new.html'
+      .state("demo", {
+        url: "/demo",
+        templateUrl: "views/demo/new.html"
       })
-      .state('demo/view', {
-        url: '/demo/:guid',
-        templateUrl: 'views/demo/view.html'
+      .state("demo/view", {
+        url: "/demo/:guid",
+        templateUrl: "views/demo/view.html"
       });
   });
 
-  app.controller('NewDemoController', ['$scope', '$state', 'Demo', function ($scope, $state, Demo) {
+  app.controller("NewDemoController", ["$scope", "$state", "Demo", function ($scope, $state, Demo) {
     console.log("NewDemoController()");
 
     $scope.newDemo = function () {
@@ -25,7 +26,7 @@
         },
         function (demo) {
           console.log(demo);
-          $state.go('demo/view', {
+          $state.go("demo/view", {
             guid: demo.guid
           });
         },
@@ -52,7 +53,7 @@
 
   }]);
 
-  app.controller('ViewDemoController', ['$scope', '$state', '$stateParams', 'Demo', function ($scope, $state, $stateParams, Demo) {
+  app.controller("ViewDemoController", ["$scope", "$state", "$stateParams", "Demo", function ($scope, $state, $stateParams, Demo) {
     console.log("ViewDemoController()");
 
     $scope.demo = {};
@@ -89,11 +90,11 @@
       }, function (res) {
         console.log(res);
       });
-    }
+    };
 
     $scope.addUser = function () {
       Demo.createUserByGuid({
-        guid: $scope.demo.guid,
+        guid: $scope.demo.guid
       }, {
         retailerId: $("#retailerId").val()
       }, function (demo) {
@@ -101,7 +102,7 @@
       }, function (res) {
         console.log(res);
       });
-    }
+    };
 
     $scope.deleteDemo = function () {
       Demo.deleteByGuid({
@@ -112,12 +113,12 @@
       }, function (res) {
         console.log(res);
       });
-    }
+    };
 
 
   }]);
 
-})();
+}());
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
