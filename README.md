@@ -1,6 +1,5 @@
 # Logistics Wizard ERP
 
-[![Build Status](https://travis-ci.org/IBM-Bluemix/logistics-wizard-erp.svg?branch=master)](https://travis-ci.org/IBM-Bluemix/logistics-wizard-erp)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1918ce5ef7fa4b7c95c55d4328cbaa18)](https://www.codacy.com/app/fred/logistics-wizard-erp?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=IBM-Bluemix/logistics-wizard-erp&amp;utm_campaign=Badge_Grade)
 [![Coverage Status](https://coveralls.io/repos/github/IBM-Bluemix/logistics-wizard-erp/badge.svg?branch=master)](https://coveralls.io/github/IBM-Bluemix/logistics-wizard-erp?branch=master)
 
