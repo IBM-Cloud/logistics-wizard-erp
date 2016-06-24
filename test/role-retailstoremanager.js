@@ -181,16 +181,39 @@ describe("Validates the Retail Store Manager", function () {
       });
   });
 
+  var newShipment;
+
   it("can NOT create a new shipment when logged", function (done) {
     api.post("/Shipments")
       .set("Authorization", api.loopbackAccessToken.id)
       .send({
-        "status": "NEW",
-        "fromId": "0",
-        "toId": "1"
+        "status": "NEW"
       })
-      .expect(401)
+      .expect(200)
       .end(function (err, res) {
+        newShipment = res.body;
+        done(err);
+      });
+  });
+
+  it("can add line items to a shipment", function (done) {
+    api.post("/Shipments/" + newShipment.id + "/items")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .set("Content-Type", "application/json")
+      .send(JSON.stringify({}))
+      .expect(200)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it("can retrieve the  line items of a shipment", function (done) {
+    api.get("/Shipments/" + newShipment.id + "/items")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .set("Content-Type", "application/json")
+      .expect(200)
+      .end(function (err, res) {
+        assert.equal(1, res.body.length);
         done(err);
       });
   });
