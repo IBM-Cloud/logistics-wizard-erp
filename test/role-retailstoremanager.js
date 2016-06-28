@@ -181,13 +181,53 @@ describe("Validates the Retail Store Manager", function () {
       });
   });
 
-  var newShipment;
-
-  it("can NOT create a new shipment when logged", function (done) {
+  it("needs to specify source and destination for shipments", function (done) {
     api.post("/Shipments")
       .set("Authorization", api.loopbackAccessToken.id)
       .send({
         "status": "NEW"
+      })
+      .expect(422)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it("needs to specify destination in addition to source for shipments", function (done) {
+    api.post("/Shipments")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .send({
+        "status": "NEW",
+        "fromId": "14"
+      })
+      .expect(422)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it("needs to specify source in addition to destination for shipments", function (done) {
+    api.post("/Shipments")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .send({
+        "status": "NEW",
+        "toId": "14"
+      })
+      .expect(422)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  var newShipment;
+
+  it("can create a new shipment when logged", function (done) {
+    api.post("/Shipments")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .send({
+        "status": "NEW",
+        "fromId": "12",
+        "toId": "14"
       })
       .expect(200)
       .end(function (err, res) {

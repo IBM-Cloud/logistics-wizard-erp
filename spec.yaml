@@ -1146,6 +1146,8 @@ definitions:
     required:
       - status
       - createdAt
+      - fromId
+      - toId
     additionalProperties: false
   ERPUser:
     properties:

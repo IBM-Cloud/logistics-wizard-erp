@@ -149,7 +149,9 @@ describe("Validates the Supply Chain Manager", function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .set("Content-Type", "application/json")
       .send(JSON.stringify({
-        "status": "NEW"
+        "status": "NEW",
+        "fromId": "12",
+        "toId": "14"
       }))
       .expect(200)
       .end(function (err, res) {

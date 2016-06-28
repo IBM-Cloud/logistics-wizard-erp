@@ -25,6 +25,12 @@
     },
     "estimatedTimeOfArrival": {
       "type": "date"
+    },
+    "fromId": {
+      "required": true
+    },
+    "toId": {
+      "required": true
     }
   },
   "validations": [],
