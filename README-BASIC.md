@@ -22,37 +22,108 @@ In the basic configuration, the simulator runs as a Cloud Foundry app in Bluemix
   }
 )
 
-## Deploying the simulator
+## Deploying the simulator locally
 
-Before deploying any of the pieces of the application, it is recommended that you create a dedicated space in Bluemix for the Logistics Wizard app. This gives a simple way to view all the resources involved in the app.
+1. Get the code locally
 
-### Deploying the simulator automatically
+  ```
+  git clone https://github.com/IBM-Bluemix/logistics-wizard-erp.git
+  ```
 
-1. Use the Deploy to Bluemix button to create an instance of the ERP simulator.
+1. Change to the checkout directory
 
-  [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy)
+1. Get the application dependencies
+
+  ```
+  npm install
+  ```
+
+1. Start the application
+
+  ```
+  npm start
+  ```
+
+At that point the application runs with an in-memory database.
+You lose all changes when you stop the app. Let's configure a persistent storage.
+
+### Using a persistent in-memory database
+
+1. Create the file **server/datasources.local.json** with the following content:
+
+  ```
+  {
+    "db": {
+      "name": "db",
+      "connector": "memory-idstr",
+      "file": "in-memory-database.json"
+    }
+  }
+  ```
+
+1. Start the application
+
+  ```
+  npm start
+  ```
   
-1. Once deployed, the target space is populated with
-  * a database **logistics-wizard-erp-db**
-  * the ERP simulator app **logistics-wizard-erp**
+The data is now persisted in *in-memory-database.json*.
+
+### Using Cloudant
+
+1. Create a new Cloudant service
+
+  ```
+  cf create-service cloudantNoSQLDB Shared logistics-wizard-erp-db
+  ```
+
+1. Create a set of credentials
+
+  ```
+  cf create-service-key logistics-wizard-erp-db erp
+  ```
   
-  Note: if a service with the same name already exists in the space, it will be reused.
+1. Retrieve the credentials
 
-## Working with the sample data set
+  ```
+  cf service-key logistics-wizard-erp-db erp
+  ```
+  
+1. Create the file **server/datasources.local.json** with the following content, replacing the :
 
-The simulator comes with a sample data set and a simple user interface to initialize the database with this data set.
+  ```
+  {
+    "db": {
+      "name": "db",
+      "connector": "cloudant",
+      "url": "<url-from-the-credentials-above>",
+      "database": "erp"
+    }
+  }
+  ```
 
-1. Connect to the deployed simulator
+1. Create the database in the Cloudant instance from the Bluemix service dashboard or with
 
-1. Log in as an administrator
+  ```
+  curl -H 'Content-Type: application/json' -X PUT <url-from-the-credentials-above>/erp
+  ```
+  
+1. Start the application
 
-1. Use the option to reset the database and to load the sample data set
+  ```
+  npm start
+  ```
+
+The data is now persisted in Cloudant.
 
 ## Building an API with Swagger and Loopback.io
 
 ### Swagger
 
-The ERP service API is designed with Swagger and defined [here](spec.yaml). Swagger is a simple yet powerful representation of a RESTful API. The Swagger specification has been donated to the [Open API Initiative](https://github.com/OAI/OpenAPI-Specification) as part of an effort to define a standard specification format for REST APIs.
+The ERP service API is designed with Swagger and defined [here](spec.yaml).
+Swagger is a simple yet powerful representation of a RESTful API.
+The Swagger specification has been donated to the [Open API Initiative](https://github.com/OAI/OpenAPI-Specification)
+as part of an effort to define a standard specification format for REST APIs.
 
 1. Review the API specification in the online [Swagger Editor](http://editor.swagger.io/#/?import=https://raw.githubusercontent.com/IBM-Bluemix/logistics-wizard-erp/master/spec.yaml).
 
