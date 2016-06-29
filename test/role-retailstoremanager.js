@@ -258,7 +258,6 @@ describe("Validates the Retail Store Manager", function () {
       })
       .expect(422)
       .end(function (err, res) {
-        newShipment = res.body;
         done(err);
       });
   });
