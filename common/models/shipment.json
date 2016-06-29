@@ -65,7 +65,8 @@
     }
   },
   "mixins": {
-    "Isolated": {}
+    "Isolated": {},
+    "Integrity": {}
   },
   "hidden": ["demoId"],
   "acls": [

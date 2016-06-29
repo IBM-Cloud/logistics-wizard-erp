@@ -7,6 +7,9 @@ var winston = require("winston");
  */
 module.exports = function (Model, options) {
 
+  // mark the model as isolated
+  Model.isIsolated = true;
+  
   function injectDemoId(user, token, modelId, sharedMethod, ctx, callback) {
     // if we are create a new object
     // then inject the demoId of the current user
