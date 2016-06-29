@@ -5,6 +5,9 @@ var assert = require("chai").assert;
 var async = require("async");
 var fs = require("fs");
 
+// load default behaviors for unit tests
+require("./unittest.js");
+
 describe("Demos", function () {
 
   var loopback;

@@ -4,9 +4,8 @@ var supertest = require("supertest");
 var assert = require("chai").assert;
 var async = require("async");
 
-// workaround for "warning: possible EventEmitter memory leak detected"
-// seems to be linked to the number of unit tests in the file
-require("events").EventEmitter.prototype._maxListeners = 100;
+// load default behaviors for unit tests
+require("./unittest.js");
 
 describe("Validates the Supply Chain Manager", function () {
 
@@ -132,6 +131,32 @@ describe("Validates the Supply Chain Manager", function () {
       });
   });
 
+  var distributionCenters;
+
+  it("can retrieve distribution centers when logged", function (done) {
+    api.get("/DistributionCenters")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .expect(200)
+      .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
+        distributionCenters = res.body;
+        done(err);
+      });
+  });
+
+  var retailers;
+
+  it("can retrieve retailers when logged", function (done) {
+    api.get("/Retailers")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .expect(200)
+      .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
+        retailers = res.body;
+        done(err);
+      });
+  });
+
   it("can retrieve shipments when logged", function (done) {
     api.get("/Shipments")
       .set("Authorization", api.loopbackAccessToken.id)
@@ -150,8 +175,8 @@ describe("Validates the Supply Chain Manager", function () {
       .set("Content-Type", "application/json")
       .send(JSON.stringify({
         "status": "NEW",
-        "fromId": "12",
-        "toId": "14"
+        "fromId": distributionCenters[0].id,
+        "toId": retailers[0].id
       }))
       .expect(200)
       .end(function (err, res) {

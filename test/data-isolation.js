@@ -4,6 +4,9 @@ var supertest = require("supertest");
 var assert = require("chai").assert;
 var fs = require("fs");
 
+// load default behaviors for unit tests
+require("./unittest.js");
+
 describe("Data Isolation", function () {
 
   var loopback;
@@ -16,7 +19,6 @@ describe("Data Isolation", function () {
     loopback = require("loopback");
     app = require("..");
     app.use(loopback.rest());
-
     apiAnon = supertest(app);
     apiSupply1 = supertest(app);
     apiSupply2 = supertest(app);
@@ -32,6 +34,15 @@ describe("Data Isolation", function () {
 
   var demoEnvironment1,
     demoEnvironment2;
+
+  it("can populate the app with sample data", function (done) {
+    apiAnon.post("/Demos/seed")
+      .set("Content-Type", "application/json")
+      .expect(204)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
 
   // create D1 demo env
   it("can create D1 demo environment", function (done) {
@@ -75,6 +86,59 @@ describe("Data Isolation", function () {
       });
   });
 
+  // log in as Supply Chain Manager in D2
+  it("can log in D2", function (done) {
+    apiSupply2.post("/Demos/" + demoEnvironment2.guid + "/loginAs")
+      .set("Content-Type", "application/json")
+      .send(JSON.stringify({
+        userId: demoEnvironment2.users[0].id
+      }))
+      .expect(200)
+      .end(function (err, res) {
+        apiSupply2.loopbackAccessToken = res.body.token;
+        done(err);
+      });
+  });
+
+  var supply1DistributionCenters;
+
+  it("can retrieve distribution centers when logged", function (done) {
+    apiSupply1.get("/DistributionCenters")
+      .set("Authorization", apiSupply1.loopbackAccessToken.id)
+      .expect(200)
+      .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
+        supply1DistributionCenters = res.body;
+        done(err);
+      });
+  });
+
+  var supply1Retailers;
+
+  it("can retrieve retailers when logged", function (done) {
+    apiSupply1.get("/Retailers")
+      .set("Authorization", apiSupply1.loopbackAccessToken.id)
+      .expect(200)
+      .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
+        supply1Retailers = res.body;
+        done(err);
+      });
+  });
+
+  var supply2Retailers;
+
+  it("can retrieve retailers when logged", function (done) {
+    apiSupply2.get("/Retailers")
+      .set("Authorization", apiSupply2.loopbackAccessToken.id)
+      .expect(200)
+      .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
+        supply2Retailers = res.body;
+        done(err);
+      });
+  });
+
   var newShipment;
 
   // create a shipment in D1
@@ -83,12 +147,26 @@ describe("Data Isolation", function () {
       .set("Authorization", apiSupply1.loopbackAccessToken.id)
       .send({
         "status": "NEW",
-        "fromId": "0",
-        "toId": "1"
+        "fromId": supply1DistributionCenters[0].id,
+        "toId": supply1Retailers[0].id
       })
       .expect(200)
       .end(function (err, res) {
         newShipment = res.body;
+        done(err);
+      });
+  });
+
+  it("can NOT create a new shipment in D1 with a retailer from D2", function (done) {
+    apiSupply1.post("/Shipments")
+      .set("Authorization", apiSupply1.loopbackAccessToken.id)
+      .send({
+        "status": "NEW",
+        "fromId": supply1DistributionCenters[0].id,
+        "toId": supply2Retailers[0].id
+      })
+      .expect(422)
+      .end(function (err, res) {
         done(err);
       });
   });
@@ -143,22 +221,6 @@ describe("Data Isolation", function () {
         done(err);
       });
   });
-
-
-  // log in as Supply Chain Manager in D2
-  it("can log in D2", function (done) {
-    apiSupply2.post("/Demos/" + demoEnvironment2.guid + "/loginAs")
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify({
-        userId: demoEnvironment2.users[0].id
-      }))
-      .expect(200)
-      .end(function (err, res) {
-        apiSupply2.loopbackAccessToken = res.body.token;
-        done(err);
-      });
-  });
-
 
   // this shipment is not visible in D2
   it("can not see shipment from D1 in D2 Shipments", function (done) {
@@ -227,6 +289,15 @@ describe("Data Isolation", function () {
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
       .set("Content-Type", "application/json")
       .expect(404) // this shipment should not be visible so Not Found
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it("can delete all sample data", function (done) {
+    apiAnon.post("/Demos/reset")
+      .set("Content-Type", "application/json")
+      .expect(204)
       .end(function (err, res) {
         done(err);
       });

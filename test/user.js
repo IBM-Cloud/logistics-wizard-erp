@@ -2,6 +2,9 @@
 /*global require, describe, it, before */
 var supertest = require("supertest");
 
+// load default behaviors for unit tests
+require("./unittest.js");
+
 describe("Users", function () {
 
   var loopback;
@@ -24,6 +27,15 @@ describe("Users", function () {
     } else {
       done();
     }
+  });
+
+  it("can populate the app with sample data", function (done) {
+    api.post("/Demos/seed")
+      .set("Content-Type", "application/json")
+      .expect(204)
+      .end(function (err, res) {
+        done(err);
+      });
   });
 
   var demoEnvironment;
