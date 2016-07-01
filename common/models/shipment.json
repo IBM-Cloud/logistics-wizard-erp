@@ -27,10 +27,12 @@
       "type": "date"
     },
     "fromId": {
-      "required": true
+      "required": true,
+      "type": "number"
     },
     "toId": {
-      "required": true
+      "required": true,
+      "type": "number"
     }
   },
   "validations": [],
