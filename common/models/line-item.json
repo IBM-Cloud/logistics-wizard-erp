@@ -15,6 +15,11 @@
   },
   "validations": [],
   "relations": {
+    "product": {
+      "type": "belongsTo",
+      "model": "Product",
+      "foreignKey": "productId"
+    },
     "demo": {
       "type": "belongsTo",
       "model": "Demo",
