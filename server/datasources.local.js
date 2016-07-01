@@ -12,7 +12,21 @@ var datasources = {
 // then use VCAP_SERVICES
 if (process.env.VCAP_SERVICES) {
   var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
-  if (vcapServices.hasOwnProperty("cloudantNoSQLDB")) {
+  if (vcapServices.hasOwnProperty("elephantsql")) {
+    winston.info("Using ElephantSQL as datasource");
+    // uri is "postgres://user:password@host:port/database"
+    var urlObject = require('url').parse(vcapServices.elephantsql[0].credentials.uri);
+    datasources.db = {
+      "name": "db",
+      "connector": "postgresql",
+      "database": urlObject.path.substring(1),
+      "host": urlObject.hostname,
+      "port": urlObject.port,
+      "username": urlObject.auth.substring(0, urlObject.auth.indexOf(":")),
+      "password": urlObject.auth.substring(urlObject.auth.indexOf(":") + 1),
+      "max": vcapServices.elephantsql[0].credentials.max_conns
+    };
+  } else if (vcapServices.hasOwnProperty("cloudantNoSQLDB")) {
     winston.info("Using Cloudant as datasource");
     datasources.db = {
       connector: "cloudant",
@@ -26,7 +40,7 @@ if (process.env.VCAP_SERVICES) {
 var localDatasources = null;
 try {
   localDatasources = require("./datasources.local.json");
-  winston.info("Loaded local datasources");
+  winston.debug("Loaded local datasources");
 
   if (localDatasources.hasOwnProperty("db")) {
     winston.info("Using locally defined datasource");
@@ -36,7 +50,9 @@ try {
   winston.error(e);
 }
 
-winston.info("Datasources are", datasources);
+winston.info("Datasource is", datasources.db.name,
+  "connector:", datasources.db.connector);
+
 module.exports = datasources;
 
 //------------------------------------------------------------------------------
