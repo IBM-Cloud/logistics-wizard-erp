@@ -22,7 +22,7 @@ paths:
           in: path
           description: Model id
           required: true
-          type: string
+          type: number
           format: JSON
         - name: filter
           in: query
@@ -73,7 +73,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -94,7 +94,7 @@ paths:
           in: path
           description: Model id
           required: true
-          type: string
+          type: number
           format: JSON
         - name: filter
           in: query
@@ -145,7 +145,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -166,7 +166,7 @@ paths:
           in: path
           description: Model id
           required: true
-          type: string
+          type: number
           format: JSON
         - name: filter
           in: query
@@ -216,7 +216,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -239,7 +239,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -264,7 +264,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -288,7 +288,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '204':
@@ -315,7 +315,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -339,7 +339,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -364,7 +364,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -382,7 +382,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '204':
@@ -405,7 +405,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -467,7 +467,7 @@ paths:
           in: path
           description: Model id
           required: true
-          type: string
+          type: number
           format: JSON
         - name: filter
           in: query
@@ -491,7 +491,7 @@ paths:
           in: path
           description: Model id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -517,7 +517,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -540,7 +540,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -559,7 +559,7 @@ paths:
           in: path
           description: Model id
           required: true
-          type: string
+          type: number
           format: JSON
         - name: filter
           in: query
@@ -609,7 +609,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -632,7 +632,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -690,7 +690,7 @@ paths:
           in: path
           description: Model id
           required: true
-          type: string
+          type: number
           format: JSON
         - name: filter
           in: query
@@ -714,7 +714,7 @@ paths:
           in: path
           description: Model id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -740,7 +740,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -765,7 +765,7 @@ paths:
           in: path
           description: User id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -789,7 +789,7 @@ paths:
           in: path
           description: User id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '204':
@@ -816,7 +816,7 @@ paths:
           in: path
           description: User id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -840,7 +840,7 @@ paths:
           in: path
           description: User id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -865,7 +865,7 @@ paths:
           in: path
           description: User id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -883,7 +883,7 @@ paths:
           in: path
           description: User id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '204':
@@ -906,7 +906,7 @@ paths:
           in: path
           description: User id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -934,7 +934,7 @@ paths:
           in: path
           description: User id
           required: true
-          type: string
+          type: number
           format: JSON
       responses:
         '200':
@@ -1023,7 +1023,7 @@ paths:
         - name: userId
           in: formData
           required: true
-          type: string
+          type: number
       responses:
         '200':
           description: Request was successful
@@ -1059,7 +1059,7 @@ paths:
         - name: retailerId
           in: formData
           required: true
-          type: string
+          type: number
       responses:
         '200':
           description: Request was successful
@@ -1072,14 +1072,14 @@ definitions:
       name:
         type: string
       id:
-        type: string
+        type: number
     required:
       - name
     additionalProperties: false
   DistributionCenter:
     properties:
       id:
-        type: string
+        type: number
       address:
         $ref: '#/definitions/Address'
       contact:
@@ -1090,31 +1090,32 @@ definitions:
       name:
         type: string
       id:
-        type: string
+        type: number
       supplierId:
-        type: string
+        type: number
     required:
       - name
     additionalProperties: false
   Retailer:
     properties:
       id:
-        type: string
+        type: number
       address:
         $ref: '#/definitions/Address'
       managerId:
-        type: string
+        type: number
     additionalProperties: false
   LineItem:
     properties:
       quantity:
         default: 0
         type: number
-        format: double
       id:
-        type: string
+        type: number
+      productId:
+        type: number
       shipmentId:
-        type: string
+        type: number
     required:
       - quantity
     additionalProperties: false
@@ -1135,14 +1136,14 @@ definitions:
       estimatedTimeOfArrival:
         type: string
         format: date
+      fromId:
+        type: number
+      toId:
+        type: number
       id:
-        type: string
+        type: number
       currentLocation:
         $ref: '#/definitions/Address'
-      fromId:
-        type: string
-      toId:
-        type: string
     required:
       - status
       - createdAt
@@ -1159,9 +1160,9 @@ definitions:
         type: string
         format: date
       id:
-        type: string
+        type: number
       demoId:
-        type: string
+        type: number
       roles:
         type: array
         items:
@@ -1177,11 +1178,11 @@ definitions:
         type: number
         format: double
       id:
-        type: string
+        type: number
       productId:
-        type: string
+        type: number
       dcId:
-        type: string
+        type: number
     additionalProperties: false
   AccessToken:
     properties:
@@ -1196,14 +1197,14 @@ definitions:
         type: string
         format: date
       userId:
-        type: string
+        type: number
     required:
       - id
     additionalProperties: false
   Role:
     properties:
       id:
-        type: string
+        type: number
       name:
         type: string
       description:
@@ -1232,7 +1233,7 @@ definitions:
       guid:
         type: string
       id:
-        type: string
+        type: number
       users:
         type: array
         items:
@@ -1262,14 +1263,10 @@ definitions:
       longitude:
         type: number
         format: double
-      id:
-        type: string
     additionalProperties: false
   Contact:
     properties:
       name:
-        type: string
-      id:
         type: string
     required:
       - name
