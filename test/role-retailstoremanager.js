@@ -239,7 +239,7 @@ describe("Validates the Retail Store Manager", function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .send({
         "status": "NEW",
-        "fromId": "333",
+        "fromId": "1664",
         "toId": retailers[0].id
       })
       .expect(422)
@@ -254,7 +254,7 @@ describe("Validates the Retail Store Manager", function () {
       .send({
         "status": "NEW",
         "fromId": distributionCenters[0].id,
-        "toId": "14"
+        "toId": "1789"
       })
       .expect(422)
       .end(function (err, res) {

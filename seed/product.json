@@ -1,52 +1,52 @@
 [
   {
-    "id": "I1",
+    "id": "100",
     "name": "Jacket",
-    "supplierId": "North Face"
+    "supplierId": "1"
   },
   {
-    "id": "I2",
+    "id": "102",
     "name": "Gloves",
-    "supplierId": "North Face"
+    "supplierId": "1"
   },
   {
-    "id": "I3",
+    "id": "103",
     "name": "Scarf",
-    "supplierId": "J Crew"
+    "supplierId": "2"
   },
   {
-    "id": "I4",
+    "id": "104",
     "name": "Beans",
-    "supplierId": "Goya"
+    "supplierId": "3"
   },
   {
-    "id": "I5",
+    "id": "105",
     "name": "Soup",
-    "supplierId": "Campbell"
+    "supplierId": "4"
   },
   {
-    "id": "I6",
+    "id": "106",
     "name": "Bread",
-    "supplierId": "The Bread Co."
+    "supplierId": "5"
   },
   {
-    "id": "I7",
+    "id": "107",
     "name": "Rain Jacket",
-    "supplierId": "Barbour"
+    "supplierId": "6"
   },
   {
-    "id": "I8",
+    "id": "108",
     "name": "Umbrella",
-    "supplierId": "LifeTek"
+    "supplierId": "7"
   },
   {
-    "id": "I9",
+    "id": "109",
     "name": "Milk",
-    "supplierId": "Abbott"
+    "supplierId": "8"
   },
   {
-    "id": "I10",
+    "id": "110",
     "name": "Pasta",
-    "supplierId": "Barilla"
+    "supplierId": "9"
   }
 ]

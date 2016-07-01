@@ -5,7 +5,7 @@ var winston = require("winston");
 var datasources = {
   "db": {
     "name": "db",
-    "connector": "memory-idstr"
+    "connector": "memory"
   }
 };
 

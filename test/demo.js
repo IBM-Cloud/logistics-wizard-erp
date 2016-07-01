@@ -94,7 +94,7 @@ describe("Demos", function () {
     apiSupply.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set("Content-Type", "application/json")
       .send(JSON.stringify({
-        userId: "I do not exist"
+        userId: "-123"
       }))
       .expect(404)
       .end(function (err, res) {
@@ -156,7 +156,7 @@ describe("Demos", function () {
     apiAnon.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set("Content-Type", "application/json")
       .send(JSON.stringify({
-        retailerId: "IdoNotExist"
+        retailerId: "-123"
       }))
       .expect(404)
       .end(function (err, res) {

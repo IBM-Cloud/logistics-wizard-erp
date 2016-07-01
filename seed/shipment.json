@@ -1,9 +1,8 @@
 [
   {
-    "id": "S1",
     "status": "SHIPPED",
-    "fromId": "D2",
-    "toId": "R1",
+    "fromId": "2",
+    "toId": "201",
     "currentLocation": {
       "city": "Blacksburg",
       "state": "West Virginia",
@@ -15,10 +14,9 @@
     "lastUpdate": "Thu, 15 Oct 2015 16:15:37 GMT"
   },
   {
-    "id": "S2",
     "status": "ACCEPTED",
-    "fromId": "D2",
-    "toId": "R2",
+    "fromId": "2",
+    "toId": "202",
     "currentLocation": {
       "city": "Memphis",
       "state": "Tennessee",
@@ -30,10 +28,9 @@
     "lastUpdate": "Thu, 13 Oct 2015 12:15:37 GMT"
   },
   {
-    "id": "S3",
     "status": "SHIPPED",
-    "fromId": "D1",
-    "toId": "R3",
+    "fromId": "1",
+    "toId": "203",
     "currentLocation": {
       "city": "Reno",
       "state": "Nevada",
@@ -45,10 +42,9 @@
     "updatedAt": "Thu, 19 Oct 2015 12:15:37 GMT"
   },
   {
-    "id": "S4",
     "status": "SHIPPED",
-    "fromId": "D1",
-    "toId": "R3",
+    "fromId": "1",
+    "toId": "203",
     "currentLocation": {
       "city": "Spring Creek",
       "state": "Nevada",
@@ -60,10 +56,9 @@
     "updatedAt": "Thu, 20 Oct 2015 12:15:37 GMT"
   },
   {
-    "id": "S5",
     "status": "SHIPPED",
-    "fromId": "D2",
-    "toId": "R2",
+    "fromId": "2",
+    "toId": "202",
     "currentLocation": {
       "city": "Dallas",
       "state": "Texas",
@@ -75,10 +70,9 @@
     "updatedAt": "Thu, 20 Oct 2015 12:15:37 GMT"
   },
   {
-    "id": "S6",
     "status": "SHIPPED",
-    "fromId": "D3",
-    "toId": "R4",
+    "fromId": "3",
+    "toId": "204",
     "currentLocation": {
       "city": "Poughkeepsie",
       "state": "New York",
@@ -90,10 +84,9 @@
     "updatedAt": "Thu, 24 Oct 2015 12:15:37 GMT"
   },
   {
-    "id": "S7",
     "status": "IN_TRANSIT",
-    "fromId": "D3",
-    "toId": "R4",
+    "fromId": "3",
+    "toId": "204",
     "currentLocation": {
       "city": "Albany",
       "state": "New York",

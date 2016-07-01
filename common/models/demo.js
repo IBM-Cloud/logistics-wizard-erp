@@ -16,7 +16,8 @@ module.exports = function (Demo) {
 
   // There are the models that are indexed per "demoId"
   // They all have the "isolated" mixin in their JSON definition
-  // together with a "belongsTo" directed to the Demo object
+  // together with a "belongsTo" directed to the Demo object.
+  // They are listed here in ascending dependency order.
   Demo.ISOLATED_MODELS = [ //
     Demo.definition.modelBuilder.models.Inventory,
     Demo.definition.modelBuilder.models.Retailer,
@@ -39,7 +40,7 @@ module.exports = function (Demo) {
    * Injects data from the "seed" directory for the given model.
    * If demoId is not null, then all ids read from the seed data and suffixed with the demoId.
    */
-  function seed(model, demoId, callback) {
+  function seed(model, demoId, seedIdtoRealIds, callback) {
     winston.info("Seeding " + model.definition.name);
 
     var where = {};
@@ -53,20 +54,25 @@ module.exports = function (Demo) {
         callback(err);
       } else if (count == 0) {
         var objects = JSON.parse(fs.readFileSync("./seed/" + model.definition.name.toLowerCase() + ".json"));
+        // keep track of the IDs specified in the seed file
+        var objectIds = [];
+
         // inject the demoId if needed
         if (demoId) {
           objects.forEach(function (object) {
             object.demoId = demoId;
-            if (object.id) {
-              object.id = object.id + "-" + object.demoId;
+            objectIds.push(object.id);
+
+            if (seedIdtoRealIds) {
+              if (model.modelName == "Shipment") {
+                object.toId = seedIdtoRealIds["Retailer-" + object.toId];
+              }
+              if (model.modelName == "LineItem") {
+                object.shipmentId = seedIdtoRealIds["Shipment-" + object.shipmentId];
+              }
             }
-            // if Shipment and toId (RetailerId) then fix the toId too
-            if (model.modelName == "Shipment") {
-              object.toId = object.toId + "-" + object.demoId;
-            }
-            if (model.modelName == "LineItem") {
-              object.shipmentId = object.shipmentId + "-" + object.demoId;
-            }
+
+            delete object.id;
           });
         }
         winston.info("Injecting", objects.length, model.definition.name);
@@ -74,6 +80,15 @@ module.exports = function (Demo) {
           if (err) {
             winston.error("Failed to create", model.definition.name, err);
           } else {
+            if (seedIdtoRealIds) {
+              // record a mapping between the ID of our objects in the seed file
+              // and the actual ID they got in Loopback so we can resolve references later on
+              objectIds.forEach(function (objectId, index) {
+                if (objectId) {
+                  seedIdtoRealIds[model.modelName + "-" + objectId] = records[index].id;
+                }
+              });
+            }
             winston.info("Created", records.length, model.definition.name);
           }
           callback(null);
@@ -90,7 +105,7 @@ module.exports = function (Demo) {
     winston.info("Seeding...");
     async.waterfall(Demo.STATIC_MODELS.map(function (model) {
         return function (callback) {
-          seed(model, null, callback);
+          seed(model, null, null, callback);
         };
       }),
       function (err, result) {
@@ -173,16 +188,17 @@ module.exports = function (Demo) {
       function (demo, callback) {
         winston.info("Generating guid for Demo");
         demo.guid = makeUniqueSession(demo);
-        Demo.upsert(demo, function (err, demo) {
+        demo.save(function (err, demo) {
           callback(err, demo);
         });
       },
       // insert default data, indexed on the demo.id
       function (demo, callback) {
         winston.info("Inserting demo data");
+        var seedIdtoRealIds = {};
         async.waterfall(Demo.ISOLATED_MODELS.map(function (model) {
             return function (seedCallback) {
-              seed(model, demo.id, seedCallback);
+              seed(model, demo.id, seedIdtoRealIds, seedCallback);
             };
           }),
           function (err, result) {

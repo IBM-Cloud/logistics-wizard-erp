@@ -1,17 +1,17 @@
 [
   {
-    "productId": "I1",
-    "dcId": "D1",
+    "productId": "101",
+    "dcId": "1",
     "quantity": "10"
   },
   {
-    "productId": "I1",
-    "dcId": "D2",
+    "productId": "101",
+    "dcId": "2",
     "quantity": "15"
   },
   {
-    "productId": "I1",
-    "dcId": "D3",
+    "productId": "101",
+    "dcId": "3",
     "quantity": "12"
   }
 ]

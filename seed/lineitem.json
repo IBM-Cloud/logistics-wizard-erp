@@ -1,62 +1,62 @@
 [
   {
-    "shipmentId": "S1",
-    "productId": "I4",
+    "shipmentId": "1",
+    "productId": "104",
     "quantity": 100
   },
   {
-    "shipmentId": "S1",
-    "productId": "I5",
+    "shipmentId": "1",
+    "productId": "105",
     "quantity": 50
   },
   {
-    "shipmentId": "S2",
-    "productId": "I9",
+    "shipmentId": "2",
+    "productId": "109",
     "quantity": 85
   },
   {
-    "shipmentId": "S3",
-    "productId": "I6",
+    "shipmentId": "3",
+    "productId": "106",
     "quantity": 200
   },
   {
-    "shipmentId": "S3",
-    "productId": "I10",
+    "shipmentId": "3",
+    "productId": "110",
     "quantity": 40
   },
   {
-    "shipmentId": "S4",
-    "productId": "I9",
+    "shipmentId": "4",
+    "productId": "109",
     "quantity": 85
   },
   {
-    "shipmentId": "S5",
-    "productId": "I7",
+    "shipmentId": "5",
+    "productId": "107",
     "quantity": 85
   },
   {
-    "shipmentId": "S5",
-    "productId": "I8",
+    "shipmentId": "5",
+    "productId": "108",
     "quantity": 85
   },
   {
-    "shipmentId": "S6",
-    "productId": "I1",
+    "shipmentId": "6",
+    "productId": "101",
     "quantity": 85
   },
   {
-    "shipmentId": "S6",
-    "productId": "I2",
+    "shipmentId": "6",
+    "productId": "102",
     "quantity": 100
   },
   {
-    "shipmentId": "S6",
-    "productId": "I3",
+    "shipmentId": "6",
+    "productId": "103",
     "quantity": 40
   },
   {
-    "shipmentId": "S7",
-    "productId": "I6",
+    "shipmentId": "7",
+    "productId": "106",
     "quantity": 125
   }
 ]

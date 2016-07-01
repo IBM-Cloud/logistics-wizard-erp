@@ -1,6 +1,6 @@
 [
   {
-    "id": "D1",
+    "id": "1",
     "address": {
       "city": "Salt Lake City",
       "state": "Utah",
@@ -13,7 +13,7 @@
     }
   },
   {
-    "id": "D2",
+    "id": "2",
     "address": {
       "city": "Cincinnati",
       "state": "Ohio",
@@ -26,7 +26,7 @@
     }
   },
   {
-    "id": "D3",
+    "id": "3",
     "address": {
       "city": "Albany",
       "state": "New York",
