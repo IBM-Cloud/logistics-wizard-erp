@@ -69,12 +69,12 @@ You lose all changes when you stop the app. Let's configure a persistent storage
   
 The data is now persisted in *in-memory-database.json*.
 
-### Using Cloudant
+### Using PostgreSQL
 
-1. Create a new Cloudant service
+1. Create a new ElephantSQL service
 
   ```
-  cf create-service cloudantNoSQLDB Shared logistics-wizard-erp-db
+  cf create-service elephantsql turtle logistics-wizard-erp-db
   ```
 
 1. Create a set of credentials
@@ -89,23 +89,29 @@ The data is now persisted in *in-memory-database.json*.
   cf service-key logistics-wizard-erp-db erp
   ```
   
-1. Create the file **server/datasources.local.json** with the following content, replacing the :
+  Note that ElephantSQL returns a **uri** but the Loopback connector requires
+  more parameters that can be extracted from the **uri**. The **uri** looks like:
+
+  ```
+  "uri": "postgres://<username>:<password>@<host>:<port>/<database>"
+  ```
+  
+1. Create the file **server/datasources.local.json** with the following content, replacing the placeholders
+with values extracted from the **uri**. 
 
   ```
   {
     "db": {
       "name": "db",
-      "connector": "cloudant",
-      "url": "<url-from-the-credentials-above>",
-      "database": "erp"
+      "connector": "postgresql",
+      "database": "<database>",
+      "host": "<host>",
+      "port": "<port>",
+      "username": "<username>",
+      "password": "<password>",
+      "max": 3
     }
   }
-  ```
-
-1. Create the database in the Cloudant instance from the Bluemix service dashboard or with
-
-  ```
-  curl -H 'Content-Type: application/json' -X PUT <url-from-the-credentials-above>/erp
   ```
   
 1. Start the application
@@ -114,7 +120,8 @@ The data is now persisted in *in-memory-database.json*.
   npm start
   ```
 
-The data is now persisted in Cloudant.
+The data is now persisted in ElephantSQL. You can use the same structure for the databases.local.json
+if you work with your own PostgreSQL database.
 
 ## Building an API with Swagger and Loopback.io
 
