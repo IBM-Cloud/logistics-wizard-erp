@@ -26,13 +26,6 @@ if (process.env.VCAP_SERVICES) {
       "password": urlObject.auth.substring(urlObject.auth.indexOf(":") + 1),
       "max": Math.max(1, vcapServices.elephantsql[0].credentials.max_conns - 2) // leave some connections for the frontend
     };
-  } else if (vcapServices.hasOwnProperty("cloudantNoSQLDB")) {
-    winston.info("Using Cloudant as datasource");
-    datasources.db = {
-      connector: "cloudant",
-      url: vcapServices.cloudantNoSQLDB[0].credentials.url,
-      database: "erp-service"
-    };
   }
 }
 
@@ -50,8 +43,7 @@ try {
   winston.error(e);
 }
 
-winston.info("Datasource is", datasources.db.name,
-  "connector:", datasources.db.connector);
+winston.info("Datasource uses connector:", datasources.db.connector);
 
 module.exports = datasources;
 

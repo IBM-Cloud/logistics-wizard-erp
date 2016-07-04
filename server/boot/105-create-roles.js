@@ -6,18 +6,8 @@ module.exports = function (app, next) {
   function createRoles() {
     app.models.Role.find(function (err, roles) {
       if (err) {
-        // Database connectors like CouchDB, Cloudant set up indexes during model autoupdate
-        // but there is not event emitted that would allow us to register a listener to create
-        // the roles. As we need to wait for those to be created, we check here the error and retry
-        if (err.scope == "couch" && err.error == "no_usable_index") {
-          winston.warn("Database is not ready, retrying...");
-          process.nextTick(function () {
-            createRoles();
-          });
-        } else {
-          winston.error("find:", err);
-          next();
-        }
+        winston.error("find:", err);
+        next();
       } else if (roles.length == 0) {
         winston.warn("ERP roles not found. Creating...");
         app.models.Role.create([{

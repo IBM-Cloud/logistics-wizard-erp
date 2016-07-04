@@ -19,7 +19,6 @@
     "loopback": "^2.29.0",
     "loopback-boot": "^2.19.0",
     "loopback-component-explorer": "^2.5.0",
-    "loopback-connector-cloudant": "^1.0.11",
     "loopback-connector-memory-idstr": "^1.0.0",
     "loopback-connector-postgresql": "^2.6.3",
     "loopback-datasource-juggler": "^2.46.1",

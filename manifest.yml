@@ -1,7 +1,7 @@
 declared-services:
   logistics-wizard-erp-db:
-    label: cloudantNoSQLDB
-    plan: Shared
+    label: elephantsql
+    plan: turtle
 applications:
 - services:
   - logistics-wizard-erp-db
