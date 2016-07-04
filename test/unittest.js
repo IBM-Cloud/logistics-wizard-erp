@@ -1,9 +1,5 @@
 // Licensed under the Apache License. See footer for details.
 
-// workaround for "warning: possible EventEmitter memory leak detected"
-// seems to be linked to the number of unit tests in the file
-require("events").EventEmitter.prototype._maxListeners = 100;
-
 // force unit test to load the in-memory db configuration
 process.env.NODE_ENV = "unittest";
 

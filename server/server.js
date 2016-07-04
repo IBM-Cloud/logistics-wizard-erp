@@ -13,6 +13,11 @@ loopback.modelBuilder.define("TransientModel", {}, {
   idInjection: false
 });
 
+// workaround for "warning: possible EventEmitter memory leak detected"
+// seems to be linked to the number of unit tests in the file
+// https://github.com/strongloop/loopback-datasource-juggler/pull/939
+require("events").EventEmitter.prototype._maxListeners = 100;
+
 app.start = function () {
   // start the web server
   return app.listen(function () {
