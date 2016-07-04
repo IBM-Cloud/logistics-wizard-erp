@@ -24,7 +24,7 @@ if (process.env.VCAP_SERVICES) {
       "port": urlObject.port,
       "username": urlObject.auth.substring(0, urlObject.auth.indexOf(":")),
       "password": urlObject.auth.substring(urlObject.auth.indexOf(":") + 1),
-      "max": vcapServices.elephantsql[0].credentials.max_conns
+      "max": Math.max(1, vcapServices.elephantsql[0].credentials.max_conns - 2) // leave some connections for the frontend
     };
   } else if (vcapServices.hasOwnProperty("cloudantNoSQLDB")) {
     winston.info("Using Cloudant as datasource");
