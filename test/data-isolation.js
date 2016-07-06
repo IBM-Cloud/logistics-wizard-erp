@@ -35,15 +35,6 @@ describe("Data Isolation", function () {
   var demoEnvironment1,
     demoEnvironment2;
 
-  it("can populate the app with sample data", function (done) {
-    apiAnon.post("/Demos/seed")
-      .set("Content-Type", "application/json")
-      .expect(204)
-      .end(function (err, res) {
-        done(err);
-      });
-  });
-
   // create D1 demo env
   it("can create D1 demo environment", function (done) {
     apiAnon.post("/Demos")
@@ -289,15 +280,6 @@ describe("Data Isolation", function () {
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
       .set("Content-Type", "application/json")
       .expect(404) // this shipment should not be visible so Not Found
-      .end(function (err, res) {
-        done(err);
-      });
-  });
-
-  it("can delete all sample data", function (done) {
-    apiAnon.post("/Demos/reset")
-      .set("Content-Type", "application/json")
-      .expect(204)
       .end(function (err, res) {
         done(err);
       });

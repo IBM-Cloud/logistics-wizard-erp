@@ -34,15 +34,6 @@ describe("Demos", function () {
     }
   });
 
-  it("can populate the app with sample data", function (done) {
-    apiAnon.post("/Demos/seed")
-      .set("Content-Type", "application/json")
-      .expect(204)
-      .end(function (err, res) {
-        done(err);
-      });
-  });
-
   var demoEnvironment;
 
   it("can create a Demo environment", function (done) {
@@ -264,15 +255,6 @@ describe("Demos", function () {
     async.waterfall(tasks, function (err, result) {
       done(err);
     });
-  });
-
-  it("can delete all sample data", function (done) {
-    apiAnon.post("/Demos/reset")
-      .set("Content-Type", "application/json")
-      .expect(204)
-      .end(function (err, res) {
-        done(err);
-      });
   });
 
 });

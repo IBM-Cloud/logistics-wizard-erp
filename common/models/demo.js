@@ -118,55 +118,6 @@ module.exports = function (Demo) {
       });
   };
 
-  Demo.remoteMethod("seed", {
-    description: "Injects sample shared data in the service",
-    http: {
-      path: "/seed",
-      verb: "post"
-    },
-    accepts: []
-  });
-
-  // Remove all data from all models
-  Demo.reset = function (cb) {
-    async.waterfall([
-      Demo.app.models.Supplier,
-      Demo.app.models.Product,
-      Demo.app.models.DistributionCenter,
-      Demo.app.models.Inventory,
-      Demo.app.models.Retailer,
-      Demo.app.models.Shipment,
-      Demo.app.models.LineItem,
-      Demo.app.models.Demo,
-      Demo.app.models.ERPUser,
-      Demo.app.models.AccessToken
-    ].map(function (model) {
-        return function (callback) {
-          winston.info("Deleting all", model.definition.name);
-          model.destroyAll(function (err, result) {
-            callback(err);
-          });
-        };
-      }),
-      function (err, result) {
-        if (err) {
-          winston.error(err);
-        } else {
-          winston.info("Reset complete");
-        }
-        cb(err);
-      });
-  };
-
-  Demo.remoteMethod("reset", {
-    description: "Deletes all data",
-    http: {
-      path: "/reset",
-      verb: "post"
-    },
-    accepts: []
-  });
-
   /**
    * Create a new demo environment, seeding the environment with data
    */

@@ -3,30 +3,8 @@ var winston = require("winston");
 
 module.exports = function (app, next) {
 
-  app.models.Role.find(function (err, roles) {
-    if (err) {
-      winston.error("find:", err);
-      next();
-    } else if (roles.length == 0) {
-      winston.warn("ERP roles not found. Creating...");
-      app.models.Role.create([{
-        name: app.models.ERPUser.SUPPLY_CHAIN_MANAGER_ROLE
-            }, {
-        name: app.models.ERPUser.RETAIL_STORE_MANAGER_ROLE
-            }], function (err, roles) {
-        if (err) {
-          winston.error("create:", err);
-        } else {
-          winston.warn("Created", roles.length, "roles");
-        }
-        next(err);
-      });
-    } else {
-      winston.info("Existing ERP roles", roles.map(function (role) {
-        return role.name;
-      }));
-      next();
-    }
+  app.models.Demo.seed(function(err) {
+    next(err);
   });
 
 };
