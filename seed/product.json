@@ -5,6 +5,11 @@
     "supplierId": "1"
   },
   {
+    "id": "101",
+    "name": "Hat",
+    "supplierId": "2"
+  },
+  {
     "id": "102",
     "name": "Gloves",
     "supplierId": "1"
