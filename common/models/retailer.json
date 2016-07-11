@@ -27,6 +27,15 @@
       "type": "belongsTo",
       "model": "Demo",
       "foreignKey": "demoId"
+    },
+    "inventories": {
+      "type": "hasMany",
+      "model": "Inventory",
+      "polymorphic": {
+        "as": "location",
+        "foreignKey": "locationId",
+        "discriminator": "locationType"
+      }
     }
   },
   "mixins": {

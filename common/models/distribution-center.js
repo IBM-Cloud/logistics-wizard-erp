@@ -6,6 +6,7 @@ module.exports = function(DistributionCenter) {
   helper.hideRelation(DistributionCenter, "dcAddress");
   helper.hideRelation(DistributionCenter, "dcContact");
   helper.readOnlyRelation(DistributionCenter, "products");
+  helper.readOnlyRelation(DistributionCenter, "inventories");
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");

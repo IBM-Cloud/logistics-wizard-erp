@@ -22,7 +22,18 @@
     "distributionCenter": {
       "type": "belongsTo",
       "model": "DistributionCenter",
-      "foreignKey": "dcId"
+      "polymorphic": {
+        "foreignKey": "locationId",
+        "discriminator": "locationType"
+      }
+    },
+    "retailer": {
+      "type": "belongsTo",
+      "model": "Retailer",
+      "polymorphic": {
+        "foreignKey": "locationId",
+        "discriminator": "locationType"
+      }
     },
     "demo": {
       "type": "belongsTo",

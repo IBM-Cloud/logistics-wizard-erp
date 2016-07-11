@@ -27,11 +27,14 @@
         "forceId": false
       }
     },
-    "products": {
+    "inventories": {
       "type": "hasMany",
-      "model": "Product",
-      "foreignKey": "dcId",
-      "through": "Inventory"
+      "model": "Inventory",
+      "polymorphic": {
+        "as": "location",
+        "foreignKey": "locationId",
+        "discriminator": "locationType"
+      }
     }
   },
   "acls": [

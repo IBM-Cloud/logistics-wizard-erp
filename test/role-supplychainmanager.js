@@ -92,16 +92,6 @@ describe("Validates the Supply Chain Manager", function () {
       });
   });
 
-  it("can retrieve inventories when logged", function (done) {
-    api.get("/Inventories")
-      .set("Authorization", api.loopbackAccessToken.id)
-      .expect(200)
-      .end(function (err, res) {
-        assert.isAbove(res.body.length, 0);
-        done(err);
-      });
-  });
-
   it("can retrieve products when logged", function (done) {
     api.get("/Products")
       .set("Authorization", api.loopbackAccessToken.id)
@@ -131,6 +121,16 @@ describe("Validates the Supply Chain Manager", function () {
       .end(function (err, res) {
         assert.isAbove(res.body.length, 0);
         distributionCenters = res.body;
+        done(err);
+      });
+  });
+
+  it("can retrieve inventories when logged", function (done) {
+    api.get("/DistributionCenters/" + distributionCenters[0].id + "/inventories")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .expect(200)
+      .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
         done(err);
       });
   });
