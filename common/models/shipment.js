@@ -5,6 +5,7 @@ module.exports = function (Shipment) {
   helper.simpleCrud(Shipment);
   helper.hideRelation(Shipment, "address");
   helper.hideRelation(Shipment, "demo");
+  helper.crudRelation(Shipment, "items");
 };
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
