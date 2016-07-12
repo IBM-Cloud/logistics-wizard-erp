@@ -19,8 +19,8 @@ module.exports = function (Demo) {
   // together with a "belongsTo" directed to the Demo object.
   // They are listed here in ascending dependency order.
   Demo.ISOLATED_MODELS = [ //
-    Demo.definition.modelBuilder.models.Inventory,
     Demo.definition.modelBuilder.models.Retailer,
+    Demo.definition.modelBuilder.models.Inventory,
     Demo.definition.modelBuilder.models.Shipment,
     Demo.definition.modelBuilder.models.LineItem
   ];
@@ -69,6 +69,9 @@ module.exports = function (Demo) {
               }
               if (model.modelName == "LineItem") {
                 object.shipmentId = seedIdtoRealIds["Shipment-" + object.shipmentId];
+              }
+              if (model.modelName == "Inventory" && object.locationType == "Retailer") {
+                object.locationId = seedIdtoRealIds["Retailer-" + object.locationId];
               }
             }
 
@@ -160,6 +163,12 @@ module.exports = function (Demo) {
             }
             callback(err, demo);
           });
+      },
+      // create all inventory lines
+      function (demo, callback) {
+        Demo.app.models.Inventory.initializeAllInventories(demo.id, function (err) {
+          callback(err, demo);
+        });
       },
       // create the supply chain manager
       function (demo, callback) {

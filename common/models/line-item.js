@@ -1,5 +1,11 @@
 // Licensed under the Apache License. See footer for details.
-module.exports = function(LineItem) {
+module.exports = function (LineItem) {
+
+  LineItem.validate("quantity", function (err) {
+    if (this.quantity <= 0) err();
+  }, {
+    message: "Quantity must be positive"
+  });
 
 };
 //------------------------------------------------------------------------------

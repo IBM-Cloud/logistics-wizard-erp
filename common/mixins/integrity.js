@@ -29,7 +29,7 @@ module.exports = function (Model, options) {
       if (err) {
         callback(err);
       } else if (!instance) {
-        var notExists = new Error(targetModelName + " with id " + targetId + "does not exist");
+        var notExists = new Error(targetModelName + " with id " + targetId + " does not exist");
         notExists.status = 422;
         callback(notExists);
       } else {

@@ -34,9 +34,9 @@ describe("Validates the Retail Store Manager", function () {
   it("can create a Demo environment", function (done) {
     api.post("/Demos")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         name: "My Demo"
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         if (!err) {
@@ -74,9 +74,9 @@ describe("Validates the Retail Store Manager", function () {
     var userCount = demoEnvironment.users.length;
     api.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         retailerId: demoEnvironmentRetailers[0].id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         retailStoreManager = res.body;
@@ -88,9 +88,9 @@ describe("Validates the Retail Store Manager", function () {
   it("can NOT create a new Retailer user with the same store", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         retailerId: demoEnvironmentRetailers[0].id
-      }))
+      })
       .expect(400)
       .end(function (err, res) {
         done(err);
@@ -100,9 +100,9 @@ describe("Validates the Retail Store Manager", function () {
   it("can login with proper credentials", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         userId: retailStoreManager.id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         // capture the token
@@ -132,15 +132,6 @@ describe("Validates the Retail Store Manager", function () {
       });
   });
 
-  it("can NOT retrieve inventories when logged", function (done) {
-    api.get("/Inventories")
-      .set("Authorization", api.loopbackAccessToken.id)
-      .expect(401)
-      .end(function (err, res) {
-        done(err);
-      });
-  });
-
   it("can retrieve products when logged", function (done) {
     api.get("/Products")
       .set("Authorization", api.loopbackAccessToken.id)
@@ -160,6 +151,16 @@ describe("Validates the Retail Store Manager", function () {
       .end(function (err, res) {
         assert.isAbove(res.body.length, 0);
         distributionCenters = res.body;
+        done(err);
+      });
+  });
+
+  it("can retrieve inventories when logged", function (done) {
+    api.get("/DistributionCenters/" + distributionCenters[0].id + "/inventories")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .expect(200)
+      .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
         done(err);
       });
   });
@@ -191,7 +192,8 @@ describe("Validates the Retail Store Manager", function () {
     api.post("/Shipments")
       .set("Authorization", api.loopbackAccessToken.id)
       .send({
-        "status": "NEW"
+        "status": "NEW",
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {
@@ -204,7 +206,8 @@ describe("Validates the Retail Store Manager", function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .send({
         "status": "NEW",
-        "fromId": "14"
+        "fromId": "14",
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {
@@ -217,7 +220,8 @@ describe("Validates the Retail Store Manager", function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .send({
         "status": "NEW",
-        "toId": "14"
+        "toId": "14",
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {
@@ -231,7 +235,8 @@ describe("Validates the Retail Store Manager", function () {
       .send({
         "status": "NEW",
         "fromId": "1664",
-        "toId": retailers[0].id
+        "toId": retailers[0].id,
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {
@@ -245,7 +250,8 @@ describe("Validates the Retail Store Manager", function () {
       .send({
         "status": "NEW",
         "fromId": distributionCenters[0].id,
-        "toId": "1789"
+        "toId": "1789",
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {
@@ -261,7 +267,8 @@ describe("Validates the Retail Store Manager", function () {
       .send({
         "status": "NEW",
         "fromId": distributionCenters[0].id,
-        "toId": retailers[0].id
+        "toId": retailers[0].id,
+        estimatedTimeOfArrival: new Date()
       })
       .expect(200)
       .end(function (err, res) {
@@ -274,7 +281,10 @@ describe("Validates the Retail Store Manager", function () {
     api.post("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", api.loopbackAccessToken.id)
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({}))
+      .send([{
+        productId: 103,
+        quantity: 100
+      }])
       .expect(200)
       .end(function (err, res) {
         done(err);

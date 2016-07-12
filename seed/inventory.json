@@ -1,17 +1,20 @@
 [
   {
     "productId": "101",
-    "dcId": "1",
+    "locationId": "1",
+    "locationType": "DistributionCenter",
     "quantity": "10"
   },
   {
     "productId": "101",
-    "dcId": "2",
+    "locationId": "2",
+    "locationType": "DistributionCenter",
     "quantity": "15"
   },
   {
     "productId": "101",
-    "dcId": "3",
+    "locationId": "3",
+    "locationType": "DistributionCenter",
     "quantity": "12"
   }
 ]

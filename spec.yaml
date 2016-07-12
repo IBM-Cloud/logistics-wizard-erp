@@ -23,7 +23,6 @@ paths:
           description: Model id
           required: true
           type: number
-          format: JSON
         - name: filter
           in: query
           description: Filter defining fields and include
@@ -74,7 +73,6 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -95,7 +93,6 @@ paths:
           description: Model id
           required: true
           type: number
-          format: JSON
         - name: filter
           in: query
           description: Filter defining fields and include
@@ -129,12 +126,12 @@ paths:
             items:
               $ref: '#/definitions/Product'
       deprecated: false
-  '/DistributionCenters/{id}/products':
+  '/DistributionCenters/{id}/inventories':
     get:
       tags:
         - DistributionCenter
-      summary: Queries products of DistributionCenter.
-      operationId: DistributionCenter.prototype.__get__products
+      summary: Queries inventories of DistributionCenter.
+      operationId: DistributionCenter.prototype.__get__inventories
       parameters:
         - name: filter
           in: query
@@ -146,14 +143,13 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
           schema:
             type: array
             items:
-              $ref: '#/definitions/Product'
+              $ref: '#/definitions/Inventory'
       deprecated: false
   '/DistributionCenters/{id}':
     get:
@@ -167,7 +163,6 @@ paths:
           description: Model id
           required: true
           type: number
-          format: JSON
         - name: filter
           in: query
           description: Filter defining fields and include
@@ -217,7 +212,6 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -240,88 +234,11 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
           schema:
             $ref: '#/definitions/Retailer'
-      deprecated: false
-  '/Shipments/{id}/items/{fk}':
-    get:
-      tags:
-        - Shipment
-      summary: Find a related item by id for items.
-      operationId: Shipment.prototype.__findById__items
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for items
-          required: true
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/LineItem'
-      deprecated: false
-    delete:
-      tags:
-        - Shipment
-      summary: Delete a related item by id for items.
-      operationId: Shipment.prototype.__destroyById__items
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for items
-          required: true
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
-    put:
-      tags:
-        - Shipment
-      summary: Update a related item by id for items.
-      operationId: Shipment.prototype.__updateById__items
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for items
-          required: true
-          type: string
-          format: JSON
-        - name: data
-          in: body
-          required: false
-          schema:
-            $ref: '#/definitions/LineItem'
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/LineItem'
       deprecated: false
   '/Shipments/{id}/items':
     get:
@@ -340,7 +257,6 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -352,70 +268,27 @@ paths:
     post:
       tags:
         - Shipment
-      summary: Creates a new instance in items of this model.
-      operationId: Shipment.prototype.__create__items
+      summary: Adds new line items to a shipment
+      operationId: Shipment.addItems
       parameters:
+        - name: id
+          in: path
+          required: true
+          type: number
         - name: data
           in: body
-          required: false
-          schema:
-            $ref: '#/definitions/LineItem'
-        - name: id
-          in: path
-          description: PersistedModel id
           required: true
-          type: number
-          format: JSON
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/LineItem'
       responses:
         '200':
           description: Request was successful
           schema:
-            $ref: '#/definitions/LineItem'
-      deprecated: false
-    delete:
-      tags:
-        - Shipment
-      summary: Deletes all items of this model.
-      operationId: Shipment.prototype.__delete__items
-      parameters:
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
-  '/Shipments/{id}/items/count':
-    get:
-      tags:
-        - Shipment
-      summary: Counts items of Shipment.
-      operationId: Shipment.prototype.__count__items
-      parameters:
-        - name: where
-          in: query
-          description: Criteria to match model instances
-          required: false
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: object
-            properties:
-              count:
-                type: number
-                format: double
+            type: array
+            items:
+              $ref: '#/definitions/LineItem'
       deprecated: false
   /Shipments:
     post:
@@ -468,7 +341,6 @@ paths:
           description: Model id
           required: true
           type: number
-          format: JSON
         - name: filter
           in: query
           description: Filter defining fields and include
@@ -481,49 +353,46 @@ paths:
           schema:
             $ref: '#/definitions/Shipment'
       deprecated: false
-    delete:
-      tags:
-        - Shipment
-      summary: Delete a model instance by id from the data source.
-      operationId: Shipment.deleteById
-      parameters:
-        - name: id
-          in: path
-          description: Model id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: object
-      deprecated: false
     put:
       tags:
         - Shipment
-      summary: >-
-        Update attributes for a model instance and persist it into the data
-        source.
-      operationId: Shipment.prototype.updateAttributes
+      summary: Updates the status of a shipment as it moves along the supply-chain.
+      operationId: Shipment.updateShipmentStatus
       parameters:
-        - name: data
-          in: body
-          description: An object of model property name/value pairs
-          required: false
-          schema:
-            $ref: '#/definitions/Shipment'
         - name: id
           in: path
-          description: PersistedModel id
           required: true
           type: number
-          format: JSON
+        - name: data
+          in: body
+          description: >-
+            The update to apply to the Shipment. Only status,
+            estimatedTimeOfArrival and currentLocation can be updated
+          required: true
+          schema:
+            description: >-
+              The update to apply to the Shipment. Only status,
+              estimatedTimeOfArrival and currentLocation can be updated
+            $ref: '#/definitions/Shipment'
       responses:
         '200':
           description: Request was successful
           schema:
             $ref: '#/definitions/Shipment'
+      deprecated: false
+    delete:
+      tags:
+        - Shipment
+      summary: Cancels the given shipment.
+      operationId: Shipment.cancelShipment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: number
+      responses:
+        '204':
+          description: Request was successful
       deprecated: false
   '/Retailers/{id}/manager':
     get:
@@ -541,12 +410,36 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
           schema:
             $ref: '#/definitions/ERPUser'
+      deprecated: false
+  '/Retailers/{id}/inventories':
+    get:
+      tags:
+        - Retailer
+      summary: Queries inventories of Retailer.
+      operationId: Retailer.prototype.__get__inventories
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: PersistedModel id
+          required: true
+          type: number
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Inventory'
       deprecated: false
   '/Retailers/{id}':
     get:
@@ -560,7 +453,6 @@ paths:
           description: Model id
           required: true
           type: number
-          format: JSON
         - name: filter
           in: query
           description: Filter defining fields and include
@@ -594,160 +486,6 @@ paths:
             items:
               $ref: '#/definitions/Retailer'
       deprecated: false
-  '/Inventories/{id}/product':
-    get:
-      tags:
-        - Inventory
-      summary: Fetches belongsTo relation product.
-      operationId: Inventory.prototype.__get__product
-      parameters:
-        - name: refresh
-          in: query
-          required: false
-          type: boolean
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/Product'
-      deprecated: false
-  '/Inventories/{id}/distributionCenter':
-    get:
-      tags:
-        - Inventory
-      summary: Fetches belongsTo relation distributionCenter.
-      operationId: Inventory.prototype.__get__distributionCenter
-      parameters:
-        - name: refresh
-          in: query
-          required: false
-          type: boolean
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/DistributionCenter'
-      deprecated: false
-  /Inventories:
-    post:
-      tags:
-        - Inventory
-      summary: Create a new instance of the model and persist it into the data source.
-      operationId: Inventory.create
-      parameters:
-        - name: data
-          in: body
-          description: Model instance data
-          required: false
-          schema:
-            $ref: '#/definitions/Inventory'
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/Inventory'
-      deprecated: false
-    get:
-      tags:
-        - Inventory
-      summary: Find all instances of the model matched by filter from the data source.
-      operationId: Inventory.find
-      parameters:
-        - name: filter
-          in: query
-          description: 'Filter defining fields, where, include, order, offset, and limit'
-          required: false
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Inventory'
-      deprecated: false
-  '/Inventories/{id}':
-    get:
-      tags:
-        - Inventory
-      summary: Find a model instance by id from the data source.
-      operationId: Inventory.findById
-      parameters:
-        - name: id
-          in: path
-          description: Model id
-          required: true
-          type: number
-          format: JSON
-        - name: filter
-          in: query
-          description: Filter defining fields and include
-          required: false
-          type: string
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/Inventory'
-      deprecated: false
-    delete:
-      tags:
-        - Inventory
-      summary: Delete a model instance by id from the data source.
-      operationId: Inventory.deleteById
-      parameters:
-        - name: id
-          in: path
-          description: Model id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            type: object
-      deprecated: false
-    put:
-      tags:
-        - Inventory
-      summary: >-
-        Update attributes for a model instance and persist it into the data
-        source.
-      operationId: Inventory.prototype.updateAttributes
-      parameters:
-        - name: data
-          in: body
-          description: An object of model property name/value pairs
-          required: false
-          schema:
-            $ref: '#/definitions/Inventory'
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/Inventory'
-      deprecated: false
   '/Users/{id}/accessTokens/{fk}':
     get:
       tags:
@@ -766,7 +504,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -784,13 +521,11 @@ paths:
           description: Foreign key for accessTokens
           required: true
           type: string
-          format: JSON
         - name: id
           in: path
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '204':
           description: Request was successful
@@ -806,7 +541,6 @@ paths:
           description: Foreign key for accessTokens
           required: true
           type: string
-          format: JSON
         - name: data
           in: body
           required: false
@@ -817,7 +551,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -841,7 +574,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -866,7 +598,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -884,7 +615,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '204':
           description: Request was successful
@@ -907,7 +637,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -935,7 +664,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -1096,6 +824,20 @@ definitions:
     required:
       - name
     additionalProperties: false
+  Inventory:
+    properties:
+      quantity:
+        default: 0
+        type: number
+      id:
+        type: number
+      productId:
+        type: number
+      locationId:
+        type: number
+      locationType:
+        type: string
+    additionalProperties: false
   Retailer:
     properties:
       id:
@@ -1118,6 +860,7 @@ definitions:
         type: number
     required:
       - quantity
+      - productId
     additionalProperties: false
   Shipment:
     properties:
@@ -1147,6 +890,7 @@ definitions:
     required:
       - status
       - createdAt
+      - estimatedTimeOfArrival
       - fromId
       - toId
     additionalProperties: false
@@ -1170,19 +914,6 @@ definitions:
     required:
       - id
       - email
-    additionalProperties: false
-  Inventory:
-    properties:
-      quantity:
-        default: 0
-        type: number
-        format: double
-      id:
-        type: number
-      productId:
-        type: number
-      dcId:
-        type: number
     additionalProperties: false
   AccessToken:
     properties:
@@ -1277,6 +1008,5 @@ tags:
   - name: DistributionCenter
   - name: Shipment
   - name: Retailer
-  - name: Inventory
   - name: ERPUser
   - name: Demo

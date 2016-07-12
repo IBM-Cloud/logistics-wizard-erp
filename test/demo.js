@@ -39,9 +39,9 @@ describe("Demos", function () {
   it("can create a Demo environment", function (done) {
     apiAnon.post("/Demos")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         name: "My Demo"
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         if (!err) {
@@ -84,9 +84,9 @@ describe("Demos", function () {
   it("can NOT log in with a non-existent user on a valid demo", function (done) {
     apiSupply.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         userId: "-123"
-      }))
+      })
       .expect(404)
       .end(function (err, res) {
         done(err);
@@ -96,9 +96,9 @@ describe("Demos", function () {
   it("can log in as a user without providing credentials", function (done) {
     apiSupply.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         userId: demoEnvironment.users[0].id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         assert.isNotNull(res.body.id);
@@ -120,9 +120,9 @@ describe("Demos", function () {
     var userCount = demoEnvironment.users.length;
     apiAnon.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         retailerId: demoEnvironmentRetailers[0].id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         var user = res.body;
@@ -146,9 +146,9 @@ describe("Demos", function () {
     var userCount = demoEnvironment.users.length;
     apiAnon.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         retailerId: "-123"
-      }))
+      })
       .expect(404)
       .end(function (err, res) {
         done(err);
@@ -203,9 +203,9 @@ describe("Demos", function () {
   it("can not login with a non-existent demo", function (done) {
     apiSupply.post("/Demos/blah/loginAs")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         userId: demoEnvironment.users[0].id
-      }))
+      })
       .expect(404)
       .end(function (err, res) {
         assert.isNotNull(res.body.id);
@@ -217,9 +217,9 @@ describe("Demos", function () {
   it("can not create a user for a non-existent demo", function (done) {
     apiAnon.post("/Demos/blah/createUser")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         retailerId: demoEnvironmentRetailers[0].id
-      }))
+      })
       .expect(404)
       .end(function (err, res) {
         done(err);

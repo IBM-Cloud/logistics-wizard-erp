@@ -24,13 +24,18 @@
       "type": "date"
     },
     "estimatedTimeOfArrival": {
-      "type": "date"
+      "type": "date",
+      "required": true
     },
     "fromId": {
       "required": true,
       "type": "number"
     },
     "toId": {
+      "required": true,
+      "type": "number"
+    },
+    "demoId": {
       "required": true,
       "type": "number"
     }

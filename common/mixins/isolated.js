@@ -9,7 +9,7 @@ module.exports = function (Model, options) {
 
   // mark the model as isolated
   Model.isIsolated = true;
-  
+
   function injectDemoId(user, token, modelId, sharedMethod, ctx, callback) {
     // if we are create a new object
     // then inject the demoId of the current user
@@ -29,13 +29,14 @@ module.exports = function (Model, options) {
     if (!ctx.args.filter.where) {
       ctx.args.filter.where = {};
     }
+
     ctx.args.filter.where.demoId = user.demoId;
 
     // let the regular check happens,
     // we ensured that the demoId will be added to new item and to any query
     Model.__checkAccess(token, modelId, sharedMethod, ctx, callback);
   }
-  
+
   // keep the old version of checkAccess
   Model.__checkAccess = Model.checkAccess;
 

@@ -6,7 +6,12 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "demoId": {
+      "required": true,
+      "type": "number"
+    }
+  },
   "validations": [],
   "relations": {
     "manager": {
@@ -27,6 +32,15 @@
       "type": "belongsTo",
       "model": "Demo",
       "foreignKey": "demoId"
+    },
+    "inventories": {
+      "type": "hasMany",
+      "model": "Inventory",
+      "polymorphic": {
+        "as": "location",
+        "foreignKey": "locationId",
+        "discriminator": "locationType"
+      }
     }
   },
   "mixins": {

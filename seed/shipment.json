@@ -1,22 +1,14 @@
 [
   {
     "id": "501",
-    "status": "SHIPPED",
+    "status": "NEW",
     "fromId": "2",
     "toId": "201",
-    "currentLocation": {
-      "city": "Blacksburg",
-      "state": "West Virginia",
-      "country": "US",
-      "latitude": 37.23,
-      "longitude": -80.41
-    },
-    "estimatedTimeOfArrival": "Thu, 17 Oct 2015",
-    "lastUpdate": "Thu, 15 Oct 2015 16:15:37 GMT"
+    "estimatedTimeOfArrival": "Thu, 16 Oct 2016"
   },
   {
     "id": "502",
-    "status": "ACCEPTED",
+    "status": "APPROVED",
     "fromId": "2",
     "toId": "202",
     "currentLocation": {
@@ -26,12 +18,12 @@
       "latitude": 35.19,
       "longitude": -90.02
     },
-    "estimatedTimeOfArrival": "Thu, 16 Oct 2015",
-    "lastUpdate": "Thu, 13 Oct 2015 12:15:37 GMT"
+    "estimatedTimeOfArrival": "Thu, 16 Oct 2016",
+    "lastUpdate": "Thu, 13 Oct 2016 12:15:37 GMT"
   },
   {
     "id": "503",
-    "status": "SHIPPED",
+    "status": "DELIVERED",
     "fromId": "1",
     "toId": "203",
     "currentLocation": {
@@ -41,12 +33,12 @@
       "latitude": 39.44,
       "longitude": -119.79
     },
-    "estimatedTimeOfArrival": "Thu, 20 Oct 2015",
-    "updatedAt": "Thu, 19 Oct 2015 12:15:37 GMT"
+    "estimatedTimeOfArrival": "Thu, 20 Oct 2016",
+    "updatedAt": "Thu, 19 Oct 2016 12:15:37 GMT"
   },
   {
     "id": "504",
-    "status": "SHIPPED",
+    "status": "DELIVERED",
     "fromId": "1",
     "toId": "203",
     "currentLocation": {
@@ -56,12 +48,12 @@
       "latitude": 40.80,
       "longitude": -115.76
     },
-    "estimatedTimeOfArrival": "Thu, 22 Oct 2015",
-    "updatedAt": "Thu, 20 Oct 2015 12:15:37 GMT"
+    "estimatedTimeOfArrival": "Thu, 22 Oct 2016",
+    "updatedAt": "Thu, 20 Oct 2016 12:15:37 GMT"
   },
   {
     "id": "505",
-    "status": "SHIPPED",
+    "status": "DELIVERED",
     "fromId": "2",
     "toId": "202",
     "currentLocation": {
@@ -71,12 +63,12 @@
       "latitude": 32.74,
       "longitude": -96.80
     },
-    "estimatedTimeOfArrival": "Thu, 22 Oct 2015",
-    "updatedAt": "Thu, 20 Oct 2015 12:15:37 GMT"
+    "estimatedTimeOfArrival": "Thu, 22 Oct 2016",
+    "updatedAt": "Thu, 20 Oct 2016 12:15:37 GMT"
   },
   {
     "id": "506",
-    "status": "SHIPPED",
+    "status": "DELIVERED",
     "fromId": "3",
     "toId": "204",
     "currentLocation": {
@@ -86,8 +78,8 @@
       "latitude": 41.70,
       "longitude": -73.91
     },
-    "estimatedTimeOfArrival": "Thu, 24 Oct 2015",
-    "updatedAt": "Thu, 24 Oct 2015 12:15:37 GMT"
+    "estimatedTimeOfArrival": "Thu, 24 Oct 2016",
+    "updatedAt": "Thu, 24 Oct 2016 12:15:37 GMT"
   },
   {
     "id": "507",
@@ -101,7 +93,7 @@
       "latitude": 42.65,
       "longitude": -73.75
     },
-    "estimatedTimeOfArrival": "Thu, 28 Oct 2015",
-    "updatedAt": "Thu, 27 Oct 2015 12:15:37 GMT"
+    "estimatedTimeOfArrival": "Thu, 28 Oct 2016",
+    "updatedAt": "Thu, 27 Oct 2016 12:15:37 GMT"
   }
 ]

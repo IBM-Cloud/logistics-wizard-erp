@@ -67,7 +67,7 @@
   },
   "Inventory": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "ERPUser": {
     "dataSource": "db",

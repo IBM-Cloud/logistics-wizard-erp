@@ -33,9 +33,9 @@ describe("Validates the Supply Chain Manager", function () {
   it("can create a Demo environment", function (done) {
     api.post("/Demos")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         name: "My Demo"
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         if (!err) {
@@ -59,9 +59,9 @@ describe("Validates the Supply Chain Manager", function () {
   it("can login with proper credentials", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         userId: demoEnvironment.users[0].id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         // capture the token
@@ -84,16 +84,6 @@ describe("Validates the Supply Chain Manager", function () {
 
   it("can retrieve distribution centers when logged", function (done) {
     api.get("/DistributionCenters")
-      .set("Authorization", api.loopbackAccessToken.id)
-      .expect(200)
-      .end(function (err, res) {
-        assert.isAbove(res.body.length, 0);
-        done(err);
-      });
-  });
-
-  it("can retrieve inventories when logged", function (done) {
-    api.get("/Inventories")
       .set("Authorization", api.loopbackAccessToken.id)
       .expect(200)
       .end(function (err, res) {
@@ -135,6 +125,16 @@ describe("Validates the Supply Chain Manager", function () {
       });
   });
 
+  it("can retrieve inventories when logged", function (done) {
+    api.get("/DistributionCenters/" + distributionCenters[0].id + "/inventories")
+      .set("Authorization", api.loopbackAccessToken.id)
+      .expect(200)
+      .end(function (err, res) {
+        assert.isAbove(res.body.length, 0);
+        done(err);
+      });
+  });
+
   var retailers;
 
   it("can retrieve retailers when logged", function (done) {
@@ -167,7 +167,8 @@ describe("Validates the Supply Chain Manager", function () {
       .send(JSON.stringify({
         "status": "NEW",
         "fromId": distributionCenters[0].id,
-        "toId": retailers[0].id
+        "toId": retailers[0].id,
+        estimatedTimeOfArrival: new Date()
       }))
       .expect(200)
       .end(function (err, res) {
@@ -180,7 +181,10 @@ describe("Validates the Supply Chain Manager", function () {
     api.post("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", api.loopbackAccessToken.id)
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({}))
+      .send([{
+        productId: 103,
+        quantity: 100
+      }])
       .expect(200)
       .end(function (err, res) {
         done(err);
