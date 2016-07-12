@@ -149,7 +149,8 @@ describe("Inventory Management", function () {
       .set("Authorization", apiRetailer.loopbackAccessToken.id)
       .send({
         fromId: distributionCenters[0].id,
-        toId: retailStore.id
+        toId: retailStore.id,
+        estimatedTimeOfArrival: new Date()
       })
       .expect(200)
       .end(function (err, res) {

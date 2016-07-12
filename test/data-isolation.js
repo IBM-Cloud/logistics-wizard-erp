@@ -139,7 +139,8 @@ describe("Data Isolation", function () {
       .send({
         status: "NEW",
         fromId: supply1DistributionCenters[0].id,
-        toId: supply1Retailers[0].id
+        toId: supply1Retailers[0].id,
+        estimatedTimeOfArrival: new Date()
       })
       .expect(200)
       .end(function (err, res) {
@@ -154,7 +155,8 @@ describe("Data Isolation", function () {
       .send({
         status: "NEW",
         fromId: supply1DistributionCenters[0].id,
-        toId: supply2Retailers[0].id
+        toId: supply2Retailers[0].id,
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {

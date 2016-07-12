@@ -192,7 +192,8 @@ describe("Validates the Retail Store Manager", function () {
     api.post("/Shipments")
       .set("Authorization", api.loopbackAccessToken.id)
       .send({
-        "status": "NEW"
+        "status": "NEW",
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {
@@ -205,7 +206,8 @@ describe("Validates the Retail Store Manager", function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .send({
         "status": "NEW",
-        "fromId": "14"
+        "fromId": "14",
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {
@@ -218,7 +220,8 @@ describe("Validates the Retail Store Manager", function () {
       .set("Authorization", api.loopbackAccessToken.id)
       .send({
         "status": "NEW",
-        "toId": "14"
+        "toId": "14",
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {
@@ -232,7 +235,8 @@ describe("Validates the Retail Store Manager", function () {
       .send({
         "status": "NEW",
         "fromId": "1664",
-        "toId": retailers[0].id
+        "toId": retailers[0].id,
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {
@@ -246,7 +250,8 @@ describe("Validates the Retail Store Manager", function () {
       .send({
         "status": "NEW",
         "fromId": distributionCenters[0].id,
-        "toId": "1789"
+        "toId": "1789",
+        estimatedTimeOfArrival: new Date()
       })
       .expect(422)
       .end(function (err, res) {
@@ -262,7 +267,8 @@ describe("Validates the Retail Store Manager", function () {
       .send({
         "status": "NEW",
         "fromId": distributionCenters[0].id,
-        "toId": retailers[0].id
+        "toId": retailers[0].id,
+        estimatedTimeOfArrival: new Date()
       })
       .expect(200)
       .end(function (err, res) {

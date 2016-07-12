@@ -167,7 +167,8 @@ describe("Validates the Supply Chain Manager", function () {
       .send(JSON.stringify({
         "status": "NEW",
         "fromId": distributionCenters[0].id,
-        "toId": retailers[0].id
+        "toId": retailers[0].id,
+        estimatedTimeOfArrival: new Date()
       }))
       .expect(200)
       .end(function (err, res) {

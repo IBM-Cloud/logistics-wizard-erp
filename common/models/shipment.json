@@ -24,7 +24,8 @@
       "type": "date"
     },
     "estimatedTimeOfArrival": {
-      "type": "date"
+      "type": "date",
+      "required": true
     },
     "fromId": {
       "required": true,

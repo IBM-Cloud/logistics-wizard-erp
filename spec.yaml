@@ -890,6 +890,7 @@ definitions:
     required:
       - status
       - createdAt
+      - estimatedTimeOfArrival
       - fromId
       - toId
     additionalProperties: false
