@@ -23,7 +23,6 @@ paths:
           description: Model id
           required: true
           type: number
-          format: JSON
         - name: filter
           in: query
           description: Filter defining fields and include
@@ -74,7 +73,6 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -95,7 +93,6 @@ paths:
           description: Model id
           required: true
           type: number
-          format: JSON
         - name: filter
           in: query
           description: Filter defining fields and include
@@ -146,7 +143,6 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -167,7 +163,6 @@ paths:
           description: Model id
           required: true
           type: number
-          format: JSON
         - name: filter
           in: query
           description: Filter defining fields and include
@@ -217,7 +212,6 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -240,64 +234,11 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
           schema:
             $ref: '#/definitions/Retailer'
-      deprecated: false
-  '/Shipments/{id}/items/{fk}':
-    delete:
-      tags:
-        - Shipment
-      summary: Delete a related item by id for items.
-      operationId: Shipment.prototype.__destroyById__items
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for items
-          required: true
-          type: string
-          format: JSON
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '204':
-          description: Request was successful
-      deprecated: false
-    put:
-      tags:
-        - Shipment
-      summary: Update a related item by id for items.
-      operationId: Shipment.prototype.__updateById__items
-      parameters:
-        - name: fk
-          in: path
-          description: Foreign key for items
-          required: true
-          type: string
-          format: JSON
-        - name: data
-          in: body
-          required: false
-          schema:
-            $ref: '#/definitions/LineItem'
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: number
-          format: JSON
-      responses:
-        '200':
-          description: Request was successful
-          schema:
-            $ref: '#/definitions/LineItem'
       deprecated: false
   '/Shipments/{id}/items':
     get:
@@ -316,7 +257,6 @@ paths:
           description: PersistedModel id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -328,41 +268,27 @@ paths:
     post:
       tags:
         - Shipment
-      summary: Creates a new instance in items of this model.
-      operationId: Shipment.prototype.__create__items
+      summary: Adds new line items to a shipment
+      operationId: Shipment.addItems
       parameters:
-        - name: data
-          in: body
-          required: false
-          schema:
-            $ref: '#/definitions/LineItem'
         - name: id
           in: path
-          description: PersistedModel id
           required: true
           type: number
-          format: JSON
+        - name: data
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/LineItem'
       responses:
         '200':
           description: Request was successful
           schema:
-            $ref: '#/definitions/LineItem'
-      deprecated: false
-    delete:
-      tags:
-        - Shipment
-      summary: Deletes all items of this model.
-      operationId: Shipment.prototype.__delete__items
-      parameters:
-        - name: id
-          in: path
-          description: PersistedModel id
-          required: true
-          type: string
-          format: JSON
-      responses:
-        '204':
-          description: Request was successful
+            type: array
+            items:
+              $ref: '#/definitions/LineItem'
       deprecated: false
   /Shipments:
     post:
@@ -404,6 +330,29 @@ paths:
               $ref: '#/definitions/Shipment'
       deprecated: false
   '/Shipments/{id}':
+    get:
+      tags:
+        - Shipment
+      summary: Find a model instance by id from the data source.
+      operationId: Shipment.findById
+      parameters:
+        - name: id
+          in: path
+          description: Model id
+          required: true
+          type: number
+        - name: filter
+          in: query
+          description: Filter defining fields and include
+          required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Shipment'
+      deprecated: false
     put:
       tags:
         - Shipment
@@ -431,6 +380,20 @@ paths:
           schema:
             $ref: '#/definitions/Shipment'
       deprecated: false
+    delete:
+      tags:
+        - Shipment
+      summary: Cancels the given shipment.
+      operationId: Shipment.cancelShipment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: number
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
   '/Retailers/{id}/manager':
     get:
       tags:
@@ -446,8 +409,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
-          format: JSON
+          type: number
       responses:
         '200':
           description: Request was successful
@@ -470,8 +432,7 @@ paths:
           in: path
           description: PersistedModel id
           required: true
-          type: string
-          format: JSON
+          type: number
       responses:
         '200':
           description: Request was successful
@@ -492,7 +453,6 @@ paths:
           description: Model id
           required: true
           type: number
-          format: JSON
         - name: filter
           in: query
           description: Filter defining fields and include
@@ -544,7 +504,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -562,13 +521,11 @@ paths:
           description: Foreign key for accessTokens
           required: true
           type: string
-          format: JSON
         - name: id
           in: path
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '204':
           description: Request was successful
@@ -584,7 +541,6 @@ paths:
           description: Foreign key for accessTokens
           required: true
           type: string
-          format: JSON
         - name: data
           in: body
           required: false
@@ -595,7 +551,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -619,7 +574,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -644,7 +598,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -662,7 +615,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '204':
           description: Request was successful
@@ -685,7 +637,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -713,7 +664,6 @@ paths:
           description: User id
           required: true
           type: number
-          format: JSON
       responses:
         '200':
           description: Request was successful
@@ -910,6 +860,7 @@ definitions:
         type: number
     required:
       - quantity
+      - productId
     additionalProperties: false
   Shipment:
     properties:

@@ -308,6 +308,7 @@ module.exports = function (Shipment) {
       {
         arg: "data",
         type: ["LineItem"],
+        required: true,
         http: {
           source: 'body'
         }
