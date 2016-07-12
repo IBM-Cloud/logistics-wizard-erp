@@ -65,18 +65,6 @@ module.exports = {
     Model.disableRemoteMethod("__exists__" + relation, false);
   },
   /**
-   * Keeps only the simple GET/POST/PUT/DELETE methods for the given relation
-   * @param Model - The model to process.
-   * @param relation - The relation to alter.
-   */
-  crudRelation: function(Model, relation) {
-    Model.disableRemoteMethod("__count__" + relation, false);
-    Model.disableRemoteMethod("__findById__" + relation, false);
-    Model.disableRemoteMethod("__link__" + relation, false);
-    Model.disableRemoteMethod("__unlink__" + relation, false);
-    Model.disableRemoteMethod("__exists__" + relation, false); 
-  },
-  /**
    * Hides the given relation from the Model remote methods.
    * @param Model - The model to process.
    * @param relation - The relation to hide.
