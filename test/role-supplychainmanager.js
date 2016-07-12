@@ -33,9 +33,9 @@ describe("Validates the Supply Chain Manager", function () {
   it("can create a Demo environment", function (done) {
     api.post("/Demos")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         name: "My Demo"
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         if (!err) {
@@ -59,9 +59,9 @@ describe("Validates the Supply Chain Manager", function () {
   it("can login with proper credentials", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         userId: demoEnvironment.users[0].id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         // capture the token
@@ -180,7 +180,10 @@ describe("Validates the Supply Chain Manager", function () {
     api.post("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", api.loopbackAccessToken.id)
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({}))
+      .send([{
+        productId: 103,
+        quantity: 100
+      }])
       .expect(200)
       .end(function (err, res) {
         done(err);

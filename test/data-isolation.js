@@ -39,9 +39,9 @@ describe("Data Isolation", function () {
   it("can create D1 demo environment", function (done) {
     apiAnon.post("/Demos")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         name: "D1"
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         demoEnvironment1 = res.body;
@@ -53,9 +53,9 @@ describe("Data Isolation", function () {
   it("can create D2 demo environment", function (done) {
     apiAnon.post("/Demos")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         name: "D2"
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         demoEnvironment2 = res.body;
@@ -67,9 +67,9 @@ describe("Data Isolation", function () {
   it("can log in D1", function (done) {
     apiSupply1.post("/Demos/" + demoEnvironment1.guid + "/loginAs")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         userId: demoEnvironment1.users[0].id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         apiSupply1.loopbackAccessToken = res.body.token;
@@ -81,9 +81,9 @@ describe("Data Isolation", function () {
   it("can log in D2", function (done) {
     apiSupply2.post("/Demos/" + demoEnvironment2.guid + "/loginAs")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         userId: demoEnvironment2.users[0].id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         apiSupply2.loopbackAccessToken = res.body.token;
@@ -137,9 +137,9 @@ describe("Data Isolation", function () {
     apiSupply1.post("/Shipments")
       .set("Authorization", apiSupply1.loopbackAccessToken.id)
       .send({
-        "status": "NEW",
-        "fromId": supply1DistributionCenters[0].id,
-        "toId": supply1Retailers[0].id
+        status: "NEW",
+        fromId: supply1DistributionCenters[0].id,
+        toId: supply1Retailers[0].id
       })
       .expect(200)
       .end(function (err, res) {
@@ -152,9 +152,9 @@ describe("Data Isolation", function () {
     apiSupply1.post("/Shipments")
       .set("Authorization", apiSupply1.loopbackAccessToken.id)
       .send({
-        "status": "NEW",
-        "fromId": supply1DistributionCenters[0].id,
-        "toId": supply2Retailers[0].id
+        status: "NEW",
+        fromId: supply1DistributionCenters[0].id,
+        toId: supply2Retailers[0].id
       })
       .expect(422)
       .end(function (err, res) {
@@ -165,13 +165,15 @@ describe("Data Isolation", function () {
   it("can attach a line item to the shipment", function (done) {
     apiSupply1.post("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", apiSupply1.loopbackAccessToken.id)
-      .send({
-        "productId": "I4",
-        "quantity": 100
-      })
+      .send([{
+        productId: 103,
+        quantity: 100
+      }])
       .expect(200)
       .end(function (err, res) {
-        assert.equal(newShipment.id, res.body.shipmentId);
+        if (!err) {
+          assert.equal(newShipment.id, res.body[0].shipmentId);
+        }
         done(err);
       });
   });
@@ -243,7 +245,7 @@ describe("Data Isolation", function () {
     apiSupply2.put("/Shipments/" + newShipment.id)
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
       .set("Content-Type", "application/json")
-      .send(JSON.stringify(newShipment))
+      .send(newShipment)
       .expect(404) // this shipment should not be visible so Not Found
       .end(function (err, res) {
         done(err);

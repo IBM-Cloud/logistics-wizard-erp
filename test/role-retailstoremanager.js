@@ -34,9 +34,9 @@ describe("Validates the Retail Store Manager", function () {
   it("can create a Demo environment", function (done) {
     api.post("/Demos")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         name: "My Demo"
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         if (!err) {
@@ -74,9 +74,9 @@ describe("Validates the Retail Store Manager", function () {
     var userCount = demoEnvironment.users.length;
     api.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         retailerId: demoEnvironmentRetailers[0].id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         retailStoreManager = res.body;
@@ -88,9 +88,9 @@ describe("Validates the Retail Store Manager", function () {
   it("can NOT create a new Retailer user with the same store", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/createUser")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         retailerId: demoEnvironmentRetailers[0].id
-      }))
+      })
       .expect(400)
       .end(function (err, res) {
         done(err);
@@ -100,9 +100,9 @@ describe("Validates the Retail Store Manager", function () {
   it("can login with proper credentials", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         userId: retailStoreManager.id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         // capture the token
@@ -275,7 +275,10 @@ describe("Validates the Retail Store Manager", function () {
     api.post("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", api.loopbackAccessToken.id)
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({}))
+      .send([{
+        productId: 103,
+        quantity: 100
+      }])
       .expect(200)
       .end(function (err, res) {
         done(err);

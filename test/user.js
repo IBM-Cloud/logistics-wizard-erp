@@ -34,9 +34,9 @@ describe("Users", function () {
   it("can create a Demo environment", function (done) {
     api.post("/Demos")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         name: "My Demo"
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         if (!err) {
@@ -57,9 +57,9 @@ describe("Users", function () {
   it("can login with proper credentials", function (done) {
     api.post("/Demos/" + demoEnvironment.guid + "/loginAs")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         userId: demoEnvironment.users[0].id
-      }))
+      })
       .expect(200)
       .end(function (err, res) {
         // capture the token
@@ -89,10 +89,10 @@ describe("Users", function () {
   it("can NOT log in with invalid info", function (done) {
     apiAnon.post("/Users/login")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         email: "john@acme.com",
         password: "doe"
-      }))
+      })
       .expect(404)
       .end(function (err, res) {
         done(err);
@@ -102,11 +102,11 @@ describe("Users", function () {
   it("can NOT register a user", function (done) {
     apiAnon.post("/Users")
       .set("Content-Type", "application/json")
-      .send(JSON.stringify({
+      .send({
         email: "john@ acme.com",
         username: "john",
         password: "doe"
-      }))
+      })
       .expect(404)
       .end(function (err, res) {
         done(err);

@@ -61,7 +61,7 @@ module.exports = function (Inventory) {
               })) {
               createInventoryLines.push({
                 productId: product.id,
-                quantity: 0,
+                quantity: 100,
                 locationId: dc.id,
                 locationType: "DistributionCenter",
                 demoId: demoId
