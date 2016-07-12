@@ -11,6 +11,14 @@
       "type": "number",
       "required": true,
       "default": "0"
+    },
+    "productId": {
+      "required": true,
+      "type": "number"
+    },
+    "demoId": {
+      "required": true,
+      "type": "number"
     }
   },
   "validations": [],
@@ -27,7 +35,8 @@
     }
   },
   "mixins": {
-    "Isolated": {}
+    "Isolated": {},
+    "Integrity": {}
   },
   "hidden": ["demoId"],
   "acls": [

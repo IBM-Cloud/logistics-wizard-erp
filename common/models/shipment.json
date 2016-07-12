@@ -33,6 +33,10 @@
     "toId": {
       "required": true,
       "type": "number"
+    },
+    "demoId": {
+      "required": true,
+      "type": "number"
     }
   },
   "validations": [],

@@ -10,6 +10,10 @@
     "quantity": {
       "type": "number",
       "default": "0"
+    },
+    "demoId": {
+      "required": true,
+      "type": "number"
     }
   },
   "validations": [],
