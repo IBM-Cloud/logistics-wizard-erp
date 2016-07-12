@@ -1,22 +1,13 @@
 [
   {
     "id": "501",
-    "status": "SHIPPED",
+    "status": "NEW",
     "fromId": "2",
-    "toId": "201",
-    "currentLocation": {
-      "city": "Blacksburg",
-      "state": "West Virginia",
-      "country": "US",
-      "latitude": 37.23,
-      "longitude": -80.41
-    },
-    "estimatedTimeOfArrival": "Thu, 17 Oct 2015",
-    "lastUpdate": "Thu, 15 Oct 2015 16:15:37 GMT"
+    "toId": "201"
   },
   {
     "id": "502",
-    "status": "ACCEPTED",
+    "status": "APPROVED",
     "fromId": "2",
     "toId": "202",
     "currentLocation": {
@@ -31,7 +22,7 @@
   },
   {
     "id": "503",
-    "status": "SHIPPED",
+    "status": "DELIVERED",
     "fromId": "1",
     "toId": "203",
     "currentLocation": {
@@ -46,7 +37,7 @@
   },
   {
     "id": "504",
-    "status": "SHIPPED",
+    "status": "DELIVERED",
     "fromId": "1",
     "toId": "203",
     "currentLocation": {
@@ -61,7 +52,7 @@
   },
   {
     "id": "505",
-    "status": "SHIPPED",
+    "status": "DELIVERED",
     "fromId": "2",
     "toId": "202",
     "currentLocation": {
@@ -76,7 +67,7 @@
   },
   {
     "id": "506",
-    "status": "SHIPPED",
+    "status": "DELIVERED",
     "fromId": "3",
     "toId": "204",
     "currentLocation": {
