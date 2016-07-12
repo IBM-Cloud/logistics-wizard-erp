@@ -190,18 +190,6 @@ describe("Data Isolation", function () {
       });
   });
 
-  it("can update the shipment in D1", function (done) {
-    newShipment.updatedAt = new Date();
-    apiSupply1.put("/Shipments/" + newShipment.id)
-      .set("Authorization", apiSupply1.loopbackAccessToken.id)
-      .set("Content-Type", "application/json")
-      .send(JSON.stringify(newShipment))
-      .expect(200)
-      .end(function (err, res) {
-        done(err);
-      });
-  });
-
   it("can see shipment items from D1 by id", function (done) {
     apiSupply1.get("/Shipments/" + newShipment.id + "/items")
       .set("Authorization", apiSupply1.loopbackAccessToken.id)
@@ -280,6 +268,22 @@ describe("Data Isolation", function () {
       .set("Authorization", apiSupply2.loopbackAccessToken.id)
       .set("Content-Type", "application/json")
       .expect(404) // this shipment should not be visible so Not Found
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it("can delete the demo environment 1", function (done) {
+    apiAnon.delete("/Demos/" + demoEnvironment1.guid)
+      .expect(204)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  it("can delete the demo environment 2", function (done) {
+    apiAnon.delete("/Demos/" + demoEnvironment2.guid)
+      .expect(204)
       .end(function (err, res) {
         done(err);
       });

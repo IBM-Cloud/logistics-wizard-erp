@@ -121,6 +121,14 @@ describe("Users", function () {
       });
   });
 
+  it("can delete the demo environment", function (done) {
+    apiAnon.delete("/Demos/" + demoEnvironment.guid)
+      .expect(204)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
 });
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
