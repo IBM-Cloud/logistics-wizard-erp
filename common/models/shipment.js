@@ -41,6 +41,8 @@ module.exports = function (Shipment) {
   helper.hideRelation(Shipment, "demo");
 
   /**
+   * Increases or decreases stock at a location.
+   *
    * shipment - the shipment with items to load from
    * locationId - the ID of the location to update
    * locationType - one of DistributionCenter or Retailer
@@ -118,6 +120,7 @@ module.exports = function (Shipment) {
 
   /**
    * Handles state transition for a shipment.
+   *
    * shipment - the shipment to update
    * shipmentUpdate - the new state to apply
    */
