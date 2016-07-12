@@ -152,6 +152,7 @@ describe("Inventory Management", function () {
       .expect(200)
       .end(function (err, res) {
         shipment = res.body;
+        assert.equal(shipment.status, "NEW");
         done(err);
       });
   });
@@ -161,7 +162,7 @@ describe("Inventory Management", function () {
       .set("Authorization", apiRetailer.loopbackAccessToken.id)
       .send({
         quantity: 0,
-        productId: 3
+        productId: 103
       })
       .expect(200)
       .end(function (err, res) {
@@ -169,14 +170,128 @@ describe("Inventory Management", function () {
       });
   });
 
-  // complete the shipment
-  it("can complete the shipment", function (done) {
+  it("can approve the shipment", function (done) {
     apiRetailer.put("/Shipments/" + shipment.id)
       .set("Authorization", apiRetailer.loopbackAccessToken.id)
       .send({
-        status: "COMPLETE"
+        status: "APPROVED"
       })
       .expect(200)
+      .end(function (err, res) {
+        if (!err) {
+          shipment = res.body;
+          assert.equal(shipment.status, "APPROVED");
+        }
+        done(err);
+      });
+  });
+
+  it("can't approve something that has been approved already", function (done) {
+    apiRetailer.put("/Shipments/" + shipment.id)
+      .set("Authorization", apiRetailer.loopbackAccessToken.id)
+      .send({
+        status: "APPROVED"
+      })
+      .expect(400)
+      .end(function (err, res) {
+        done(err);
+      });
+  });
+
+  //  it("decreases the inventory at the source of the shipment");
+
+  //  it("can NOT add items to an APPROVED shipment", function (done) {
+  //    apiRetailer.post("/Shipments/" + shipment.id + "/items")
+  //      .set("Authorization", apiRetailer.loopbackAccessToken.id)
+  //      .send({
+  //        quantity: 0,
+  //        productId: 103
+  //      })
+  //      .expect(403)
+  //      .end(function (err, res) {
+  //        done(err);
+  //      });
+  //  });
+  //
+
+  it("can update the location of a shipment, turning it in IN_TRANSIT", function (done) {
+    apiRetailer.put("/Shipments/" + shipment.id)
+      .set("Authorization", apiRetailer.loopbackAccessToken.id)
+      .send({
+        status: "IN_TRANSIT",
+        estimatedTimeOfArrival: new Date("July 11, 2016 15:12:00"),
+        currentLocation: {
+          city: "Nice",
+          state: "PACA",
+          country: "France",
+          latitude: 43.7101728,
+          longitude: 7.261953199999994
+        }
+      })
+      .expect(200)
+      .end(function (err, res) {
+        if (!err) {
+          shipment = res.body;
+          assert.equal("Nice", shipment.currentLocation.city);
+          assert.equal(shipment.status, "IN_TRANSIT");
+        }
+        done(err);
+      });
+  });
+
+  it("can update the location of a shipment several times", function (done) {
+    apiRetailer.put("/Shipments/" + shipment.id)
+      .set("Authorization", apiRetailer.loopbackAccessToken.id)
+      .send({
+        status: "IN_TRANSIT",
+        estimatedTimeOfArrival: new Date("July 13, 2016"),
+        currentLocation: {
+          city: "Antibes",
+          state: "PACA",
+          country: "France",
+          latitude: 43.58041799999999,
+          longitude: 7.12510199999997
+        }
+      })
+      .expect(200)
+      .end(function (err, res) {
+        if (!err) {
+          shipment = res.body;
+          assert.equal("Antibes", shipment.currentLocation.city);
+          assert.equal(shipment.status, "IN_TRANSIT");
+        }
+        done(err);
+      });
+  });
+
+  it("can mark the shipment as DELIVERED", function (done) {
+    apiRetailer.put("/Shipments/" + shipment.id)
+      .set("Authorization", apiRetailer.loopbackAccessToken.id)
+      .send({
+        status: "DELIVERED",
+        "currentLocation": {
+          "city": "Antibes",
+          "state": "PACA",
+          "country": "France",
+          "latitude": 43.58041799999999,
+          "longitude": 7.12510199999997
+        }
+      })
+      .expect(200)
+      .end(function (err, res) {
+        if (!err) {
+          shipment = res.body;
+          assert.equal(shipment.status, "DELIVERED");
+        }
+        done(err);
+      });
+  });
+
+  //  it("increases the inventory at the destination");
+
+  it("can delete the demo environment", function (done) {
+    apiAnon.delete("/Demos/" + demoEnvironment.guid)
+      .expect(204)
       .end(function (err, res) {
         done(err);
       });
