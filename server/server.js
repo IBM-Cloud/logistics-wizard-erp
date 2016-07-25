@@ -5,6 +5,8 @@ winston.level = process.env.LOG_LEVEL || "info";
 
 var loopback = require("loopback");
 var boot = require("loopback-boot");
+
+var servicediscovery = require("./serviceDiscovery")
 var app = module.exports = loopback();
 
 // This model has no database attached, no id.
@@ -47,6 +49,15 @@ boot(app, __dirname, function (err) {
     app.start();
   }
 });
+
+// Register app with Service Discovery and initiate heartbeat cycle if running in PROD
+if(process.env.VCAP_SERVICES){
+  servicediscovery.registerService();
+}
+
+
+
+
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.

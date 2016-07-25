@@ -2,7 +2,12 @@ declared-services:
   logistics-wizard-erp-db:
     label: elephantsql
     plan: turtle
+  lw-service-discovery:
+    label: service_discovery
+    plan: free
 applications:
 - services:
   - logistics-wizard-erp-db
+  - lw-service-discovery
   name: logistics-wizard-erp
+
