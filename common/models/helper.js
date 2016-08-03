@@ -1,4 +1,6 @@
 // Licensed under the Apache License. See footer for details.
+var winston = require("winston");
+
 /**
  * Helper module.
  * @module model.helper
@@ -8,7 +10,7 @@ module.exports = {
    * Disables all remote methods on a model.
    * @param Model - The model to process.
    */
-  hideAll: function(Model) {
+  hideAll: function (Model) {
     Model.disableRemoteMethod("find", true);
     Model.disableRemoteMethod("findById", true);
     Model.disableRemoteMethod("create", true);
@@ -25,7 +27,7 @@ module.exports = {
    * Disables all write methods on a model, keeping only the GET.
    * @param Model - The model to process.
    */
-  readOnly: function(Model) {
+  readOnly: function (Model) {
     Model.disableRemoteMethod("create", true);
     Model.disableRemoteMethod("upsert", true);
     Model.disableRemoteMethod("deleteById", true);
@@ -40,20 +42,20 @@ module.exports = {
    * Keeps only the simple GET/POST/PUT/DELETE methods.
    * @param Model - The model to process.
    */
-  simpleCrud: function(Model) {
+  simpleCrud: function (Model) {
     Model.disableRemoteMethod("upsert", true);
     Model.disableRemoteMethod("updateAll", true);
     Model.disableRemoteMethod("createChangeStream", true);
     Model.disableRemoteMethod("count", true);
     Model.disableRemoteMethod("findOne", true);
-    Model.disableRemoteMethod("exists", true);    
+    Model.disableRemoteMethod("exists", true);
   },
   /**
    * Keeps only the GET methods for the given relation
    * @param Model - The model to process.
    * @param relation - The relation to alter.
    */
-  readOnlyRelation: function(Model, relation) {
+  readOnlyRelation: function (Model, relation) {
     Model.disableRemoteMethod("__create__" + relation, false);
     Model.disableRemoteMethod("__updateById__" + relation, false);
     Model.disableRemoteMethod("__destroyById__" + relation, false);
@@ -69,7 +71,7 @@ module.exports = {
    * @param Model - The model to process.
    * @param relation - The relation to hide.
    */
-  hideRelation: function(Model, relation) {
+  hideRelation: function (Model, relation) {
     Model.disableRemoteMethod("__create__" + relation, false);
     Model.disableRemoteMethod("__get__" + relation, false);
     Model.disableRemoteMethod("__update__" + relation, false);
@@ -82,6 +84,37 @@ module.exports = {
     Model.disableRemoteMethod("__link__" + relation, false);
     Model.disableRemoteMethod("__unlink__" + relation, false);
     Model.disableRemoteMethod("__exists__" + relation, false);
+  },
+  /**
+   * Begins a transaction for the given model.
+   *
+   * Similar to Model.beginTransaction but in case the model is using the in-memory data source
+   * that has no support for transaction, it returns a dummy transaction object and logs a warning.
+   * @param Model - The model to begin a transaction for
+   * @param callback - (err, tx)
+   */
+  beginTransaction: function (Model, callback) {
+    if (Model.dataSource.adapter.name == "memory") {
+      winston.warn("Creating a fake transaction object for in-memory connector with model", Model.modelName);
+      callback(null, {
+        commit: function (callback) {
+          winston.warn("Commit on a fake transaction");
+          callback(null);
+        },
+        rollback: function (callback) {
+          winston.warn("Rollback on a fake transaction");
+          callback(null);
+        }
+      });
+    } else {
+      Model.beginTransaction({
+          isolationLevel: Model.Transaction.SERIALIZABLE
+        },
+        function (err, tx) {
+          callback(err, tx);
+        }
+      );
+    }
   }
 };
 //------------------------------------------------------------------------------
