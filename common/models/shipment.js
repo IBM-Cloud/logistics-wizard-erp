@@ -43,19 +43,22 @@ module.exports = function (Shipment) {
   /**
    * Increases or decreases stock at a location.
    *
+   * tx - the transaction to use for all database calls
    * shipment - the shipment with items to load from
    * locationId - the ID of the location to update
    * locationType - one of DistributionCenter or Retailer
    * operation - one of +1 or -1 whether you want to add or remove stock from the inventory
    */
-  function updateInventory(shipment, locationId, locationType, operation, cb) {
+  function updateInventory(tx, shipment, locationId, locationType, operation, cb) {
     winston.info("Updating inventory for", locationType, locationId);
 
     var tasks = [
       // get line items in the shipment
       function (callback) {
         winston.info("Retrieving items in shipment", shipment.id);
-        shipment.items(function (err, items) {
+        shipment.items({
+          transaction: tx
+        }, function (err, items) {
           callback(err, items);
         });
       },
@@ -75,6 +78,8 @@ module.exports = function (Shipment) {
               inq: productIds
             }
           }
+        }, {
+          transaction: tx
         }, function (err, inventories) {
           callback(err, items, inventories);
         });
@@ -98,7 +103,9 @@ module.exports = function (Shipment) {
           // at the end of this task list, async will run them
           tasks.push(function (callback) {
             winston.info("Saving inventory", inventory);
-            inventory.save(function (err, updateInventory) {
+            inventory.save({
+              transaction: tx
+            }, function (err, updateInventory) {
               callback(err);
             });
           });
@@ -121,10 +128,11 @@ module.exports = function (Shipment) {
   /**
    * Handles state transition for a shipment.
    *
+   * tx - the transaction to use for all database calls
    * shipment - the shipment to update
    * shipmentUpdate - the new state to apply
    */
-  function applyShipmentUpdate(shipment, shipmentUpdate, cb) {
+  function applyShipmentUpdate(tx, shipment, shipmentUpdate, cb) {
     switch (shipmentUpdate.status) {
       case "APPROVED":
         if (shipment.status != "NEW") {
@@ -163,15 +171,17 @@ module.exports = function (Shipment) {
     }
 
     // persist the new state and update the inventory
-    shipment.save(function (err, updatedShipment) {
+    shipment.save({
+      transaction: tx
+    }, function (err, updatedShipment) {
       if (err) {
         cb(err);
       } else if (shipment.status == "APPROVED") { // decrease stock at source
-        updateInventory(shipment, shipment.fromId, "DistributionCenter", -1, function (err) {
+        updateInventory(tx, shipment, shipment.fromId, "DistributionCenter", -1, function (err) {
           cb(err, updatedShipment);
         });
       } else if (shipment.status == "DELIVERED") { // increase stock at destination
-        updateInventory(shipment, shipment.toId, "Retailer", +1, function (err) {
+        updateInventory(tx, shipment, shipment.toId, "Retailer", +1, function (err) {
           cb(err, updatedShipment);
         });
       } else {
@@ -182,28 +192,66 @@ module.exports = function (Shipment) {
 
   Shipment.updateShipmentStatus = function (token, shipmentId, shipmentUpdate, cb) {
     winston.info("User", token.userId, "is updating shipment", shipmentId);
-    Shipment.app.models.ERPUser.findById(token.userId, function (err, user) {
-      if (err) {
-        return cb(err);
-      } else {
-        Shipment.findOne({
-          where: {
-            id: shipmentId,
-            demoId: user.demoId
-          }
-        }, function (err, shipment) {
-          if (err) {
+
+    async.waterfall([
+      // start a transaction
+      function (callback) {
+          helper.beginTransaction(Shipment, function (err, tx) {
+            callback(err, tx);
+          });
+      },
+      // find the user
+      function (tx, callback) {
+          Shipment.app.models.ERPUser.findById(token.userId, {
+            transaction: tx
+          }, function (err, user) {
+            callback(err, tx, user);
+          });
+      },
+      // find the shipment
+      function (tx, user, callback) {
+          Shipment.findOne({
+              where: {
+                id: shipmentId,
+                demoId: user.demoId
+              }
+            }, {
+              transaction: tx
+            },
+            function (err, shipment) {
+              if (err) {
+                callback(err, tx);
+              } else if (!shipment) {
+                var notFound = new Error("Shipment does not exist");
+                notFound.status = 404;
+                callback(notFound, tx);
+              } else {
+                callback(null, tx, shipment);
+              }
+            });
+        },
+        // apply the update
+        function (tx, shipment, callback) {
+          applyShipmentUpdate(tx, shipment, shipmentUpdate, function (err, updatedShipment) {
+            callback(err, tx, updatedShipment);
+          });
+        },
+        // commit the transaction
+        function (tx, updatedShipment, callback) {
+          tx.commit(function (err) {
+            callback(err, tx, updatedShipment);
+          });
+        }
+      ],
+      function (err, tx, updatedShipment) {
+        if (tx && err) {
+          tx.rollback(function () {
             cb(err);
-          } else if (!shipment) {
-            var notFound = new Error("Shipment does not exist");
-            notFound.status = 404;
-            cb(notFound);
-          } else {
-            applyShipmentUpdate(shipment, shipmentUpdate, cb);
-          }
-        });
-      }
-    });
+          });
+        } else {
+          cb(err, updatedShipment);
+        }
+      });
   }
 
   Shipment.remoteMethod("updateShipmentStatus", {
@@ -247,43 +295,82 @@ module.exports = function (Shipment) {
   });
 
   /**
-   * Adds items to a shipment. Items can be added only if the 
+   * Adds items to a shipment.
+   * Items can be added only if the shipment is still NEW.
    */
   Shipment.addItems = function (token, shipmentId, items, cb) {
     winston.info("User", token.userId, "is adding", items.length, "items to shipment", shipmentId);
-    Shipment.app.models.ERPUser.findById(token.userId, function (err, user) {
-      if (err) {
-        return cb(err);
-      } else {
+
+    async.waterfall([
+      // start a transaction
+      function (callback) {
+        helper.beginTransaction(Shipment, function (err, tx) {
+          callback(err, tx);
+        });
+      },
+      // find the user
+      function (tx, callback) {
+        Shipment.app.models.ERPUser.findById(token.userId, {
+          transaction: tx
+        }, function (err, user) {
+          callback(err, tx, user);
+        });
+      },
+      // find the shipment
+      function (tx, user, callback) {
         Shipment.findOne({
-          where: {
-            id: shipmentId,
-            demoId: user.demoId
-          }
-        }, function (err, shipment) {
-          if (err) {
-            cb(err);
-          } else if (!shipment) {
-            var notFound = new Error("Shipment does not exist");
-            notFound.status = 404;
-            cb(notFound);
-          } else if (shipment.status != "NEW") {
-            var invalidStatus = new Error("Shipment can no longer be modified");
-            invalidStatus.status = 400;
-            cb(invalidStatus);
-          } else {
-            // link these items to the demo
-            items.forEach(function (item) {
-              item.demoId = user.demoId;
-            });
-            shipment.items.create(items, function (err, persistedItems) {
-              cb(err, persistedItems);
-            });
-          }
+            where: {
+              id: shipmentId,
+              demoId: user.demoId
+            }
+          }, {
+            transaction: tx
+          },
+          function (err, shipment) {
+            if (err) {
+              callback(err, tx);
+            } else if (!shipment) {
+              var notFound = new Error("Shipment does not exist");
+              notFound.status = 404;
+              callback(notFound, tx);
+            } else if (shipment.status != "NEW") {
+              var invalidStatus = new Error("Shipment can no longer be modified");
+              invalidStatus.status = 400;
+              callback(invalidStatus, tx);
+            } else {
+              callback(null, tx, user, shipment);
+            }
+          });
+        },
+      // add items
+      function (tx, user, shipment, callback) {
+        // link these items to the demo
+        items.forEach(function (item) {
+          item.demoId = user.demoId;
+        });
+
+        shipment.items.create(items, {
+          transaction: tx
+        }, function (err, persistedItems) {
+          callback(err, tx, persistedItems);
+        });
+      },
+      // commit transaction
+      function (tx, items, callback) {
+        tx.commit(function (err) {
+          callback(err, tx, items);
         });
       }
+    ], function (err, tx, items) {
+      if (tx && err) {
+        tx.rollback(function () {
+          cb(err);
+        });
+      } else {
+        cb(err, items);
+      }
     });
-  };
+  }
 
   Shipment.remoteMethod("addItems", {
     description: "Adds new line items to a shipment",
@@ -325,43 +412,83 @@ module.exports = function (Shipment) {
 
   Shipment.cancelShipment = function (token, shipmentId, cb) {
     winston.info("User", token.userId, "is canceling shipment", shipmentId);
-    Shipment.app.models.ERPUser.findById(token.userId, function (err, user) {
-      if (err) {
-        return cb(err);
-      } else {
-        Shipment.findOne({
-          where: {
-            id: shipmentId,
-            demoId: user.demoId
-          }
-        }, function (err, shipment) {
-          if (err) {
-            cb(err);
-          } else if (!shipment) {
-            var notFound = new Error("Shipment does not exist");
-            notFound.status = 404;
-            cb(notFound);
+
+    async.waterfall([
+      // start a transaction
+      function (callback) {
+          helper.beginTransaction(Shipment, function (err, tx) {
+            callback(err, tx);
+          });
+      },
+      // find the user
+      function (tx, callback) {
+          Shipment.app.models.ERPUser.findById(token.userId, {
+            transaction: tx
+          }, function (err, user) {
+            callback(err, tx, user);
+          });
+      },
+      // find the shipment
+      function (tx, user, callback) {
+          Shipment.findOne({
+              where: {
+                id: shipmentId,
+                demoId: user.demoId
+              }
+            }, {
+              transaction: tx
+            },
+            function (err, shipment) {
+              if (err) {
+                callback(err, tx);
+              } else if (!shipment) {
+                var notFound = new Error("Shipment does not exist");
+                notFound.status = 404;
+                callback(notFound, tx);
+              } else {
+                callback(null, tx, shipment);
+              }
+            });
+        },
+      // update inventory if shipment was approved or in transit
+      function (tx, shipment, callback) {
+          if (shipment.status == "APPROVED" || shipment.status == "IN_TRANSIT") {
+            winston.info("Restoring inventory to source for shipment", shipment.id);
+            updateInventory(tx, shipment, shipment.fromId, "DistributionCenter", +1, function (err) {
+              if (err) {
+                callback(err, tx);
+              } else {
+                callback(null, tx, shipment);
+              }
+            });
           } else {
-            if (shipment.status == "APPROVED" || shipment.status == "IN_TRANSIT") {
-              winston.info("Restoring inventory to source for shipment", shipment.id);
-              updateInventory(shipment, shipment.fromId, "DistributionCenter", +1, function (err) {
-                if (err) {
-                  cb(err);
-                } else {
-                  shipment.destroy(function (err) {
-                    cb(err);
-                  });
-                }
-              });
-            } else {
-              shipment.destroy(function (err) {
-                cb(err);
-              });
-            }
+            callback(null, tx, shipment);
           }
-        });
-      }
-    });
+      },
+      // destroy shipment
+      function (tx, shipment, callback) {
+          shipment.destroy({
+            transaction: tx
+          }, function (err) {
+            callback(err, tx);
+          });
+      },
+      // commit transaction
+      function (tx, callback) {
+          tx.commit(function (err) {
+            callback(err);
+          });
+        }
+      ],
+      function (err, tx) {
+        if (tx && err) {
+          tx.rollback(function () {
+            cb(err);
+          });
+        } else {
+          cb(err);
+        }
+      });
   };
 
   Shipment.remoteMethod("cancelShipment", {
