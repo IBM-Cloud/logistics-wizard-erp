@@ -1,7 +1,12 @@
 // Licensed under the Apache License. See footer for details.
 
 // force unit test to load the in-memory db configuration
-process.env.NODE_ENV = "unittest";
+if (!process.env.NODE_ENV) {
+  console.log("Setting NODE_ENV to unittest");
+  process.env.NODE_ENV = "unittest";
+} else {
+  console.log("NODE_ENV is set to", process.env.NODE_ENV);
+}
 
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
