@@ -19,6 +19,7 @@ module.exports = function (ErpUser) {
 
   // hide the link back to the demo
   helper.hideRelation(ErpUser, "demo");
+  helper.hideRelation(ErpUser, "accessTokens");
   helper.readOnlyRelation(ErpUser, "roles");
 
   // callback(err, principal)
