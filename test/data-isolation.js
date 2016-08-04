@@ -91,6 +91,18 @@ describe("Data Isolation", function () {
       });
   });
 
+  var products = [];
+  it("can get products through D1", function (done) {
+    apiSupply1.get("/Products")
+      .set("Authorization", apiSupply1.loopbackAccessToken.id)
+      .set("Content-Type", "application/json")
+      .expect(200)
+      .end(function (err, res) {
+        products = res.body;
+        done(err);
+      });
+  });
+
   var supply1DistributionCenters;
 
   it("can retrieve distribution centers when logged", function (done) {
@@ -100,6 +112,19 @@ describe("Data Isolation", function () {
       .end(function (err, res) {
         assert.isAbove(res.body.length, 0);
         supply1DistributionCenters = res.body;
+        done(err);
+      });
+  });
+
+  // get initial inventory for first distribution center
+  var initialDistributionCenterInventory;
+  it("can get inventory for distribution center in D1", function (done) {
+    apiSupply1.get("/DistributionCenters/" + supply1DistributionCenters[0].id + "/inventories")
+      .set("Authorization", apiSupply1.loopbackAccessToken.id)
+      .set("Content-Type", "application/json")
+      .expect(200)
+      .end(function (err, res) {
+        assert.equal(products.length, res.body.length);
         done(err);
       });
   });
