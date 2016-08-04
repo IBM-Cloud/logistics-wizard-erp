@@ -6,10 +6,6 @@ winston.level = process.env.LOG_LEVEL || "info";
 var loopback = require("loopback");
 var boot = require("loopback-boot");
 
-// Name this micro service will be referred to as within
-// the Service Discovery service.
-var serviceName = "lw-erp";
-
 var servicediscovery = require("./serviceDiscovery")
 
 var serviceEndpoint = 'https://logistics-wizard-erp.mybluemix.net/';
@@ -63,6 +59,8 @@ boot(app, __dirname, function (err) {
 //Register this applications url to the Service Discovery service
 if(process.env.VCAP_SERVICES && process.env.VCAP_APPLICATION){
   servicediscovery.registerInstance("lw-erp", JSON.parse(process.env.VCAP_APPLICATION)['application_uris'][0]);
+} else {
+  winston.info("Running locally, skipping registration to Service Discovery")
 }
 
 

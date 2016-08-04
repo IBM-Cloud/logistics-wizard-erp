@@ -18,8 +18,10 @@ var ServicePublisher = serviceDiscovery.ServicePublisher;
  */
 function registerInstance(serviceName, serviceEndpoint, tags) {
 
-  serviceName = serviceName || "lw-erp-ram";
-  serviceEndpoint = serviceEndpoint || 'https://logistics-wizard-erp.mybluemix.net';
+  if (!serviceName || !serviceEndpoint) {
+    winston.error("Service Discovery serviceName or  serviceEndpoint is not defined");
+     return;
+   }
   tags = tags || ["logistics-wizard","database"];
 
   winston.info("Registering " + serviceEndpoint + " under the name " + serviceName);
