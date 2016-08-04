@@ -2,13 +2,16 @@
 var winston = require("winston");
 
 var servicediscovery = require("../serviceDiscovery")
-var serviceEndpoint = 'https://logistics-wizard-erp.mybluemix.net/';
 
-//Register this applications url to the Service Discovery service
-if(process.env.VCAP_SERVICES && process.env.VCAP_APPLICATION){
-  servicediscovery.registerInstance("lw-erp", JSON.parse(process.env.VCAP_APPLICATION)['application_uris'][0]);
-} else {
-  winston.info("Running locally, skipping registration to Service Discovery")
+module.exports = function (app) {
+
+  //Register this applications url to the Service Discovery service
+  if(app.dataSources.servicediscovery){
+    var serviceDiscoveryCredentials = app.dataSources.servicediscovery.settings;
+    servicediscovery.registerInstance(serviceDiscoveryCredentials.serviceName, serviceDiscoveryCredentials.serviceEndpoint )
+  } else {
+    winston.info("Service Discovery not found, skipping registration")
+  }
 }
 
 //------------------------------------------------------------------------------
