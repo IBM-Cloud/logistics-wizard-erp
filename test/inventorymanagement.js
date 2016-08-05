@@ -128,6 +128,17 @@ describe("Inventory Management", function () {
       });
   });
 
+    // should NOT get inventory for non-existent distribution center
+    var initialDistributionCenterInventory;
+    it("can NOT get inventory for non-existent distribution center", function (done) {
+      apiRetailer.get("/DistributionCenters/-123123/inventories")
+        .set("Authorization", apiRetailer.loopbackAccessToken.id)
+        .set("Content-Type", "application/json")
+        .expect(404)
+        .end(function (err, res) {
+        done(err);
+        });
+    });
   // get initial inventory for a retailer
   var initialRetailerInventory;
   it("can get inventory for retailer", function (done) {
@@ -250,7 +261,7 @@ describe("Inventory Management", function () {
             productIdToInitialInventory[item.productId].quantity - item.quantity;
         });
 
-        // check the expected against actual      
+        // check the expected against actual
         updatedInventory.forEach(function (inventory) {
           assert.equal(productIdToInitialInventory[inventory.productId].quantity, inventory.quantity);
         });
@@ -425,7 +436,7 @@ describe("Inventory Management", function () {
             productIdToInitialInventory[item.productId].quantity + item.quantity;
         });
 
-        // check the expected against actual      
+        // check the expected against actual
         updatedInventory.forEach(function (inventory) {
           assert.equal(productIdToInitialInventory[inventory.productId].quantity, inventory.quantity);
         });

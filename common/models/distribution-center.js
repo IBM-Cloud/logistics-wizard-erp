@@ -17,6 +17,17 @@ module.exports = function (DistributionCenter) {
             callback(err, user);
           });
       },
+      function(user, callback){
+        DistributionCenter.findById(dcId, function (err, distributionCenter) {
+          if(!distributionCenter){
+            var notFound = new Error("Inventory does not exist");
+            notFound.status = 404;
+            callback(notFound);
+            return;
+          }
+          callback(err, user);
+        });
+      },
       // find the inventories
       function (user, callback) {
           DistributionCenter.app.models.Inventory.find({
