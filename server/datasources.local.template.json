@@ -1,0 +1,20 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "postgresql",
+    "database": "foo",
+    "host": "jumbo.db.elephantsql.com",
+    "port": "5432",
+    "username": "foo",
+    "password": "password",
+    "max": 3
+  },
+  "service_discovery": {
+    "serviceName": "lw-erp",
+    "serviceEndpoint": "http://0.0.0.0:3000",
+    "credentials": {
+      "token": "",
+      "url": "https://servicediscovery.ng.bluemix.net"
+    }
+  }
+}

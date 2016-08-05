@@ -5,6 +5,7 @@ winston.level = process.env.LOG_LEVEL || "info";
 
 var loopback = require("loopback");
 var boot = require("loopback-boot");
+
 var app = module.exports = loopback();
 
 // This model has no database attached, no id.
@@ -21,13 +22,13 @@ require("events").EventEmitter.prototype._maxListeners = 100;
 app.start = function () {
   // start the web server
   return app.listen(function () {
-    app.emit("started");
     var baseUrl = app.get("url").replace(/\/$/, "");
     winston.info("Web server listening at: %s", baseUrl);
     if (app.get("loopback-component-explorer")) {
       var explorerPath = app.get("loopback-component-explorer").mountPath;
       winston.info("Browse your REST API at %s%s", baseUrl, explorerPath);
     }
+    app.emit("started");
   });
 };
 
@@ -47,6 +48,15 @@ boot(app, __dirname, function (err) {
     app.start();
   }
 });
+
+
+
+
+
+
+
+
+
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
