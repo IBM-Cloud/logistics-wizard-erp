@@ -59,7 +59,6 @@ try {
 
 winston.info("Datasource uses connector:", datasources.db.connector);
 
-console.log(datasources);
 module.exports = datasources;
 
 //------------------------------------------------------------------------------
