@@ -28,9 +28,14 @@ if (process.env.VCAP_SERVICES) {
     };
   }
   if (vcapServices.hasOwnProperty("service_discovery") && process.env.VCAP_APPLICATION) {
+    var tags = ["logistics-wizard", "database"];
+    if(process.env.LOGISTICS_WIZARD_ENV){ //Differentiate among different instances
+      tags.push(process.env.LOGISTICS_WIZARD_ENV); //"DEV", "PROD"
+    }
     datasources.servicediscovery = {
       "serviceName": "lw-erp",
       "serviceEndpoint": JSON.parse(process.env.VCAP_APPLICATION)['application_uris'][0],
+      "tags": tags,
       "credentials": {
         "token": vcapServices.service_discovery[0].credentials.auth_token,
         "url": vcapServices.service_discovery[0].credentials.url
