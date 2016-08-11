@@ -55,7 +55,7 @@ You lose all changes when you stop the app. Let's configure a persistent storage
   {
     "db": {
       "name": "db",
-      "connector": "memory-idstr",
+      "connector": "memory",
       "file": "in-memory-database.json"
     }
   }
@@ -114,6 +114,41 @@ with values extracted from the **uri**.
   }
   ```
   
+  Note: **max** defines the number of connections that can be established to the database.
+  Loopback uses a pool of connections and will create **max** connections in this pool.
+  The free *turtle* plan of ElephantSQL allows at most 5 concurrent connections.
+  **max** is set to 3 here to allow the 2 remaining connections to be used by the ElephantSQL dashboard
+  where you can look at your database tables and content.
+  
+  If you set max to 5 or if you create multiple instances of the ERP service all connecting
+  to the same ElephantSQL database using the *turtle* plan,
+  you may get "too many connections" errors like:
+  
+  ```
+  { [error: too many connections for role "dncfoed"]
+  name: 'error',
+  length: 103,
+  severity: 'FATAL',
+  code: '53300',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'miscinit.c',
+  line: '480',
+  routine: 'InitializeSessionUserId' }
+  ```
+  
+  In that case, the option is to move to a larger plan allowing more concurrent connections
+  to the database.  
+  
 1. Start the application
 
   ```
@@ -145,8 +180,6 @@ The ERP simulator uses [Loopback](https://strongloop.com/) for its implementatio
   * Use geolocation, file, and push services for mobile apps.
   * Easily create client apps using Android, iOS, and JavaScript SDKs.
   * Run your application on-premises or in the cloud.
-
-1. Connect to http://[your-erp-service-url]/explorer/ to look at the ERP service API.
 
 ## Using a Service Discovery
 * (todo) how to integrate with the Service Discovery service in a microservice architecture
