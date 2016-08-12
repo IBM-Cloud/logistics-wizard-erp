@@ -6,7 +6,7 @@ var nock = require("nock");
 // load default behaviors for unit tests
 require("./unittest.js");
 
-describe("Users", function () {
+describe("Service Discovery", function () {
 
   var loopback;
   var app;
@@ -17,7 +17,7 @@ describe("Users", function () {
     app.use(loopback.rest());
 
     // a fake service discovery service that will be mocked by "nock" later on.
-    app.dataSources.servicediscovery = {
+    app.dataSources.serviceDiscovery = {
       settings: {
         "serviceName": "lw-erp",
         "serviceEndpoint": "http://fakeurl:3000",

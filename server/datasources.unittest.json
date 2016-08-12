@@ -2,5 +2,9 @@
   "db": {
     "name": "db",
     "connector": "memory"
+  },
+  "service_discovery": {
+    "serviceName": "lw-erp",
+    "serviceEndpoint": "http://0.0.0.0:3000"
   }
 }

@@ -32,7 +32,7 @@ if (process.env.VCAP_SERVICES) {
     if(process.env.LOGISTICS_WIZARD_ENV){ //Differentiate among different instances
       tags.push(process.env.LOGISTICS_WIZARD_ENV); //"DEV", "PROD"
     }
-    datasources.servicediscovery = {
+    datasources.serviceDiscovery = {
       "serviceName": "lw-erp",
       "serviceEndpoint": JSON.parse(process.env.VCAP_APPLICATION)['application_uris'][0],
       "tags": tags,
@@ -56,7 +56,7 @@ try {
   }
   if (localDatasources.hasOwnProperty("service_discovery")) {
     winston.info("Using locally defined Service Discovery parameters");
-    datasources.servicediscovery = localDatasources.service_discovery;
+    datasources.serviceDiscovery = localDatasources.service_discovery;
   }
 } catch (e) {
   winston.error(e);

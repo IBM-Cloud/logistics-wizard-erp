@@ -4,13 +4,13 @@ var winston = require("winston");
 var ServicePublisher = require('../../lib/service_discovery').ServicePublisher;
 
 module.exports = function (app) {
-
+  
   //Register this applications url to the Service Discovery service
-  if (app.dataSources.servicediscovery) {
+  if (app.dataSources.serviceDiscovery) {
 
     // Register with the service discovery once the REST API is mounted
     app.once("started", function () {
-      var serviceDiscoveryDatasource = app.dataSources.servicediscovery.settings;
+      var serviceDiscoveryDatasource = app.dataSources.serviceDiscovery.settings;
 
       winston.info("Registering", serviceDiscoveryDatasource.serviceEndpoint,
         "under the name", serviceDiscoveryDatasource.serviceName);
