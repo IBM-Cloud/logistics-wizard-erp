@@ -130,14 +130,9 @@ paths:
     get:
       tags:
         - DistributionCenter
-      summary: Queries inventories of DistributionCenter.
-      operationId: DistributionCenter.prototype.__get__inventories
+      summary: Gets inventories at the given distribution center.
+      operationId: DistributionCenter.getInventories
       parameters:
-        - name: filter
-          in: query
-          required: false
-          type: string
-          format: JSON
         - name: id
           in: path
           description: PersistedModel id
