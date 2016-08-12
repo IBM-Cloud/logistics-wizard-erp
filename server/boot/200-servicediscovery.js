@@ -24,14 +24,17 @@ module.exports = function (app) {
 
       publisher.on('registered', function (serviceName) {
         winston.info(serviceName + " successfully registered with Service Discovery!");
+        app.emit("servicediscovery.registered");
       });
 
       publisher.on('error', function (serverResponse) {
         winston.error("Server responded with: ", serverResponse);
+        app.emit("servicediscovery.error");
       });
 
       publisher.on('expired', function (serviceName) {
         winston.error(serviceName + " expired from Service Discovery registry");
+        app.emit("servicediscovery.expired");
       });
     });
     

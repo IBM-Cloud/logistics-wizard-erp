@@ -24,6 +24,7 @@
     "loopback-component-explorer": "^2.5.0",
     "loopback-connector-postgresql": "^2.6.3",
     "loopback-datasource-juggler": "^2.46.1",
+    "nock": "^8.0.0",
     "randomstring": "^1.1.5",
     "request": "^2.73.0",
     "serve-favicon": "^2.3.0",
