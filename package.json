@@ -6,8 +6,8 @@
     "postinstall": "bower install --allow-root",
     "start": "node .",
     "test": "mocha test/*.js",
-    "coverage": "istanbul cover _mocha test/*.js --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage/",
-    "localcoverage": "istanbul cover _mocha --report html -- -R spec",
+    "coverage": "istanbul cover _mocha test/*.js --report lcovonly -- -R spec --timeout 300000 && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage/",
+    "localcoverage": "istanbul cover _mocha test/*.js --report html -- -R spec --timeout 300000",
     "exportapi": "slc loopback:export-api-def -o spec.yaml"
   },
   "dependencies": {
