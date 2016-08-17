@@ -160,39 +160,8 @@ with values extracted from the **uri**.
   ```
   
   Note: **max** defines the number of connections that can be established to the database.
-  Loopback uses a pool of connections and will create **max** connections in this pool.
-  The free *turtle* plan of ElephantSQL allows at most 5 concurrent connections.
-  **max** is set to 3 here to allow the 2 remaining connections to be used by the ElephantSQL dashboard
-  where you can look at your database tables and content.
-  
-  If you set max to 5 or if you create multiple instances of the ERP service all connecting
-  to the same ElephantSQL database using the *turtle* plan,
-  you may get "too many connections" errors like:
-  
-  ```
-  { [error: too many connections for role "dncfoed"]
-  name: 'error',
-  length: 103,
-  severity: 'FATAL',
-  code: '53300',
-  detail: undefined,
-  hint: undefined,
-  position: undefined,
-  internalPosition: undefined,
-  internalQuery: undefined,
-  where: undefined,
-  schema: undefined,
-  table: undefined,
-  column: undefined,
-  dataType: undefined,
-  constraint: undefined,
-  file: 'miscinit.c',
-  line: '480',
-  routine: 'InitializeSessionUserId' }
-  ```
-  
-  In that case, the option is to move to a larger plan allowing more concurrent connections
-  to the database.  
+  If you are seeing a "too many connections" error on app startup, check out the [explanation and solution in the FAQ](https://github.com/IBM-Bluemix/logistics-wizard/wiki/FAQ#the-erp-simulator-app-is-throwing-a-too-many-connections-error-on-startup)
+ 
   
 1. Start the application
 
