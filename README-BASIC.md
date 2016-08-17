@@ -22,6 +22,13 @@ In the basic configuration, the simulator runs as a Cloud Foundry app in Bluemix
   }
 )
 
+## Deploying the simulator automatically
+
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM-Bluemix/logistics-wizard-erp.git)
+
+or to deploy the full system (including the Logistics Wizard user interface) all at once,
+check out the [Logistics Wizard Toolchain][toolchain_github_url]
+
 ## Running the simulator on Bluemix
 
 1. If you do not already have a Bluemix account, [sign up here][bluemix_signup_url]
@@ -206,3 +213,4 @@ To review the API specification, open the [Swagger Editor](http://editor.swagger
   
 [bluemix_signup_url]: http://ibm.biz/logistics-wizard-signup
 [cloud_foundry_url]: https://github.com/cloudfoundry/cli
+[toolchain_github_url]: https://github.com/IBM-Bluemix/logistics-wizard-toolchain
