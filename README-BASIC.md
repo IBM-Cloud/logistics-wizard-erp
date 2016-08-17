@@ -201,16 +201,40 @@ To review the API specification, open the [Swagger Editor](http://editor.swagger
 
 ### Code Structure
 
+To better understand some of the code below including Loopback tips,
+the [blog post titled **Build a smarter supply chain with LoopBack**](https://developer.ibm.com/bluemix/2016/07/11/building-smarter-supply-chain-developer-journey-loopback/) is worth a read.
+
 | File | Description |
 | ---- | ----------- |
 |[**Loopback models**](common/models)|Contains JSON definitions of the object model and implementation of remote methods.|
 |[**integrity.js**](common/mixins/integrity.js)|A mixin to check foreign key constraints.|
 |[**isolated.js**](common/mixins/isolated.js)|A mixin to isolate data per demo environment.|
-|[**seed**](seed)|Seed data loaded into the database at startup and when new demo environments are created.|
-|[**boot**](server/boot)|Startup scripts including table creation, static data injection, registration with service discovery.|
+|[**seed/**](seed)|Seed data loaded into the database at startup and when new demo environments are created.|
+|[**server/boot/**](server/boot)|Startup scripts including table creation, static data injection, registration with service discovery.|
 |[**datasources.local.js**](server/datasources.local.js)|Initializes data sources (database, service discovery) from a local file or by reading the Cloud Foundry VCAP_SERVICES.|
 |[**datasources.local.template.json**](server/datasources.local.template.json)|Template file to define local data sources.|
+|[**test/**](test)|Unit tests.|
+
+### Testing
+
+The unit tests use [Mocha](https://mochajs.org/) as test runner.
+
+To run the unit tests (all *.js* under *test*), run
+
+  ```
+  npm run test
+  ```
+
+The unit tests use a [dedicated datasource definition file](server/datasources.unittest.json).
+
+To run the tests and collect coverage data with [istanbul](http://gotwarlost.github.io/istanbul/), run
+
+  ```
+  npm run localcoverage
+  ```
   
+and view the coverage report in **coverage/index.html**.
+
 [bluemix_signup_url]: http://ibm.biz/logistics-wizard-signup
 [cloud_foundry_url]: https://github.com/cloudfoundry/cli
 [toolchain_github_url]: https://github.com/IBM-Bluemix/logistics-wizard-toolchain
