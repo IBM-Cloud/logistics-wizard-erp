@@ -235,6 +235,12 @@ To run the tests and collect coverage data with [istanbul](http://gotwarlost.git
   
 and view the coverage report in **coverage/index.html**.
 
+To run tests and post coverage results to [coveralls](https://coveralls.io), either through a continuous integration tool like Travis or through your own tool (by adding a .coveralls.yml file with a repo_token property as described [here](https://github.com/nickmerwin/node-coveralls)), run
+
+  ```
+  npm run coverage
+  ```
+  
 [bluemix_signup_url]: http://ibm.biz/logistics-wizard-signup
 [cloud_foundry_url]: https://github.com/cloudfoundry/cli
 [toolchain_github_url]: https://github.com/IBM-Bluemix/logistics-wizard-toolchain
