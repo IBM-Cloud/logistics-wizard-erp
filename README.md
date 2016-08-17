@@ -35,7 +35,8 @@ The ERP service can be used to demonstrate different capabilities and configurat
 
 ### Basic configuration to support for the use cases of the other services
 
-In this configuration, the ERP service is only providing access to the data. We deploy the ERP simulator as a regular Clound Foundry app in Bluemix and connect it to the rest of the system.
+In this configuration, the ERP service is only providing access to the data.
+We deploy the ERP simulator as a regular Cloud Foundry app in Bluemix and connect it to the rest of the system.
 
 This configuration illustrates:
 * how to integrate with a Service Discovery service in a microservice architecture
