@@ -22,7 +22,59 @@ In the basic configuration, the simulator runs as a Cloud Foundry app in Bluemix
   }
 )
 
-## Deploying the simulator locally
+## Deploying the simulator automatically
+
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM-Bluemix/logistics-wizard-erp.git)
+
+or to deploy the full system (including the Logistics Wizard user interface) all at once,
+check out the [Logistics Wizard Toolchain][toolchain_github_url]
+
+## Running the simulator on Bluemix
+
+1. If you do not already have a Bluemix account, [sign up here][bluemix_signup_url]
+
+1. Download and install the [Cloud Foundry CLI][cloud_foundry_url] tool
+
+1. Clone the app and its submodules to your local environment from your terminal using the following command:
+
+	```
+	git clone https://github.com/IBM-Bluemix/logistics-wizard-erp.git
+	```
+
+1. `cd` into this newly created directory
+
+1. Open the `manifest.yml` file and change the `host` value to something unique.
+
+  The host you choose will determinate the subdomain of your application's URL:  `<host>.mybluemix.net`
+  
+1. Connect to Bluemix in the command line tool and follow the prompts to log in.
+
+	```
+	cf api https://api.ng.bluemix.net
+	cf login
+	```
+
+1. Create a new Service Discovery service
+
+  ```
+  cf create-service service_discovery free lw-service-discovery
+  ```
+  
+1. Create a new ElephantSQL service
+
+  ```
+  cf create-service elephantsql turtle logistics-wizard-erp-db
+  ```
+  
+1. Push the app to Bluemix.
+
+	```
+	cf push
+	```
+
+And voila! You now have your very own instance of simulator running on Bluemix.
+
+## Running the simulator locally
 
 1. Get the code locally
 
@@ -115,39 +167,8 @@ with values extracted from the **uri**.
   ```
   
   Note: **max** defines the number of connections that can be established to the database.
-  Loopback uses a pool of connections and will create **max** connections in this pool.
-  The free *turtle* plan of ElephantSQL allows at most 5 concurrent connections.
-  **max** is set to 3 here to allow the 2 remaining connections to be used by the ElephantSQL dashboard
-  where you can look at your database tables and content.
-  
-  If you set max to 5 or if you create multiple instances of the ERP service all connecting
-  to the same ElephantSQL database using the *turtle* plan,
-  you may get "too many connections" errors like:
-  
-  ```
-  { [error: too many connections for role "dncfoed"]
-  name: 'error',
-  length: 103,
-  severity: 'FATAL',
-  code: '53300',
-  detail: undefined,
-  hint: undefined,
-  position: undefined,
-  internalPosition: undefined,
-  internalQuery: undefined,
-  where: undefined,
-  schema: undefined,
-  table: undefined,
-  column: undefined,
-  dataType: undefined,
-  constraint: undefined,
-  file: 'miscinit.c',
-  line: '480',
-  routine: 'InitializeSessionUserId' }
-  ```
-  
-  In that case, the option is to move to a larger plan allowing more concurrent connections
-  to the database.  
+  If you are seeing a "too many connections" error on app startup, check out the [explanation and solution in the FAQ](https://github.com/IBM-Bluemix/logistics-wizard/wiki/FAQ#the-erp-simulator-app-is-throwing-a-too-many-connections-error-on-startup)
+ 
   
 1. Start the application
 
@@ -158,22 +179,10 @@ with values extracted from the **uri**.
 The data is now persisted in ElephantSQL. You can use the same structure for the databases.local.json
 if you work with your own PostgreSQL database.
 
-## Building an API with Swagger and Loopback.io
+## Building an API with Loopback and Swagger
 
-### Swagger
-
-The ERP service API is designed with Swagger and defined [here](spec.yaml).
-Swagger is a simple yet powerful representation of a RESTful API.
-The Swagger specification has been donated to the [Open API Initiative](https://github.com/OAI/OpenAPI-Specification)
-as part of an effort to define a standard specification format for REST APIs.
-
-1. Review the API specification in the online [Swagger Editor](http://editor.swagger.io/#/?import=https://raw.githubusercontent.com/IBM-Bluemix/logistics-wizard-erp/master/spec.yaml).
-
-This Swagger specification has been generated from the Loopback model using the ```slc loopback:export-api-def -o spec.yaml``` command.
-
-### Loopback
-
-The ERP simulator uses [Loopback](https://strongloop.com/) for its implementation. LoopBack is a highly-extensible, open-source Node.js framework that enables you to:
+The ERP simulator uses [Loopback](https://strongloop.com/) for its implementation.
+LoopBack is a highly-extensible, open-source Node.js framework that enables you to:
   * Create dynamic end-to-end REST APIs with little or no coding.
   * Access data from major relational databases, MongoDB, SOAP and REST APIs.
   * Incorporate model relationships and access controls for complex APIs.
@@ -181,13 +190,57 @@ The ERP simulator uses [Loopback](https://strongloop.com/) for its implementatio
   * Easily create client apps using Android, iOS, and JavaScript SDKs.
   * Run your application on-premises or in the cloud.
 
-## Using a Service Discovery
-* (todo) how to integrate with the Service Discovery service in a microservice architecture
-* (todo) point to the code where the registration is done and the hearbeat is sent
+From the Loopback model definition, we derived a [Swagger specification](spec.yaml),
+initially generated with ```slc loopback:export-api-def -o spec.yaml```.
 
-## Configuring auto-scaling
-* (todo) how to configure auto-scaling to cope with additional load + script to generate load to actually show the auto-scaling in effect
+Swagger is a simple yet powerful representation of a RESTful API.
+The Swagger specification has been donated to the [Open API Initiative](https://github.com/OAI/OpenAPI-Specification)
+as part of an effort to define a standard specification format for REST APIs.
 
-## Managing ERP service failures and loss of connectivity
-* (todo) lost of connectivity between the ERP service and its database
-* (todo) lost of connectivity between the other services and the ERP service
+To review the API specification, open the [Swagger Editor](http://editor.swagger.io/#/?import=https://raw.githubusercontent.com/IBM-Bluemix/logistics-wizard-erp/master/spec.yaml).
+
+### Code Structure
+
+To better understand some of the code below including Loopback tips,
+the [blog post titled **Build a smarter supply chain with LoopBack**](https://developer.ibm.com/bluemix/2016/07/11/building-smarter-supply-chain-developer-journey-loopback/) is worth a read.
+
+| File | Description |
+| ---- | ----------- |
+|[**Loopback models**](common/models)|Contains JSON definitions of the object model and implementation of remote methods.|
+|[**integrity.js**](common/mixins/integrity.js)|A mixin to check foreign key constraints.|
+|[**isolated.js**](common/mixins/isolated.js)|A mixin to isolate data per demo environment.|
+|[**seed/**](seed)|Seed data loaded into the database at startup and when new demo environments are created.|
+|[**server/boot/**](server/boot)|Startup scripts including table creation, static data injection, registration with service discovery.|
+|[**datasources.local.js**](server/datasources.local.js)|Initializes data sources (database, service discovery) from a local file or by reading the Cloud Foundry VCAP_SERVICES.|
+|[**datasources.local.template.json**](server/datasources.local.template.json)|Template file to define local data sources.|
+|[**test/**](test)|Unit tests.|
+
+### Testing
+
+The unit tests use [Mocha](https://mochajs.org/) as test runner.
+
+To run the unit tests (all *.js* under *test*), run
+
+  ```
+  npm run test
+  ```
+
+The unit tests use a [dedicated datasource definition file](server/datasources.unittest.json).
+
+To run the tests and collect coverage data with [istanbul](http://gotwarlost.github.io/istanbul/), run
+
+  ```
+  npm run localcoverage
+  ```
+  
+and view the coverage report in **coverage/index.html**.
+
+To run tests and post coverage results to [coveralls](https://coveralls.io), either through a continuous integration tool like Travis or through your own tool (by adding a .coveralls.yml file with a repo_token property as described [here](https://github.com/nickmerwin/node-coveralls)), run
+
+  ```
+  npm run coverage
+  ```
+  
+[bluemix_signup_url]: http://ibm.biz/logistics-wizard-signup
+[cloud_foundry_url]: https://github.com/cloudfoundry/cli
+[toolchain_github_url]: https://github.com/IBM-Bluemix/logistics-wizard-toolchain

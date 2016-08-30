@@ -11,4 +11,5 @@ services:
   - lw-service-discovery
 applications:
   - name: logistics-wizard-erp
+    host: logistics-wizard-erp
     memory: 256M
