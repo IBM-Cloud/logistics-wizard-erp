@@ -12,15 +12,31 @@ POSTGRES_CREDENTIALS_JSON=`cf service-key logistics-wizard-erp-db-for-tests for-
 # inject VCAP_SERVICES in the environment, to be picked up by the datasources.local.js
 export VCAP_SERVICES='
 {
-    "elephantsql": [
-        {
-            "name": "logistics-wizard-erp-db",
-            "label": "elephantsql",
-            "plan": "turtle",
-            "credentials":'$POSTGRES_CREDENTIALS_JSON'
-        }
-    ]
+  "elephantsql": [
+    {
+      "name": "logistics-wizard-erp-db",
+      "label": "elephantsql",
+      "plan": "turtle",
+      "credentials":'$POSTGRES_CREDENTIALS_JSON'
+    }
+  ],
+  "service_discovery": [
+    {
+      "credentials": {
+        "auth_token": "123456",
+        "url": "https://fake.url.local"
+      }
+    }
+  ]
 }'
+
+export VCAP_APPLICATION='
+{
+  "application_uris": [
+    "https://myapp.local"
+  ]
+}
+'
 
 # override NODE_ENV to ensure datasource is not overwritten by unittest.js
 export NODE_ENV=test-with-postgresql
