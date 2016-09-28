@@ -12,10 +12,6 @@
       "required": true,
       "default": "$now"
     },
-    "name": {
-      "type": "string",
-      "required": true
-    },
     "guid": {
       "type": "string"
     }

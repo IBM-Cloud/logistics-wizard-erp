@@ -36,9 +36,7 @@ describe("Cancelling a shipment", function () {
   it("can create a demo environment", function (done) {
     apiAnon.post("/Demos")
       .set("Content-Type", "application/json")
-      .send({
-        name: "D1"
-      })
+      .send()
       .expect(200)
       .end(function (err, res) {
         demoEnvironment = res.body;
@@ -278,7 +276,7 @@ describe("Cancelling a shipment", function () {
             productIdToInitialInventory[item.productId].quantity - item.quantity;
         });
 
-        // check the expected against actual      
+        // check the expected against actual
         updatedInventory.forEach(function (inventory) {
           assert.equal(productIdToInitialInventory[inventory.productId].quantity, inventory.quantity);
         });
@@ -316,7 +314,7 @@ describe("Cancelling a shipment", function () {
             productIdToInitialInventory[item.productId].quantity + item.quantity;
         });
 
-        // check the expected against actual      
+        // check the expected against actual
         updatedInventory.forEach(function (inventory) {
           assert.equal(productIdToInitialInventory[inventory.productId].quantity, inventory.quantity);
         });
