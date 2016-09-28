@@ -34,9 +34,7 @@ describe("Users", function () {
   it("can create a Demo environment", function (done) {
     api.post("/Demos")
       .set("Content-Type", "application/json")
-      .send({
-        name: "My Demo"
-      })
+      .send()
       .expect(200)
       .end(function (err, res) {
         if (!err) {

@@ -124,7 +124,7 @@ module.exports = function (Demo) {
   /**
    * Create a new demo environment, seeding the environment with data
    */
-  Demo.newDemo = function (data, cb) {
+  Demo.newDemo = function (cb) {
 
     var app = Demo.app;
 
@@ -132,9 +132,7 @@ module.exports = function (Demo) {
       // create a new demo environment
       function (callback) {
         winston.info("Creating new Demo instance");
-        Demo.create({
-          name: data.name
-        }, function (err, demo) {
+        Demo.create({}, function (err, demo) {
           callback(err, demo);
         });
       },
@@ -222,16 +220,6 @@ module.exports = function (Demo) {
       path: "/",
       verb: "post"
     },
-    accepts: [
-      {
-        arg: "data",
-        type: "Demo",
-        required: true,
-        http: {
-          source: "body"
-        }
-      }
-    ],
     returns: {
       arg: "demo",
       type: "Demo",

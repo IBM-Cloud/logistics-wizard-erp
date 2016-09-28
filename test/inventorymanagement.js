@@ -36,9 +36,7 @@ describe("Inventory Management", function () {
   it("can create a demo environment", function (done) {
     apiAnon.post("/Demos")
       .set("Content-Type", "application/json")
-      .send({
-        name: "D1"
-      })
+      .send()
       .expect(200)
       .end(function (err, res) {
         demoEnvironment = res.body;
@@ -138,7 +136,7 @@ describe("Inventory Management", function () {
         done(err);
       });
   });
-  
+
   // get initial inventory for a retailer
   var initialRetailerInventory;
   it("can get inventory for retailer", function (done) {

@@ -39,14 +39,11 @@ describe("Demos", function () {
   it("can create a Demo environment", function (done) {
     apiAnon.post("/Demos")
       .set("Content-Type", "application/json")
-      .send({
-        name: "My Demo"
-      })
+      .send()
       .expect(200)
       .end(function (err, res) {
         if (!err) {
           demoEnvironment = res.body;
-          assert.equal("My Demo", demoEnvironment.name);
           assert.equal(1, demoEnvironment.users.length);
           assert.equal(1, demoEnvironment.users[0].roles.length);
         }

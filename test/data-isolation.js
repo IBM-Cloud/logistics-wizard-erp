@@ -39,9 +39,7 @@ describe("Data Isolation", function () {
   it("can create D1 demo environment", function (done) {
     apiAnon.post("/Demos")
       .set("Content-Type", "application/json")
-      .send({
-        name: "D1"
-      })
+      .send()
       .expect(200)
       .end(function (err, res) {
         demoEnvironment1 = res.body;
@@ -53,9 +51,7 @@ describe("Data Isolation", function () {
   it("can create D2 demo environment", function (done) {
     apiAnon.post("/Demos")
       .set("Content-Type", "application/json")
-      .send({
-        name: "D2"
-      })
+      .send()
       .expect(200)
       .end(function (err, res) {
         demoEnvironment2 = res.body;
