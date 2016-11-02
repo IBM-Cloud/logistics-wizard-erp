@@ -27,21 +27,6 @@ if (process.env.VCAP_SERVICES) {
       "max": Math.max(1, vcapServices.elephantsql[0].credentials.max_conns - 2) // leave some connections for the frontend
     };
   }
-  if (vcapServices.hasOwnProperty("service_discovery") && process.env.VCAP_APPLICATION) {
-    var tags = ["logistics-wizard", "database"];
-    if(process.env.LOGISTICS_WIZARD_ENV){ //Differentiate among different instances
-      tags.push(process.env.LOGISTICS_WIZARD_ENV); //"DEV", "PROD"
-    }
-    datasources.serviceDiscovery = {
-      "serviceName": "lw-erp",
-      "serviceEndpoint": JSON.parse(process.env.VCAP_APPLICATION)['application_uris'][0],
-      "tags": tags,
-      "credentials": {
-        "token": vcapServices.service_discovery[0].credentials.auth_token,
-        "url": vcapServices.service_discovery[0].credentials.url
-      }
-    };
-  }
 }
 
 // and allow override with a local datasource definition
@@ -53,10 +38,6 @@ try {
   if (localDatasources.hasOwnProperty("db")) {
     winston.info("Using locally defined datasource");
     datasources.db = localDatasources.db;
-  }
-  if (localDatasources.hasOwnProperty("service_discovery")) {
-    winston.info("Using locally defined Service Discovery parameters");
-    datasources.serviceDiscovery = localDatasources.service_discovery;
   }
 } catch (e) {
   winston.error(e);

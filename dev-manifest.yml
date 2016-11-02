@@ -3,12 +3,8 @@ declared-services:
   dev-logistics-wizard-erp-db:
     label: elephantsql
     plan: turtle
-  lw-service-discovery:
-    label: service_discovery
-    plan: free
 services:
   - dev-logistics-wizard-erp-db
-  - lw-service-discovery
 applications:
   - name: dev-logistics-wizard-erp
     memory: 256M
