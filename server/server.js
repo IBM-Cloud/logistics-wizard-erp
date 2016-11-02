@@ -3,6 +3,9 @@
 var winston = require("winston");
 winston.level = process.env.LOG_LEVEL || "info";
 
+//---Deployment Tracker---------------------------------------------------------
+require("../tracker");
+
 var loopback = require("loopback");
 var boot = require("loopback-boot");
 
