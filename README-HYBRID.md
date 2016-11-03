@@ -6,22 +6,18 @@ The hybrid configuration introduces the Secure Gateway service to cross the on-p
   digraph G {
     node [fontname = "helvetica"]
     rankdir=BT
-    broker -> discovery [label="1 - Registers and sends heartbeat"]
-    others -> discovery [label="2 - Obtain reference to ERP service broker"]
-    others -> broker [label="3 - Call ERP service via broker"]
-    broker -> sgw [label="4 - Forwards calls"]
-    sgw -> sgwclient [label="5 - Reaches on-prem"]
+    others -> broker [label=" Call ERP service via broker"]
+    broker -> sgw [label="Forwards calls"]
+    sgw -> sgwclient [label="Reaches on-prem"]
     sgwclient -> erp [label="Calls the on-prem system"]
     {rank=same; broker -> sgw -> sgwclient -> erp [style=invis] }
-    {rank=same; discovery -> others [style=invis] }
     /* services on top */
-    {rank=source; others, discovery }
+    {rank=source; others }
     /* styling */
     broker [shape=rect label="ERP Service Broker"]
     erp [shape=rect label="ERP\\n[on-prem]"]
     sgw [shape=circle width=1.5 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Secure\\nGateway"]
     sgwclient [shape=circle width=1.5 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Secure\\nGateway\\nClient"]
-    discovery [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Service\\nDiscovery"]
     others [shape=rect style=filled color="%2324B643" fontcolor=white label="Other Services"]
   }
 )

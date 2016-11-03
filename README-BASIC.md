@@ -6,17 +6,13 @@ In the basic configuration, the simulator runs as a Cloud Foundry app in Bluemix
   digraph G {
     node [fontname = "helvetica"]
     rankdir=BT
-    simulator -> discovery [label="1 - Registers and sends heartbeat"]
-    simulator -> database [label="4 - CRUD operations"]
-    others -> simulator [label="3 - Call ERP service"]
-    others -> discovery [label="2 - Obtain reference to ERP service"]
+    simulator -> database [label="CRUD operations"]
+    others -> simulator [label=" Call ERP service"]
     {rank=same; simulator -> database [style=invis] }
-    {rank=same; discovery -> others [style=invis] }
     /* services on top */
-    {rank=source; others, discovery }
+    {rank=source; others }
     /* styling */
     simulator [shape=rect label="ERP service"]
-    discovery [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Service\\nDiscovery"]
     database [shape=circle width=1 fixedsize=true style=filled color="%234E96DB" fontcolor=white label="Database"]
     others [shape=rect style=filled color="%2324B643" fontcolor=white label="Other Services"]
   }
@@ -46,7 +42,7 @@ check out the [Logistics Wizard Toolchain][toolchain_github_url]
 1. Open the `manifest.yml` file and change the `host` value to something unique.
 
   The host you choose will determinate the subdomain of your application's URL:  `<host>.mybluemix.net`
-  
+
 1. Connect to Bluemix in the command line tool and follow the prompts to log in.
 
 	```
@@ -54,18 +50,12 @@ check out the [Logistics Wizard Toolchain][toolchain_github_url]
 	cf login
 	```
 
-1. Create a new Service Discovery service
-
-  ```
-  cf create-service service_discovery free lw-service-discovery
-  ```
-  
 1. Create a new ElephantSQL service
 
   ```
   cf create-service elephantsql turtle logistics-wizard-erp-db
   ```
-  
+
 1. Push the app to Bluemix.
 
 	```
@@ -118,7 +108,7 @@ You lose all changes when you stop the app. Let's configure a persistent storage
   ```
   npm start
   ```
-  
+
 The data is now persisted in *in-memory-database.json*.
 
 ### Using PostgreSQL
@@ -134,22 +124,22 @@ The data is now persisted in *in-memory-database.json*.
   ```
   cf create-service-key logistics-wizard-erp-db erp
   ```
-  
+
 1. Retrieve the credentials
 
   ```
   cf service-key logistics-wizard-erp-db erp
   ```
-  
+
   Note that ElephantSQL returns a **uri** but the Loopback connector requires
   more parameters that can be extracted from the **uri**. The **uri** looks like:
 
   ```
   "uri": "postgres://<username>:<password>@<host>:<port>/<database>"
   ```
-  
+
 1. Create the file **server/datasources.local.json** with the following content, replacing the placeholders
-with values extracted from the **uri**. 
+with values extracted from the **uri**.
 
   ```
   {
@@ -165,11 +155,11 @@ with values extracted from the **uri**.
     }
   }
   ```
-  
+
   Note: **max** defines the number of connections that can be established to the database.
   If you are seeing a "too many connections" error on app startup, check out the [explanation and solution in the FAQ](https://github.com/IBM-Bluemix/logistics-wizard/wiki/FAQ#the-erp-simulator-app-is-throwing-a-too-many-connections-error-on-startup)
- 
-  
+
+
 1. Start the application
 
   ```
@@ -210,8 +200,8 @@ the [blog post titled **Build a smarter supply chain with LoopBack**](https://de
 |[**integrity.js**](common/mixins/integrity.js)|A mixin to check foreign key constraints.|
 |[**isolated.js**](common/mixins/isolated.js)|A mixin to isolate data per demo environment.|
 |[**seed/**](seed)|Seed data loaded into the database at startup and when new demo environments are created.|
-|[**server/boot/**](server/boot)|Startup scripts including table creation, static data injection, registration with service discovery.|
-|[**datasources.local.js**](server/datasources.local.js)|Initializes data sources (database, service discovery) from a local file or by reading the Cloud Foundry VCAP_SERVICES.|
+|[**server/boot/**](server/boot)|Startup scripts including table creation, static data injection.|
+|[**datasources.local.js**](server/datasources.local.js)|Initializes data sources (database) from a local file or by reading the Cloud Foundry VCAP_SERVICES.|
 |[**datasources.local.template.json**](server/datasources.local.template.json)|Template file to define local data sources.|
 |[**test/**](test)|Unit tests.|
 
@@ -232,7 +222,7 @@ To run the tests and collect coverage data with [istanbul](http://gotwarlost.git
   ```
   npm run localcoverage
   ```
-  
+
 and view the coverage report in **coverage/index.html**.
 
 To run tests and post coverage results to [coveralls](https://coveralls.io), either through a continuous integration tool like Travis or through your own tool (by adding a .coveralls.yml file with a repo_token property as described [here](https://github.com/nickmerwin/node-coveralls)), run
@@ -240,7 +230,7 @@ To run tests and post coverage results to [coveralls](https://coveralls.io), eit
   ```
   npm run coverage
   ```
-  
+
 [bluemix_signup_url]: http://ibm.biz/logistics-wizard-signup
 [cloud_foundry_url]: https://github.com/cloudfoundry/cli
 [toolchain_github_url]: https://github.com/IBM-Bluemix/logistics-wizard-toolchain

@@ -22,14 +22,6 @@ export VCAP_SERVICES='
       "plan": "turtle",
       "credentials":'$POSTGRES_CREDENTIALS_JSON'
     }
-  ],
-  "service_discovery": [
-    {
-      "credentials": {
-        "auth_token": "123456",
-        "url": "https://fake.url.local"
-      }
-    }
   ]
 }'
 

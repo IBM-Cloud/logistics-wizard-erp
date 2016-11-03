@@ -40,7 +40,6 @@ In this configuration, the ERP service is only providing access to the data.
 We deploy the ERP simulator as a regular Cloud Foundry app in Bluemix and connect it to the rest of the system.
 
 This configuration illustrates:
-* how to integrate with a Service Discovery service in a microservice architecture
 * how to document an API with Swagger.io
 * how to quickly implement an API with Loopback.io
 * how to configure auto-scaling to cope with additional load
