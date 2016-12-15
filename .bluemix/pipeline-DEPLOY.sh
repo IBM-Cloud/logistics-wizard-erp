@@ -1,11 +1,11 @@
 #!/bin/bash
 # Use prefix when needed for DEV environment
 if [ "$LOGISTICS_WIZARD_ENV" == "DEV" ]; then
-  echo "No prefix for master branch"
   PREFIX="dev-"
   echo "Using prefix: $PREFIX"
 else
   PREFIX=""
+  echo "Using empty prefix"
 fi
 
 cf create-service elephantsql turtle ${PREFIX}logistics-wizard-erp-db
