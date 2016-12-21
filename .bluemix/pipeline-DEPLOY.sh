@@ -1,18 +1,24 @@
 #!/bin/bash
-# Use prefix when needed for DEV environment
-if [ "$LOGISTICS_WIZARD_ENV" == "DEV" ]; then
-  PREFIX="dev-"
-  echo "Using prefix: $PREFIX"
-else
+
+# The branch may use a custom manifest
+MANIFEST=manifest.yml
+if [ -f ${REPO_BRANCH}-manifest.yml ]; then
+  MANIFEST=${REPO_BRANCH}-manifest.yml
+fi
+echo "Using manifest file: $MANIFEST"
+
+# and a prefix for services if not building the master branch
+if [ "$REPO_BRANCH" == "master" ]; then
+  echo "No prefix for master branch"
   PREFIX=""
-  echo "Using empty prefix"
+else
+  PREFIX=$REPO_BRANCH"-"
+  echo "Using prefix: $PREFIX"
 fi
 
 cf create-service elephantsql turtle ${PREFIX}logistics-wizard-erp-db
 if ! cf app $CF_APP; then
-  cf push $CF_APP -n $CF_APP -f ${PREFIX}manifest.yml --no-start
-  cf set-env $CF_APP LOGISTICS_WIZARD_ENV ${LOGISTICS_WIZARD_ENV}
-  cf start $CF_APP
+  cf push $CF_APP -n $CF_APP -f ${MANIFEST}
 else
   OLD_CF_APP=${CF_APP}-OLD-$(date +"%s")
   rollback() {
@@ -27,8 +33,6 @@ else
   set -e
   trap rollback ERR
   cf rename $CF_APP $OLD_CF_APP
-  cf push $CF_APP -n $CF_APP -f ${PREFIX}manifest.yml --no-start
-  cf set-env $CF_APP LOGISTICS_WIZARD_ENV ${LOGISTICS_WIZARD_ENV}
-  cf start $CF_APP
+  cf push $CF_APP -n $CF_APP -f ${MANIFEST}
   cf delete $OLD_CF_APP -f
 fi
