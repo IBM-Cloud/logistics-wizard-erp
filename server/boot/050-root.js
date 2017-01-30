@@ -1,17 +1,10 @@
 // Licensed under the Apache License. See footer for details.
-/*global angular*/
-(function () {
-
-  // angular app initialization
-  var app = angular.module("erpApp", [
-    "lbServices",
-    "ui.router"]);
-
-  app.config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/demo");
-  });
-
-}());
+module.exports = function(server) {
+  // Install a `/` route that returns server status
+  var router = server.loopback.Router();
+  router.get('/', server.loopback.status());
+  server.use(router);
+};
 //------------------------------------------------------------------------------
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
