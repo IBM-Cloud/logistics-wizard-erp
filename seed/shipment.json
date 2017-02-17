@@ -8,7 +8,7 @@
   },
   {
     "id": "502",
-    "status": "APPROVED",
+    "status": "IN_TRANSIT",
     "fromId": "2",
     "toId": "202",
     "currentLocation": {
@@ -23,7 +23,7 @@
   },
   {
     "id": "503",
-    "status": "DELIVERED",
+    "status": "IN_TRANSIT",
     "fromId": "1",
     "toId": "203",
     "currentLocation": {
@@ -38,7 +38,7 @@
   },
   {
     "id": "504",
-    "status": "DELIVERED",
+    "status": "IN_TRANSIT",
     "fromId": "1",
     "toId": "203",
     "currentLocation": {
@@ -53,7 +53,7 @@
   },
   {
     "id": "505",
-    "status": "DELIVERED",
+    "status": "IN_TRANSIT",
     "fromId": "2",
     "toId": "202",
     "currentLocation": {
@@ -72,11 +72,11 @@
     "fromId": "3",
     "toId": "204",
     "currentLocation": {
-      "city": "Poughkeepsie",
+      "city": "New York",
       "state": "New York",
       "country": "US",
-      "latitude": 41.70,
-      "longitude": -73.91
+      "latitude": 40.71,
+      "longitude": -73.75
     },
     "estimatedTimeOfArrival": "Thu, 24 Oct 2016",
     "updatedAt": "Thu, 24 Oct 2016 12:15:37 GMT"
@@ -90,7 +90,7 @@
       "city": "Albany",
       "state": "New York",
       "country": "US",
-      "latitude": 42.65,
+      "latitude": 42.15,
       "longitude": -73.75
     },
     "estimatedTimeOfArrival": "Thu, 28 Oct 2016",
