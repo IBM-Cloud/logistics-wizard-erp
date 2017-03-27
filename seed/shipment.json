@@ -72,11 +72,11 @@
     "fromId": "3",
     "toId": "204",
     "currentLocation": {
-      "city": "New York",
-      "state": "New York",
+      "city": "Richmond",
+      "state": "Virginia",
       "country": "US",
-      "latitude": 40.71,
-      "longitude": -73.75
+      "latitude": 37.64,
+      "longitude": -77.51
     },
     "estimatedTimeOfArrival": "Thu, 24 Oct 2016",
     "updatedAt": "Thu, 24 Oct 2016 12:15:37 GMT"
@@ -87,11 +87,11 @@
     "fromId": "3",
     "toId": "204",
     "currentLocation": {
-      "city": "Albany",
-      "state": "New York",
+      "city": "Orlando",
+      "state": "Florida",
       "country": "US",
-      "latitude": 42.15,
-      "longitude": -73.75
+      "latitude": 28.53,
+      "longitude": -81.37
     },
     "estimatedTimeOfArrival": "Thu, 28 Oct 2016",
     "updatedAt": "Thu, 27 Oct 2016 12:15:37 GMT"

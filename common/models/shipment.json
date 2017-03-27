@@ -2,42 +2,65 @@
   "name": "Shipment",
   "base": "PersistedModel",
   "idInjection": true,
-  "strictDelete": "true",
   "options": {
     "validateUpsert": true
   },
+  "strictDelete": "true",
+  "mixins": {
+    "Isolated": {},
+    "Integrity": {}
+  },
+  "hidden": [
+    "demoId"
+  ],
   "properties": {
-    "status": {
-      "type": "string",
-      "required": true,
-      "default": "NEW"
-    },
     "createdAt": {
       "type": "date",
       "required": true,
       "default": "$now"
     },
-    "updatedAt": {
-      "type": "date"
-    },
     "deliveredAt": {
       "type": "date"
+    },
+    "demoId": {
+      "type": "number",
+      "required": true
     },
     "estimatedTimeOfArrival": {
       "type": "date",
       "required": true
     },
     "fromId": {
+      "type": "number",
+      "required": true
+    },
+    "seed": {
+      "type": "boolean",
+      "required": false
+    },
+    "status": {
+      "type": "string",
       "required": true,
-      "type": "number"
+      "default": "NEW"
     },
     "toId": {
-      "required": true,
-      "type": "number"
+      "type": "number",
+      "required": true
     },
-    "demoId": {
-      "required": true,
-      "type": "number"
+    "updatedAt": {
+      "type": "date"
+    },
+    "averageSpeed": {
+      "type": "number",
+      "required": false
+    },
+    "shipmentHumidity": {
+      "type": "number",
+      "required": false
+    },
+    "shipmentTemp": {
+      "type": "number",
+      "required": false
     }
   },
   "validations": [],
@@ -71,11 +94,6 @@
       "foreignKey": "demoId"
     }
   },
-  "mixins": {
-    "Isolated": {},
-    "Integrity": {}
-  },
-  "hidden": ["demoId"],
   "acls": [
     {
       "accessType": "*",
