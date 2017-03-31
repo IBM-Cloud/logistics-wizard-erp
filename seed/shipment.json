@@ -4,7 +4,7 @@
     "status": "NEW",
     "fromId": "2",
     "toId": "201",
-    "estimatedTimeOfArrival": "Thu, 16 Oct 2016"
+    "estimatedTimeOfArrival": "Thu, 16 Oct 2017"
   },
   {
     "id": "502",
@@ -18,8 +18,8 @@
       "latitude": 35.19,
       "longitude": -90.02
     },
-    "estimatedTimeOfArrival": "Thu, 16 Oct 2016",
-    "lastUpdate": "Thu, 13 Oct 2016 12:15:37 GMT"
+    "estimatedTimeOfArrival": "Thu, 16 Oct 2017",
+    "lastUpdate": "Thu, 13 Oct 2017 12:15:37 GMT"
   },
   {
     "id": "503",
@@ -33,8 +33,11 @@
       "latitude": 39.44,
       "longitude": -119.79
     },
-    "estimatedTimeOfArrival": "Thu, 20 Oct 2016",
-    "updatedAt": "Thu, 19 Oct 2016 12:15:37 GMT"
+    "averageSpeed": 51,
+    "shipmentHumidity": 30,
+    "shipmentTemp": 86,
+    "estimatedTimeOfArrival": "Thu, 20 Oct 2017",
+    "updatedAt": "Thu, 19 Oct 2017 12:15:37 GMT"
   },
   {
     "id": "504",
@@ -48,8 +51,11 @@
       "latitude": 40.80,
       "longitude": -115.76
     },
-    "estimatedTimeOfArrival": "Thu, 22 Oct 2016",
-    "updatedAt": "Thu, 20 Oct 2016 12:15:37 GMT"
+    "averageSpeed": 43,
+    "shipmentHumidity": 28,
+    "shipmentTemp": 64,
+    "estimatedTimeOfArrival": "Thu, 22 Oct 2017",
+    "updatedAt": "Thu, 20 Oct 2017 12:15:37 GMT"
   },
   {
     "id": "505",
@@ -63,8 +69,11 @@
       "latitude": 32.74,
       "longitude": -96.80
     },
-    "estimatedTimeOfArrival": "Thu, 22 Oct 2016",
-    "updatedAt": "Thu, 20 Oct 2016 12:15:37 GMT"
+    "averageSpeed": 49,
+    "shipmentHumidity": 40,
+    "shipmentTemp": 59,
+    "estimatedTimeOfArrival": "Thu, 22 Oct 2017",
+    "updatedAt": "Thu, 20 Oct 2017 12:15:37 GMT"
   },
   {
     "id": "506",
@@ -72,14 +81,14 @@
     "fromId": "3",
     "toId": "204",
     "currentLocation": {
-      "city": "New York",
-      "state": "New York",
+      "city": "Richmond",
+      "state": "Virginia",
       "country": "US",
-      "latitude": 40.71,
-      "longitude": -73.75
+      "latitude": 37.64,
+      "longitude": -77.51
     },
-    "estimatedTimeOfArrival": "Thu, 24 Oct 2016",
-    "updatedAt": "Thu, 24 Oct 2016 12:15:37 GMT"
+    "estimatedTimeOfArrival": "Thu, 24 Oct 2017",
+    "updatedAt": "Thu, 24 Oct 2017 12:15:37 GMT"
   },
   {
     "id": "507",
@@ -87,13 +96,16 @@
     "fromId": "3",
     "toId": "204",
     "currentLocation": {
-      "city": "Albany",
-      "state": "New York",
+      "city": "Orlando",
+      "state": "Florida",
       "country": "US",
-      "latitude": 42.15,
-      "longitude": -73.75
+      "latitude": 28.53,
+      "longitude": -81.37
     },
-    "estimatedTimeOfArrival": "Thu, 28 Oct 2016",
-    "updatedAt": "Thu, 27 Oct 2016 12:15:37 GMT"
+    "averageSpeed": 66,
+    "shipmentHumidity": 38,
+    "shipmentTemp": 83,
+    "estimatedTimeOfArrival": "Thu, 28 Oct 2017",
+    "updatedAt": "Thu, 27 Oct 2017 12:15:37 GMT"
   }
 ]

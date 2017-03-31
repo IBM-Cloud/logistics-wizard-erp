@@ -22,21 +22,21 @@
   {
     "id": "203",
     "address": {
-      "city": "San Francisco",
-      "state": "California",
+      "city": "Phoenix",
+      "state": "Arizona",
       "country": "US",
-      "latitude": 37.72,
-      "longitude": -122.44
+      "latitude": 33.44,
+      "longitude": -112.07
     }
   },
   {
     "id": "204",
     "address": {
-      "city": "New York",
-      "state": "New York",
+      "city": "Boston",
+      "state": "Massachusetts",
       "country": "US",
-      "latitude": 40.71,
-      "longitude": -74.00
+      "latitude": 42.31,
+      "longitude": -71.07
     }
   }
 ]
