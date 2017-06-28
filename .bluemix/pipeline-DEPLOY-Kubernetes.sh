@@ -67,4 +67,4 @@ cat lw-erp-deployment.yml | sed 's/registry.ng.bluemix.net\/<namespace>\/lw-erp:
 echo -e 'Deploying service...'
 istioctl delete -f lw-erp-routes.yml
 istioctl create -f lw-erp-routes.yml
-kubectl apply -f tmp-deployment.yml
+kubectl apply -f <(istioctl kube-inject -f tmp-deployment.yml --includeIPRanges=10.0.0.1/24)
