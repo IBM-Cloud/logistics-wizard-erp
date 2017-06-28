@@ -31,13 +31,33 @@ figlet 'Logging in Bluemix'
 bx login -a "$CF_TARGET_URL" --apikey "$BLUEMIX_API_KEY" -o "$CF_ORG" -s "$CF_SPACE"
 bx cs init
 
-figlet 'ERP Deployment'
-echo -e 'Setting KUBECONFIG...'
+figlet 'Configuring kubectl'
 exp=$(bx cs cluster-config $CLUSTER_NAME | grep export)
 eval "$exp"
 
 kubectl version
 istioctl version
+
+figlet 'Creating database service'
+bx cf create-service elephantsql turtle logistics-wizard-erp-db-kube
+bx cf create-service-key logistics-wizard-erp-db-kube for-kube
+
+# grab the credentials - ignoring the first debug logs of cf command
+POSTGRES_CREDENTIALS_JSON=`cf service-key logistics-wizard-erp-db-kube for-kube | tail -n+3`
+
+# inject VCAP_SERVICES in the environment, to be picked up by the datasources.local.js
+VCAP_SERVICES='
+{
+  "elephantsql": [
+    {
+      "name": "logistics-wizard-erp-db",
+      "label": "elephantsql",
+      "plan": "turtle",
+      "credentials":'$POSTGRES_CREDENTIALS_JSON'
+    }
+  ]
+}'
+kubectl create secret generic lw-erp-vcap-services --from-literal=VCAP_SERVICES="${VCAP_SERVICES}"
 
 echo "Using Docker image $IMAGE_NAME"
 ESCAPED_IMAGE_NAME=$(echo $IMAGE_NAME | sed 's/\//\\\//g')
