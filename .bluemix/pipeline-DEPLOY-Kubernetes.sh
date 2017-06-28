@@ -41,7 +41,7 @@ istioctl version
 
 echo "Using Docker image $IMAGE_NAME"
 ESCAPED_IMAGE_NAME=$(echo $IMAGE_NAME | sed 's/\//\\\//g')
-cat erp-deployment.yml | sed 's/registry.ng.bluemix.net\/<namespace>\/lw-erp:latest/'$ESCAPED_IMAGE_NAME'/g' > tmp-deployment.yml
+cat lw-erp-deployment.yml | sed 's/registry.ng.bluemix.net\/<namespace>\/lw-erp:latest/'$ESCAPED_IMAGE_NAME'/g' > tmp-deployment.yml
 
 echo -e 'Deploying service...'
 istioctl delete -f lw-erp-routes.yml
