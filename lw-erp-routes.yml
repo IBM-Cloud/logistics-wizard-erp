@@ -3,7 +3,7 @@
 #######################################################
 
 type: route-rule
-name: erp-default
+name: lw-erp-default
 spec:
   destination: lw-erp.default.svc.cluster.local
   # match:
