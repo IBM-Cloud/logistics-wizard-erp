@@ -1,5 +1,14 @@
 #!/bin/bash
 
+if [ -f "image.env" ]; then
+  echo 'Loading image name from image.env file.'
+  source image.env
+  echo "IMAGE_NAME=${IMAGE_NAME}"
+else
+  echo 'IMAGE_NAME not set'
+  exit 1;
+fi
+
 echo 'Installing dependencies...'
 sudo apt-get -qq update 1>/dev/null
 sudo apt-get -qq install jq 1>/dev/null
