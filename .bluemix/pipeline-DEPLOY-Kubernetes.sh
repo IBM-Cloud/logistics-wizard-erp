@@ -14,7 +14,7 @@ sudo apt-get -qq update 1>/dev/null
 sudo apt-get -qq install figlet 1>/dev/null
 
 mkdir /tmp/bin
-export PATH="/tmp/:$PATH"
+export PATH="/tmp/bin:$PATH"
 
 figlet -f small 'kubectl'
 wget --quiet --output-document=/tmp/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
