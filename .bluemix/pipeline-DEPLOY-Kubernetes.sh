@@ -54,7 +54,8 @@ VCAP_SERVICES='
     }
   ]
 }'
-kubectl create secret generic lw-erp-vcap-services --from-literal=VCAP_SERVICES="${VCAP_SERVICES}"
+kubectl delete secret lw-erp-env
+kubectl create secret generic lw-erp-env --from-literal=VCAP_SERVICES="${VCAP_SERVICES}"
 
 echo "Using Docker image $IMAGE_NAME"
 ESCAPED_IMAGE_NAME=$(echo $IMAGE_NAME | sed 's/\//\\\//g')

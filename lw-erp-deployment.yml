@@ -37,7 +37,7 @@ spec:
           - name: VCAP_SERVICES
             valueFrom:
               secretKeyRef:
-                name: lw-erp-vcap-services
+                name: lw-erp-env
                 key: VCAP_SERVICES
 ---
 apiVersion: extensions/v1beta1
