@@ -23,6 +23,9 @@ module.exports = function (Shipment) {
   Shipment.disableRemoteMethod("count", true);
   Shipment.disableRemoteMethod("findOne", true);
   Shipment.disableRemoteMethod("exists", true);
+  Shipment.disableRemoteMethod("replaceOrCreate", true);
+  Shipment.disableRemoteMethod("upsertWithWhere", true);
+  Shipment.disableRemoteMethod("replaceById", true);
 
   // keep only GET and GET :id
   Shipment.disableRemoteMethod("__create__items", false);
