@@ -16,23 +16,9 @@ sudo apt-get -qq install figlet 1>/dev/null
 mkdir /tmp/bin
 export PATH="/tmp/bin:$PATH"
 
-figlet -f small 'kubectl'
-wget --quiet --output-document=/tmp/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-chmod +x /tmp/bin/kubectl
-
 figlet -f small 'istioctl'
 curl -L https://git.io/getIstio | sh -
 (cd istio-* && ln -s $PWD/bin/istioctl /tmp/bin/istioctl)
-
-figlet 'Logging in Bluemix'
-bx login -a "$CF_TARGET_URL" --apikey "$BLUEMIX_API_KEY" -o "$CF_ORG" -s "$CF_SPACE"
-bx cs init
-
-figlet 'Configuring kubectl'
-exp=$(bx cs cluster-config $CLUSTER_NAME | grep export)
-eval "$exp"
-
-kubectl version
 istioctl version
 
 figlet 'Creating database service'
