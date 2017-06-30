@@ -22,11 +22,11 @@ curl -L https://git.io/getIstio | sh -
 istioctl version
 
 figlet 'Creating database service'
-bx cf create-service elephantsql turtle logistics-wizard-erp-db-kube
-bx cf create-service-key logistics-wizard-erp-db-kube for-kube
+bx cf create-service elephantsql turtle logistics-wizard-erp-db
+bx cf create-service-key logistics-wizard-erp-db for-kube
 
 # grab the credentials - ignoring the first debug logs of cf command
-POSTGRES_CREDENTIALS_JSON=`cf service-key logistics-wizard-erp-db-kube for-kube | tail -n+3`
+POSTGRES_CREDENTIALS_JSON=`cf service-key logistics-wizard-erp-db for-kube | tail -n+3`
 
 # inject VCAP_SERVICES in the environment, to be picked up by the datasources.local.js
 VCAP_SERVICES='
