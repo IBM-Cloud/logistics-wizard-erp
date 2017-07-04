@@ -2,14 +2,14 @@
 var winston = require("winston");
 var helper = require("./helper.js");
 var async = require("async");
-var bcrypt = require("bcryptjs");
 var randomstring = require("randomstring");
 var fs = require("fs");
 
 function makeUniqueSession(demo) {
-  var SALT_WORK_FACTOR = 10;
-  var salt = bcrypt.genSaltSync(SALT_WORK_FACTOR);
-  return new Buffer(bcrypt.hashSync(demo.id + " " + demo.createdAt, salt)).toString("base64");
+  return demo.id + randomstring.generate({
+    length: 3,
+    charset: 'numeric'
+  });
 }
 
 module.exports = function (Demo) {
