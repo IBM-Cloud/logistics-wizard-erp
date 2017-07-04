@@ -22,6 +22,9 @@ module.exports = {
     Model.disableRemoteMethod("count", true);
     Model.disableRemoteMethod("findOne", true);
     Model.disableRemoteMethod("exists", true);
+    Model.disableRemoteMethod("replaceOrCreate", true);
+    Model.disableRemoteMethod("upsertWithWhere", true);
+    Model.disableRemoteMethod("replaceById", true);
   },
   /**
    * Disables all write methods on a model, keeping only the GET.
@@ -37,6 +40,9 @@ module.exports = {
     Model.disableRemoteMethod("count", true);
     Model.disableRemoteMethod("findOne", true);
     Model.disableRemoteMethod("exists", true);
+    Model.disableRemoteMethod("replaceOrCreate", true);
+    Model.disableRemoteMethod("upsertWithWhere", true);
+    Model.disableRemoteMethod("replaceById", true);
   },
   /**
    * Keeps only the simple GET/POST/PUT/DELETE methods.
@@ -49,6 +55,9 @@ module.exports = {
     Model.disableRemoteMethod("count", true);
     Model.disableRemoteMethod("findOne", true);
     Model.disableRemoteMethod("exists", true);
+    Model.disableRemoteMethod("replaceOrCreate", true);
+    Model.disableRemoteMethod("upsertWithWhere", true);
+    Model.disableRemoteMethod("replaceById", true);
   },
   /**
    * Keeps only the GET methods for the given relation

@@ -1,0 +1,57 @@
+#######################################################
+# Kubernetes + Istio deployment for ERP
+#######################################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: lw-erp
+  labels:
+    app: lw-erp
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: lw-erp
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: lw-erp-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: lw-erp
+        version: v1
+    spec:
+      containers:
+      - name: lw-erp
+        image: registry.ng.bluemix.net/<namespace>/lw-erp:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+          - name: VCAP_SERVICES
+            valueFrom:
+              secretKeyRef:
+                name: lw-erp-env
+                key: VCAP_SERVICES
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: lw-erp-gateway
+  annotations:
+    kubernetes.io/ingress.class: "istio"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /lw/erp/.*
+        backend:
+          serviceName: lw-erp
+          servicePort: 8080
+---
