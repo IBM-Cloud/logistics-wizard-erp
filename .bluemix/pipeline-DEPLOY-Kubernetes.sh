@@ -17,7 +17,7 @@ mkdir /tmp/bin
 export PATH="/tmp/bin:$PATH"
 
 figlet -f small 'istioctl'
-curl -L https://git.io/getIstio | sh -
+curl -L https://git.io/getLatestIstio | sh -
 (cd istio-* && ln -s $PWD/bin/istioctl /tmp/bin/istioctl)
 istioctl version
 
