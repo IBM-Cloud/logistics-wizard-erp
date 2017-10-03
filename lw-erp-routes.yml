@@ -4,7 +4,7 @@
 
 kind: RouteRule
 metadata:
-  name: my-rule
+  name: lw-erp-route
 spec:
   destination:
     name: lw-erp
