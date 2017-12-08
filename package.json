@@ -14,7 +14,6 @@
     "async": "2.1.4",
     "bcryptjs": "2.3.0",
     "bower": "1.8.0",
-    "cf-deployment-tracker-client": "^0.1.2",
     "compression": "1.6.2",
     "cors": "2.8.1",
     "heartbeats": "5.0.1",

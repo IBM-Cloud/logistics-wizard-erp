@@ -5,7 +5,6 @@ ADD seed /app/seed
 ADD server /app/server
 
 ADD package.json /app
-ADD tracker.js /app
 
 RUN cd /app; npm install
 
