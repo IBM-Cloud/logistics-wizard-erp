@@ -45,7 +45,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/IBM-Bluemix/logistics-wizard-erp/"
+    "url": "https://github.com/IBM-Cloud/logistics-wizard-erp/"
   },
   "license": "Apache-2.0",
   "description": "Logistics Wizard ERP"

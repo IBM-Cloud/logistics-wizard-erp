@@ -6,7 +6,7 @@
     "IBM"
   ],
   "license": "Apache-2.0",
-  "homepage": "https://github.com/IBM-Bluemix/logistics-wizard-erp",
+  "homepage": "https://github.com/IBM-Cloud/logistics-wizard-erp",
   "private": true,
   "ignore": [
     "**/.*",
