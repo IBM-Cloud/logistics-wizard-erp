@@ -20,7 +20,7 @@ In the basic configuration, the simulator runs as a Cloud Foundry app in Bluemix
 
 ## Deploying the simulator automatically
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM-Bluemix/logistics-wizard-erp.git)
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM-Cloud/logistics-wizard-erp.git)
 
 or to deploy the full system (including the Logistics Wizard user interface) all at once,
 check out the [Logistics Wizard Toolchain][toolchain_github_url]
@@ -34,7 +34,7 @@ check out the [Logistics Wizard Toolchain][toolchain_github_url]
 1. Clone the app and its submodules to your local environment from your terminal using the following command:
 
 	```
-	git clone https://github.com/IBM-Bluemix/logistics-wizard-erp.git
+	git clone https://github.com/IBM-Cloud/logistics-wizard-erp.git
 	```
 
 1. `cd` into this newly created directory
@@ -69,7 +69,7 @@ And voila! You now have your very own instance of simulator running on Bluemix.
 1. Get the code locally
 
   ```
-  git clone https://github.com/IBM-Bluemix/logistics-wizard-erp.git
+  git clone https://github.com/IBM-Cloud/logistics-wizard-erp.git
   ```
 
 1. Change to the checkout directory
@@ -157,7 +157,7 @@ with values extracted from the **uri**.
   ```
 
   Note: **max** defines the number of connections that can be established to the database.
-  If you are seeing a "too many connections" error on app startup, check out the [explanation and solution in the FAQ](https://github.com/IBM-Bluemix/logistics-wizard/wiki/FAQ#the-erp-simulator-app-is-throwing-a-too-many-connections-error-on-startup)
+  If you are seeing a "too many connections" error on app startup, check out the [explanation and solution in the FAQ](https://github.com/IBM-Cloud/logistics-wizard/wiki/FAQ#the-erp-simulator-app-is-throwing-a-too-many-connections-error-on-startup)
 
 
 1. Start the application
@@ -187,7 +187,7 @@ Swagger is a simple yet powerful representation of a RESTful API.
 The Swagger specification has been donated to the [Open API Initiative](https://github.com/OAI/OpenAPI-Specification)
 as part of an effort to define a standard specification format for REST APIs.
 
-To review the API specification, open the [Swagger Editor](http://editor.swagger.io/#/?import=https://raw.githubusercontent.com/IBM-Bluemix/logistics-wizard-erp/master/spec.yaml).
+To review the API specification, open the [Swagger Editor](http://editor.swagger.io/#/?import=https://raw.githubusercontent.com/IBM-Cloud/logistics-wizard-erp/master/spec.yaml).
 
 ### Code Structure
 
@@ -233,4 +233,4 @@ To run tests and post coverage results to [coveralls](https://coveralls.io), eit
 
 [bluemix_signup_url]: http://ibm.biz/logistics-wizard-signup
 [cloud_foundry_url]: https://github.com/cloudfoundry/cli
-[toolchain_github_url]: https://github.com/IBM-Bluemix/logistics-wizard-toolchain
+[toolchain_github_url]: https://github.com/IBM-Cloud/logistics-wizard-toolchain
