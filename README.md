@@ -1,4 +1,4 @@
-[Logistics Wizard](https://github.com/IBM-Cloud/logistics-wizard/tree/master#logistics-wizard-overview) \ [Architecture](https://github.com/IBM-Cloud/logistics-wizard/tree/master#architecture) \ logistics-wizard-erp
+[Logistics Wizard](https://github.com/IBM-Cloud/logistics-wizard/tree/master#logistics-wizard-overview) / [Architecture](https://github.com/IBM-Cloud/logistics-wizard/tree/master#architecture) / logistics-wizard-erp
 
 # Logistics Wizard ERP
 
