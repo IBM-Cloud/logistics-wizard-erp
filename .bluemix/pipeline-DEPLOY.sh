@@ -16,23 +16,23 @@ else
   echo "Using prefix: $PREFIX"
 fi
 
-cf create-service elephantsql turtle ${PREFIX}logistics-wizard-erp-db
-if ! cf app $CF_APP; then
-  cf push $CF_APP -n $CF_APP -f ${MANIFEST}
+bx service create elephantsql turtle ${PREFIX}logistics-wizard-erp-db
+if ! bx app show $CF_APP; then
+  bx app push $CF_APP -n $CF_APP -f ${MANIFEST}
 else
   OLD_CF_APP=${CF_APP}-OLD-$(date +"%s")
   rollback() {
     set +e
-    if cf app $OLD_CF_APP; then
-      cf logs $CF_APP --recent
-      cf delete $CF_APP -f
-      cf rename $OLD_CF_APP $CF_APP
+    if bx app show $OLD_CF_APP; then
+      bx app logs $CF_APP --recent
+      bx app delete $CF_APP -f
+      bx app rename $OLD_CF_APP $CF_APP
     fi
     exit 1
   }
   set -e
   trap rollback ERR
-  cf rename $CF_APP $OLD_CF_APP
-  cf push $CF_APP -n $CF_APP -f ${MANIFEST}
-  cf delete $OLD_CF_APP -f
+  bx app rename $CF_APP $OLD_CF_APP
+  bx app push $CF_APP -n $CF_APP -f ${MANIFEST}
+  bx app delete $OLD_CF_APP -f
 fi
