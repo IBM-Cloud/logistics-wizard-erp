@@ -9,13 +9,13 @@ if [ -f ${REPO_BRANCH}-manifest.yml ]; then
 fi
 echo "Using manifest file: $MANIFEST"
 
-# and a prefix for services if not building the master branch
-if [ "$REPO_BRANCH" == "master" ]; then
-  echo "No prefix for master branch"
-  PREFIX=""
-else
+# and a prefix for dev branch services
+if [ "$REPO_BRANCH" == "dev" ]; then
   PREFIX=$REPO_BRANCH"-"
   echo "Using prefix: $PREFIX"
+else
+  echo "No prefix for non-dev branch"
+  PREFIX=""
 fi
 
 bx service create elephantsql turtle ${PREFIX}logistics-wizard-erp-db
