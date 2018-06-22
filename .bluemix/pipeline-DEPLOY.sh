@@ -1,5 +1,6 @@
 #!/bin/bash
-bx api $CF_TARGET_URL
+echo 'Login IBM Cloud api=$CF_TARGET_URL org=$CF_ORG space=$CF_SPACE'
+bx login -a "$CF_TARGET_URL" --apikey "$IAM_API_KEY" -o "$CF_ORG" -s "$CF_SPACE"
 
 # The branch may use a custom manifest
 MANIFEST=manifest.yml
