@@ -1,4 +1,5 @@
 #!/bin/bash
+bx api $CF_TARGET_URL
 
 # The branch may use a custom manifest
 MANIFEST=manifest.yml
