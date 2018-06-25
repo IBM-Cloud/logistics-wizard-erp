@@ -39,7 +39,7 @@ export NODE_ENV=test-with-postgresql
 # on exit, delete the service key and service
 cleanup() {
   bx service key-delete -f $SERVICE_NAME for-test
-  bx service key-delete -f $SERVICE_NAME
+  bx service delete -f $SERVICE_NAME
 }
 trap cleanup EXIT
 
