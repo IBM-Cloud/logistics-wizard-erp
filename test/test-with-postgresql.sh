@@ -9,8 +9,8 @@ bx service create elephantsql turtle $SERVICE_NAME
 # generate credentials
 bx service key-create $SERVICE_NAME for-test
 
-# grab the credentials - ignoring the first debug logs of cf command
-POSTGRES_CREDENTIALS_JSON=`bx service key-show $SERVICE_NAME for-test | tail -n+3`
+# grab the credentials - ignoring the first debug logs of bx command
+POSTGRES_CREDENTIALS_JSON=`bx service key-show $SERVICE_NAME for-test | tail -n+5`
 
 # inject VCAP_SERVICES in the environment, to be picked up by the datasources.local.js
 export VCAP_SERVICES='
