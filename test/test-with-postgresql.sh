@@ -25,6 +25,9 @@ export VCAP_SERVICES='
   ]
 }'
 
+# debug
+echo $VCAP_SERVICES
+
 export VCAP_APPLICATION='
 {
   "application_uris": [
