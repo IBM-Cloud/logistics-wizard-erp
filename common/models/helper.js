@@ -103,7 +103,7 @@ module.exports = {
    * @param callback - (err, tx)
    */
   beginTransaction: function (Model, callback) {
-    if (Model.dataSource.adapter.name == "memory") {
+    if (Model.dataSource.adapter.name == "memory" || Model.dataSource.adapter.name == "cloudant" ) {
       winston.warn("Creating a fake transaction object for in-memory connector with model", Model.modelName);
       callback(null, {
         commit: function (callback) {

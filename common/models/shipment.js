@@ -274,7 +274,7 @@ module.exports = function (Shipment) {
       },
       {
         arg: "id",
-        type: "number",
+        type: "string",
         required: true,
         http: {
           source: "path"
@@ -392,7 +392,7 @@ module.exports = function (Shipment) {
       },
       {
         arg: "id",
-        type: "number",
+        type: "string",
         required: true,
         http: {
           source: "path"
@@ -511,7 +511,7 @@ module.exports = function (Shipment) {
       },
       {
         arg: "id",
-        type: "number",
+        type: "string",
         required: true,
         http: {
           source: "path"

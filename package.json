@@ -2,6 +2,10 @@
   "name": "logistics-wizard-erp",
   "version": "1.0.0",
   "main": "server/server.js",
+  "engines": {
+    "node": ">=6.9.1",
+    "npm": "^3.0.0"
+  },
   "scripts": {
     "start": "node .",
     "test": "mocha test/*.js",
@@ -20,6 +24,7 @@
     "loopback": "2.36.0",
     "loopback-boot": "2.23.0",
     "loopback-component-explorer": "2.7.0",
+    "loopback-connector-cloudant": "^2.1.0",
     "loopback-connector-postgresql": "2.7.0",
     "loopback-datasource-juggler": "2.53.0",
     "randomstring": "1.1.5",
