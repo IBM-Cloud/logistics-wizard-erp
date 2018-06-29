@@ -48,4 +48,4 @@ cleanup() {
 trap cleanup EXIT
 
 # run the test with a larger timeout as the default is way to small for a remote database
-mocha -t 300000
+DEBUG=* mocha -t 3000000
