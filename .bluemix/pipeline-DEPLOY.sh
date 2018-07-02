@@ -22,7 +22,7 @@ bx service create cloudantNoSQLDB Lite ${PREFIX}logistics-wizard-erp-db
 
 # create the database
 bx service key-create ${PREFIX}logistics-wizard-erp-db for-pipeline
-CLOUDANT_URL=`bx service key-show ${PREFIX}logistics-wizard-erp-db for-test | grep "\"url\"" | awk '{print $2}' | tr -d '","'`
+CLOUDANT_URL=`bx service key-show ${PREFIX}logistics-wizard-erp-db for-pipeline | grep "\"url\"" | awk '{print $2}' | tr -d '","'`
 curl -s -X PUT $CLOUDANT_URL/logistics-wizard | grep -v file_exists
 
 if ! bx app show $CF_APP; then
