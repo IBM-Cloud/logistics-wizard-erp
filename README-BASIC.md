@@ -135,6 +135,12 @@ The data is now persisted in *in-memory-database.json*.
   "url": "https://<username>:<password>@<host>/<database>"
   ```
 
+1. Create a database named `logistics-wizard` in the Cloudant instance from the dashboard or with
+
+   ```
+   curl -s -X PUT <url>/logistics-wizard
+   ```
+
 1. Create the file **server/datasources.local.json** with the following content, replacing the placeholders
 with values extracted from the **uri**.
 
