@@ -11,19 +11,26 @@ module.exports = function (server, next) {
   // this is our main datasource
   var ds = server.dataSources.db;
   
-  // collect all tables persisted in this datasource
-  var erpTables = Object.keys(server.models).filter(function (model) {
-    return server.models[model].autoAttach == "db";
-  });
-
-  // and create or update the tables
-  ds.autoupdate(erpTables, function (er) {
-    if (er) {
-      winston.error(er);
+  // ensure the database is connected
+  ds.connect(function(err) {
+    if (err) {
+      next(err);
     } else {
-      winston.info("ERP service tables created/updated.");
+      // collect all tables persisted in this datasource
+      var erpTables = Object.keys(server.models).filter(function (model) {
+        return server.models[model].autoAttach == "db";
+      });
+
+      //  and create or update the tables
+      ds.autoupdate(erpTables, function (er) {
+        if (er) {
+          winston.error(er);
+        } else {
+          winston.info("ERP service tables created/updated.");
+        }
+        next();
+      });
     }
-    next();
   });
 
 };

@@ -14,11 +14,13 @@
     },
     "productId": {
       "required": true,
-      "type": "number"
+      "type": "string",
+      "index": true
     },
     "demoId": {
       "required": true,
-      "type": "number"
+      "type": "string",
+      "index": true
     }
   },
   "validations": [],

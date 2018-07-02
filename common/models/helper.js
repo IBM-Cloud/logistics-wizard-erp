@@ -103,7 +103,7 @@ module.exports = {
    * @param callback - (err, tx)
    */
   beginTransaction: function (Model, callback) {
-    if (Model.dataSource.adapter.name == "memory") {
+    if (Model.dataSource.adapter.name == "memory" || Model.dataSource.adapter.name == "cloudant" ) {
       winston.warn("Creating a fake transaction object for in-memory connector with model", Model.modelName);
       callback(null, {
         commit: function (callback) {
@@ -123,6 +123,28 @@ module.exports = {
           callback(err, tx);
         }
       );
+    }
+  },
+  /**
+   * Bulk insert
+   * 
+   * @param callback - err, [{id, rev}]
+   */
+  bulk: function (Model, items, callback) {
+    if (Model.dataSource.adapter.name == "cloudant") {
+      // retrieve the inner Cloudant database to perform a raw bulk insert
+      // https://github.com/strongloop/loopback-connector-couchdb2/blob/master/lib/couchdb.js#L749
+      var modelObject = Model.dataSource.adapter.selectModel(Model.modelName, false);
+      modelObject.db.bulk({
+        docs: items.map(function(item) {
+          // inject the loopback__model__name property before insert
+          return Model.dataSource.adapter.toDB(Model.modelName, modelObject, item);
+        })
+      }, function(err, savedItems) {
+        callback(err, savedItems);
+      });
+    } else {
+      Model.create(items, callback);
     }
   }
 };

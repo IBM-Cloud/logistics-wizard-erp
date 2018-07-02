@@ -23,16 +23,18 @@
       "type": "date"
     },
     "demoId": {
-      "type": "number",
-      "required": true
+      "type": "string",
+      "required": true,
+      "index": true
     },
     "estimatedTimeOfArrival": {
       "type": "date",
       "required": true
     },
     "fromId": {
-      "type": "number",
-      "required": true
+      "type": "string",
+      "required": true,
+      "index": true
     },
     "seed": {
       "type": "boolean",
@@ -44,8 +46,9 @@
       "default": "NEW"
     },
     "toId": {
-      "type": "number",
-      "required": true
+      "type": "string",
+      "required": true,
+      "index": true
     },
     "updatedAt": {
       "type": "date"
