@@ -63,7 +63,7 @@ module.exports = function (DistributionCenter) {
       },
       {
         arg: "id",
-        type: "number",
+        type: "string",
         required: true,
         http: {
           source: "path"

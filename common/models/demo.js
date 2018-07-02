@@ -79,7 +79,7 @@ module.exports = function (Demo) {
           });
         }
         winston.info("Injecting", objects.length, model.definition.name);
-        model.create(objects, function (err, records) {
+        helper.bulk(model, objects, function (err, records) {
           if (err) {
             winston.error("Failed to create", model.definition.name, err);
           } else {

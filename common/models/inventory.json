@@ -13,7 +13,8 @@
     },
     "demoId": {
       "required": true,
-      "type": "number"
+      "type": "string",
+      "index": true
     }
   },
   "validations": [],
