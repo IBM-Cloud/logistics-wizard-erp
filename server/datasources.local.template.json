@@ -8,5 +8,25 @@
     "username": "foo",
     "password": "password",
     "max": 3
+  },
+  "db": {
+    "name": "db",
+    "connector": "db2",
+    "username": "username",
+    "password": "password",
+    "database": "BLUDB",
+    "hostname": "hostname",
+    "port":      50000,
+    "minPoolSize": 1,
+    "maxPoolSize": 3
+  },
+  "db": {
+    "name": "db",
+    "connector": "cloudant",
+    "url": "https://username:password@host",
+    "database": "logistics-wizard",
+    "plugin": "retry",
+    "retryAttempts": 20,
+    "retryTimeout": 1000
   }
 }

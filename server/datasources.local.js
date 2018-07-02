@@ -26,6 +26,20 @@ if (process.env.VCAP_SERVICES) {
       "password": urlObject.auth.substring(urlObject.auth.indexOf(":") + 1),
       "max": Math.max(1, vcapServices.elephantsql[0].credentials.max_conns - 2) // leave some connections for the frontend
     };
+  } else if (vcapServices.hasOwnProperty("dashDB For Transactions")) {
+    winston.info("Using Db2 as datasource");
+    var db2Creds = vcapServices["dashDB For Transactions"][0].credentials;
+    datasources.db = {
+      "name": "db",
+      "connector": "db2",
+      "username": db2Creds.username,
+      "password": db2Creds.password,
+      "database": db2Creds.db,
+      "hostname": db2Creds.hostname,
+      "port": db2Creds.port,
+      "minPoolSize": 1,
+      "maxPoolSize": 3
+    };
   } else if (vcapServices.hasOwnProperty("cloudantNoSQLDB")) {
     winston.info("Using Cloudant as datasource");
     var cloudantCreds = vcapServices.cloudantNoSQLDB[0].credentials;
@@ -35,8 +49,8 @@ if (process.env.VCAP_SERVICES) {
       "url": cloudantCreds.url,
       "database": "logistics-wizard",
       "plugin": "retry",
-      "retryAttempts": 20,
-      "retryTimeout": 1000  
+      "retryAttempts": 10,
+      "retryTimeout": 500
     };
   }
 }
