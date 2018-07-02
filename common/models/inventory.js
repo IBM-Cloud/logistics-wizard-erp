@@ -87,9 +87,7 @@ module.exports = function (Inventory) {
         });
 
         winston.info("Creating", createInventoryLines.length, "inventory lines");
-        Inventory.create(createInventoryLines, function (err, lines) {
-          callback(err);
-        });
+        helper.bulk(Inventory, createInventoryLines, callback);
       }
     ], function (err, result) {
       cb(err);
