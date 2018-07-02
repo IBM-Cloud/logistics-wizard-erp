@@ -50,10 +50,10 @@ check out the [Logistics Wizard Toolchain][toolchain_github_url]
 	cf login
 	```
 
-1. Create a new ElephantSQL service
+1. Create a new Cloudant service
 
   ```
-  cf create-service elephantsql turtle logistics-wizard-erp-db
+  cf create-service cloudantNoSQLDB Lite logistics-wizard-erp-db
   ```
 
 1. Push the app to Bluemix.
@@ -111,12 +111,12 @@ You lose all changes when you stop the app. Let's configure a persistent storage
 
 The data is now persisted in *in-memory-database.json*.
 
-### Using PostgreSQL
+### Using Cloudant
 
-1. Create a new ElephantSQL service
+1. Create a new Cloudant service
 
   ```
-  cf create-service elephantsql turtle logistics-wizard-erp-db
+  cf create-service cloudantNoSQLDB Lite logistics-wizard-erp-db
   ```
 
 1. Create a set of credentials
@@ -131,34 +131,24 @@ The data is now persisted in *in-memory-database.json*.
   cf service-key logistics-wizard-erp-db erp
   ```
 
-  Note that ElephantSQL returns a **uri** but the Loopback connector requires
-  more parameters that can be extracted from the **uri**. The **uri** looks like:
-
   ```
-  "uri": "postgres://<username>:<password>@<host>:<port>/<database>"
+  "url": "https://<username>:<password>@<host>/<database>"
   ```
 
 1. Create the file **server/datasources.local.json** with the following content, replacing the placeholders
 with values extracted from the **uri**.
 
   ```
-  {
-    "db": {
-      "name": "db",
-      "connector": "postgresql",
-      "database": "<database>",
-      "host": "<host>",
-      "port": "<port>",
-      "username": "<username>",
-      "password": "<password>",
-      "max": 3
-    }
+  "db": {
+    "name": "db",
+    "connector": "cloudant",
+    "url": "https://username:password@host",
+    "database": "logistics-wizard",
+    "plugin": "retry",
+    "retryAttempts": 20,
+    "retryTimeout": 1000
   }
   ```
-
-  Note: **max** defines the number of connections that can be established to the database.
-  If you are seeing a "too many connections" error on app startup, check out the [explanation and solution in the FAQ](https://github.com/IBM-Cloud/logistics-wizard/wiki/FAQ#the-erp-simulator-app-is-throwing-a-too-many-connections-error-on-startup)
-
 
 1. Start the application
 
@@ -166,8 +156,8 @@ with values extracted from the **uri**.
   npm start
   ```
 
-The data is now persisted in ElephantSQL. You can use the same structure for the databases.local.json
-if you work with your own PostgreSQL database.
+The data is now persisted in Cloudant. You can use the same structure for the databases.local.json
+if you work with your own Cloudant database.
 
 ## Building an API with Loopback and Swagger
 
