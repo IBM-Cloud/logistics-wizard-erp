@@ -1,6 +1,6 @@
 # Basic configuration with the Logistics Wizard ERP simulator
 
-In the basic configuration, the simulator runs as a Cloud Foundry app in Bluemix.
+In the basic configuration, the simulator runs as a Cloud Foundry app in IBM Cloud.
 
 ![Architecture](http://g.gravizo.com/g?
   digraph G {
@@ -20,14 +20,14 @@ In the basic configuration, the simulator runs as a Cloud Foundry app in Bluemix
 
 ## Deploying the simulator automatically
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM-Cloud/logistics-wizard-erp.git)
+[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM-Cloud/logistics-wizard-erp.git)
 
 or to deploy the full system (including the Logistics Wizard user interface) all at once,
 check out the [Logistics Wizard Toolchain][toolchain_github_url]
 
-## Running the simulator on Bluemix
+## Running the simulator on IBM Cloud
 
-1. If you do not already have a Bluemix account, [sign up here][bluemix_signup_url]
+1. If you do not already have a IBM Cloud account, [sign up here][bluemix_signup_url]
 
 1. Download and install the [Cloud Foundry CLI][cloud_foundry_url] tool
 
@@ -43,23 +43,23 @@ check out the [Logistics Wizard Toolchain][toolchain_github_url]
 
   The host you choose will determinate the subdomain of your application's URL:  `<host>.mybluemix.net`
 
-1. Connect to Bluemix in the command line tool and follow the prompts to log in.
+1. Connect to IBM Cloud in the command line tool and follow the prompts to log in.
 
 	```
-	cf api https://api.ng.bluemix.net
-	cf login
+	ibmcloud api https://api.ng.bluemix.net
+  ibmcloud login
 	```
 
 1. Create a new Cloudant service
 
   ```
-  cf create-service cloudantNoSQLDB Lite logistics-wizard-erp-db
+  ibmcloud cf create-service cloudantNoSQLDB Lite logistics-wizard-erp-db
   ```
 
-1. Push the app to Bluemix.
+1. Push the app to IBM Cloud.
 
 	```
-	cf push
+	ibmcloud cf push
 	```
 
 And voila! You now have your very own instance of simulator running on Bluemix.
