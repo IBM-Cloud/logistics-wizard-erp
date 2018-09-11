@@ -53,6 +53,19 @@ if (process.env.VCAP_SERVICES) {
       "retryTimeout": 500
     };
   }
+  else if (vcapServices.hasOwnProperty("cloudantnosqldb")) {
+    winston.info("Using Cloudant as datasource");
+    var cloudantCreds = vcapServices.cloudantnosqldb[0].credentials;
+    datasources.db = {
+      "name": "db",
+      "connector": "cloudant",
+      "url": cloudantCreds.url,
+      "database": "logistics-wizard",
+      "plugin": "retry",
+      "retryAttempts": 10,
+      "retryTimeout": 500
+    };
+  }
 }
 
 // and allow override with a local datasource definition
