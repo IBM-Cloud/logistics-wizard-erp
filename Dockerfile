@@ -4,7 +4,7 @@ ADD common /app/common
 ADD seed /app/seed
 ADD server /app/server
 
-ADD package.json /app
+ADD package.json /app/package.json
 
 # add build tools for db2 driver
 RUN cd /app \
