@@ -5,7 +5,7 @@ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.2/install.sh | b
 nvm install 6.9.1
 npm install
 if [ -z ${COVERALLS_REPO_TOKEN} ]; then
-  npm run localcoverage
+  npm run idra
   echo No Coveralls token specified, skipping coveralls.io upload
 else
   npm run coverage
