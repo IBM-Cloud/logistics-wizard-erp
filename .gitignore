@@ -14,13 +14,10 @@
 .idea
 .project
 .strong-pm
-coverage
 node_modules
 npm-debug.log
 client/vendor
 in-memory-database.json
-coverage
 .coveralls.yml
 out
 server/datasources.local.json
-test/results
