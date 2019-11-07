@@ -18,7 +18,11 @@ else
   PREFIX=""
 fi
 
-bx service create cloudantNoSQLDB Lite ${PREFIX}logistics-wizard-erp-db
+if [ -z "$CLOUDANT_SERVICE_PLAN" ]; then
+  CLOUDANT_SERVICE_PLAN=Lite
+fi
+
+bx service create cloudantNoSQLDB $CLOUDANT_SERVICE_PLAN ${PREFIX}logistics-wizard-erp-db
 
 # create the database
 bx service key-create ${PREFIX}logistics-wizard-erp-db for-pipeline
