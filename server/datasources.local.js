@@ -12,35 +12,7 @@ var datasources = {
 // then use VCAP_SERVICES
 if (process.env.VCAP_SERVICES) {
   var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
-  if (vcapServices.hasOwnProperty("elephantsql")) {
-    winston.info("Using ElephantSQL as datasource");
-    // uri is "postgres://user:password@host:port/database"
-    var urlObject = require('url').parse(vcapServices.elephantsql[0].credentials.uri);
-    datasources.db = {
-      "name": "db",
-      "connector": "postgresql",
-      "database": urlObject.path.substring(1),
-      "host": urlObject.hostname,
-      "port": urlObject.port,
-      "username": urlObject.auth.substring(0, urlObject.auth.indexOf(":")),
-      "password": urlObject.auth.substring(urlObject.auth.indexOf(":") + 1),
-      "max": Math.max(1, vcapServices.elephantsql[0].credentials.max_conns - 2) // leave some connections for the frontend
-    };
-  } else if (vcapServices.hasOwnProperty("dashDB For Transactions")) {
-    winston.info("Using Db2 as datasource");
-    var db2Creds = vcapServices["dashDB For Transactions"][0].credentials;
-    datasources.db = {
-      "name": "db",
-      "connector": "db2",
-      "username": db2Creds.username,
-      "password": db2Creds.password,
-      "database": db2Creds.db,
-      "hostname": db2Creds.hostname,
-      "port": db2Creds.port,
-      "minPoolSize": 1,
-      "maxPoolSize": 3
-    };
-  } else if (vcapServices.hasOwnProperty("cloudantNoSQLDB")) {
+  if (vcapServices.hasOwnProperty("cloudantNoSQLDB")) {
     winston.info("Using Cloudant as datasource");
     var cloudantCreds = vcapServices.cloudantNoSQLDB[0].credentials;
     datasources.db = {
