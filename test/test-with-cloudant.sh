@@ -10,18 +10,17 @@ fi
 ibmcloud cf create-service cloudantNoSQLDB $CLOUDANT_SERVICE_PLAN $SERVICE_NAME
 
 # generate credentials
-until bx service key-create $SERVICE_NAME for-test
+until ibmcloud cf create-service-key $SERVICE_NAME for-test
 do
   echo "Will retry..."
   sleep 10
 done
 
-
 # grab the credentials - ignoring the first debug logs of bx command
-CREDENTIALS_JSON=`bx service key-show $SERVICE_NAME for-test | tail -n+5`
+CREDENTIALS_JSON=`ibmcloud cf service-key $SERVICE_NAME for-test | tail -n+5`
 
 # create the database
-CLOUDANT_URL=`bx service key-show $SERVICE_NAME for-test | grep "\"url\"" | awk '{print $2}' | tr -d '","'`
+CLOUDANT_URL=$(echo $CREDENTIALS_JSON | jq -r .url)
 curl -s -X PUT $CLOUDANT_URL/logistics-wizard | grep -v file_exists
 
 # inject VCAP_SERVICES in the environment, to be picked up by the datasources.local.js
@@ -50,8 +49,8 @@ export NODE_ENV=test-with-cloudant
 
 # on exit, delete the service key and service
 cleanup() {
-  bx service key-delete -f $SERVICE_NAME for-test
-  bx service delete -f $SERVICE_NAME
+  ibmcloud cf delete-service-key $SERVICE_NAME for-test -f
+  ibmcloud cf delete-service $SERVICE_NAME -f
 }
 trap cleanup EXIT
 
