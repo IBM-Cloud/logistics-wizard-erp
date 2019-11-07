@@ -16,7 +16,7 @@ do
   sleep 10
 done
 
-# grab the credentials - ignoring the first debug logs of bx command
+# grab the credentials - ignoring the first debug logs of ibmcloud command
 CREDENTIALS_JSON=`ibmcloud cf service-key $SERVICE_NAME for-test | tail -n+5`
 
 # create the database
