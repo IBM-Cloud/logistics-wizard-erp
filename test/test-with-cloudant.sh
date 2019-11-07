@@ -4,7 +4,10 @@
 SERVICE_NAME=lw-erp-tests-`date +"%Y-%m-%d-%H-%M"`-$RANDOM
 echo "Creating a new Cloudant service named $SERVICE_NAME"
 
-bx service create cloudantNoSQLDB Lite $SERVICE_NAME
+if [ -z "$CLOUDANT_SERVICE_PLAN" ]; then
+  CLOUDANT_SERVICE_PLAN=Lite
+fi
+bx service create cloudantNoSQLDB $CLOUDANT_SERVICE_PLAN $SERVICE_NAME
 
 # generate credentials
 bx service key-create $SERVICE_NAME for-test
