@@ -1,6 +1,6 @@
 #!/bin/bash
 echo Login IBM Cloud api=$CF_TARGET_URL org=$CF_ORG space=$CF_SPACE
-bx login -a "$CF_TARGET_URL" --apikey "$IAM_API_KEY" -o "$CF_ORG" -s "$CF_SPACE"
+ibmcloud login -a "$CF_TARGET_URL" --apikey "$IAM_API_KEY" -o "$CF_ORG" -s "$CF_SPACE" -g "$RESOURCE_GROUP"
 
 # The branch may use a custom manifest
 MANIFEST=manifest.yml
@@ -18,29 +18,39 @@ else
   PREFIX=""
 fi
 
-bx service create cloudantNoSQLDB Lite ${PREFIX}logistics-wizard-erp-db
+if [ -z "$CLOUDANT_SERVICE_PLAN" ]; then
+  CLOUDANT_SERVICE_PLAN=Lite
+fi
+
+ibmcloud cf create-service cloudantNoSQLDB $CLOUDANT_SERVICE_PLAN ${PREFIX}logistics-wizard-erp-db
 
 # create the database
-bx service key-create ${PREFIX}logistics-wizard-erp-db for-pipeline
-CLOUDANT_URL=`bx service key-show ${PREFIX}logistics-wizard-erp-db for-pipeline | grep "\"url\"" | awk '{print $2}' | tr -d '","'`
+until ibmcloud cf create-service-key ${PREFIX}logistics-wizard-erp-db for-pipeline
+do
+  echo "Will retry..."
+  sleep 10
+done
+
+CREDENTIALS_JSON=$(ibmcloud cf service-key ${PREFIX}logistics-wizard-erp-db for-pipeline | tail -n+5)
+CLOUDANT_URL=$(echo $CREDENTIALS_JSON | jq -r .url)
 curl -s -X PUT $CLOUDANT_URL/logistics-wizard | grep -v file_exists
 
-if ! bx app show $CF_APP; then
-  bx app push $CF_APP -n $CF_APP -f ${MANIFEST}
+if ! ibmcloud cf app $CF_APP; then
+  ibmcloud cf push $CF_APP -n $CF_APP -f ${MANIFEST}
 else
   OLD_CF_APP=${CF_APP}-OLD-$(date +"%s")
   rollback() {
     set +e
-    if bx app show $OLD_CF_APP; then
-      bx app logs $CF_APP --recent
-      bx app delete $CF_APP -f
-      bx app rename $OLD_CF_APP $CF_APP
+    if ibmcloud cf app $OLD_CF_APP; then
+      ibmcloud cf logs $CF_APP --recent
+      ibmcloud cf delete $CF_APP -f
+      ibmcloud cf rename $OLD_CF_APP $CF_APP
     fi
     exit 1
   }
   set -e
   trap rollback ERR
-  bx app rename $CF_APP $OLD_CF_APP
-  bx app push $CF_APP -n $CF_APP -f ${MANIFEST}
-  bx app delete $OLD_CF_APP -f
+  ibmcloud cf rename $CF_APP $OLD_CF_APP
+  ibmcloud cf push $CF_APP -n $CF_APP -f ${MANIFEST}
+  ibmcloud cf delete $OLD_CF_APP -f
 fi

@@ -3,19 +3,15 @@
   "version": "1.0.0",
   "main": "server/server.js",
   "engines": {
-    "node": "6.9.1",
-    "npm": "^3.0.0"
+    "node": "12.13.0",
+    "npm": "^6.12.0"
   },
   "scripts": {
     "start": "node .",
     "test": "mocha test/*.js",
     "coverage": "istanbul cover _mocha test/*.js --report lcovonly -- -R spec --timeout 300000 && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage/",
     "localcoverage": "istanbul cover _mocha test/*.js --report html -- -R spec --timeout 300000",
-    "exportapi": "slc loopback:export-api-def -o spec.yaml",
-    "idra:coverage": "istanbul cover --report lcov --report json-summary _mocha -- -R xunit -O output=./test/results/mocha.xml 'test/**/*.js'",
-    "idra:publish-coverage": "idra --publishtestresult --filelocation=./coverage/coverage-summary.json --type=code",
-    "idra:publish-unittest": "idra --publishtestresult --filelocation=./test/results/mocha.xml --type=unittest"
-
+    "exportapi": "slc loopback:export-api-def -o spec.yaml"
   },
   "dependencies": {
     "async": "2.1.4",
@@ -29,8 +25,6 @@
     "loopback-boot": "2.23.0",
     "loopback-component-explorer": "2.7.0",
     "loopback-connector-cloudant": "^2.1.0",
-    "loopback-connector-db2": "^2.1.1",
-    "loopback-connector-postgresql": "2.7.0",
     "loopback-datasource-juggler": "2.53.0",
     "randomstring": "1.1.5",
     "request": "2.79.0",
@@ -43,7 +37,6 @@
   "devDependencies": {
     "chai": "3.5.0",
     "coveralls": "2.11.15",
-    "grunt-idra3": "^0.1.35",
     "istanbul": "0.4.5",
     "jshint": "2.9.4",
     "mocha": "*",
